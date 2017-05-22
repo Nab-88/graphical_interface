@@ -3,7 +3,7 @@
  *  @brief	Graphical primitives to draw lines, polygons, text, and operation of drawing
  *		surfaces.
  *
- *  \author 
+ *  \author
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  *
@@ -13,7 +13,6 @@
 #define EI_DRAW_H
 
 #include <stdint.h>
-#include <string.h>
 #include "ei_types.h"
 #include "hw_interface.h"
 
