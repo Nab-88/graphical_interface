@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdlib.h>
 #include "ei_types.h"
 #include "hw_interface.h"
 
@@ -16,7 +17,37 @@
  *				of the color is ignored in the case of surfaces the don't have an
  *				alpha channel.
  */
-uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color);
+uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
+    /* ir -> Position of the red in the 32 bit integer
+     * ig -> Position of the green in the 32 bit integer
+     * ib -> Position of the blue in the 32 bit integer
+     * ia -> Position of the aplha value in the 32 bit integer
+     * *ia may be -1, this means that the surface does not handle alpha.
+     */
+    // int ir;
+    // int ig;
+    // int ib;
+    // int ia;
+    // uint32_t couleur = 0;
+    // hw_surface_get_channel_indices(surface, &ir, &ig, &ib, &ia);
+    // // We must we recalculate ir, ig, ib, ia
+    // ir = 3 - ir;
+    // ig = 3 - ig;
+    // ib = 3 - ib;
+    // ia = 3 - ia;
+    // bleu = atoi(color -> blue);
+    // rouge = atoi(color -> red);
+    // vert = atoi(color -> green);
+    // alpha = atoi(color -> alpha);
+    // couleur = couleur && (((uint32_t) bleu) << ib);
+    // couleur = couleur && (((uint32_t) rouge) << ir);
+    // couleur = couleur && (((uint32_t) vert) << ig);
+    // if (ia > 3){
+    //     couleur = couleur && (((uint32_t) alpha) << ia);
+    // }
+    // return couleur;
+		//
+}
 
 
 
@@ -32,11 +63,11 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color);
  * @param	color		The color used to draw the line, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
- void draw_pixel(ei_surface_t surface, int x_coord, int y_coord, ei_color_t color) {
+ void draw_pixel(ei_surface_t surface, int x_coord, int y_coord, uint32_t color_rgba) { // A changer pour optimiser
 	 uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
 	 ei_size_t surface_size = hw_surface_get_size(surface);
 	 pixel_ptr += x_coord + y_coord * surface_size.width;
-	 *pixel_ptr = 0;
+	 *pixel_ptr = color_rgba;
  }
 
 void			ei_draw_polyline	(ei_surface_t			surface,
@@ -44,6 +75,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
 				 hw_surface_lock(surface);
+				 uint32_t color_rgba = ei_map_rgba(surface, &color);
 				 ei_point_t point_current = first_point->point; // Verifier que le premier point est non nul
 				 int x_coord = point_current.x;
 				 int y_coord = point_current.y;

@@ -3,7 +3,7 @@
  *  @brief	Graphical primitives to draw lines, polygons, text, and operation of drawing
  *		surfaces.
  *
- *  \author 
+ *  \author
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  *
