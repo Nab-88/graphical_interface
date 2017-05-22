@@ -1,8 +1,7 @@
-# fichier ei_draw
 #include <stdint.h>
 #include "ei_types.h"
 #include "hw_interface.h"
-
+#include "ei_types.h"
 
 
 /**
@@ -71,43 +70,41 @@ void			ei_draw_text		(ei_surface_t		surface,
 						 const char*		text,
 						 const ei_font_t	font,
 						 const ei_color_t*	color,
-						 const ei_rect_t*	clipper);
+						 const ei_rect_t*	clipper)
+						 {
+						 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
+						 hw_surface_lock(text_surface);
+						 hw_surface_set_origin(surface, *where);
+						 ei_rect_t rectangle = hw_surface_get_rect(surface);
+						 hw_surface_lock(surface);
+						 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
+						 hw_surface_unlock(surface);
+						 hw_surface_unlock(text_surface);
+						 hw_surface_update_rects(surface);
+						 }
 
-/**
- * \brief	Fills the surface with the specified color.
- *
- * @param	surface		The surface to be filled. The surface must be *locked* by
- *				\ref hw_surface_lock.
- * @param	color		The color used to fill the surface. If NULL, it means that the
- *				caller want it painted black (opaque).
- * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
- */
 void			ei_fill			(ei_surface_t		surface,
 						 const ei_color_t*	color,
-						 const ei_rect_t*	clipper);
+						 const ei_rect_t*	clipper)
+//PAS DE GESTION DU CLIPPING POUR L'INSTANT.
+             {
+             ei_size_t suface_size = hw_surface_get_size(surface);
+             if(color == NULL){
+               uint32_t converted_color = 0;
+             }
+             else{
+               uint32_t converted_color = ei_map_rgba(surface, *color);
+             }
+             hw_surface_lock(surface);
+             uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+             for (i = 0; i < (suface_size.width * surface_size.height); i++){
+               	*pixel_ptr =  converted_color;
+                *pixel_ptr ++;
+              }
+              hw_surface_unlock(surface);
+              hw_surface_update_rects(surface);
+             };
 
-
-/**
- * \brief	Copies a surface, or a subpart, to another one.
- *		The source and destination area of the copy (either the entire surfaces, or
- *		subparts) must have the same size (before clipping). Both the source and destination
- *		surfaces must be *locked* by \ref hw_surface_lock.
- *
- * @param	destination	The surface on which to copy pixels from the source surface.
- * @param	dst_rect	If NULL, the entire destination surface is used. If not NULL,
- *				defines the rectangle on the destination surface where to copy
- *				the pixels.
- * @param	source		The surface from which to copy pixels.
- * @param	src_rect	If NULL, the entire source surface is used. If not NULL, defines the
- *				rectangle on the source surface from which to copy the pixels.
- * @param	alpha		If true, the final pixels are a combination of source and
- *				destination pixels weighted by the source alpha channel. The
- *				transparency of the final pixels is set	to opaque.
- *				If false, the final pixels are an exact copy of the source pixels,
- 				including the alpha channel.
- *
- * @return			Returns 0 on success, 1 on failure (different ROI size).
- */
 int			ei_copy_surface		(ei_surface_t		destination,
 						 const ei_rect_t*	dst_rect,
 						 const ei_surface_t	source,
