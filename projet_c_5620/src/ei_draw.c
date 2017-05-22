@@ -1,4 +1,3 @@
-# fichier ei_draw
 #include <stdint.h>
 #include "ei_types.h"
 #include "hw_interface.h"
@@ -33,10 +32,39 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color);
  * @param	color		The color used to draw the line, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
+ void draw_pixel(ei_surface_t surface, int x_coord, int y_coord, ei_color_t color) {
+	 uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+	 ei_size_t surface_size = hw_surface_get_size(surface);
+	 pixel_ptr += x_coord + y_coord * surface_size.width;
+	 *pixel_ptr = 0;
+ }
+
 void			ei_draw_polyline	(ei_surface_t			surface,
 						 const ei_linked_point_t*	first_point,
 						 const ei_color_t		color,
-						 const ei_rect_t*		clipper);
+						 const ei_rect_t*		clipper) {
+				 hw_surface_lock(surface);
+				 ei_point_t point_current = first_point->point; // Verifier que le premier point est non nul
+				 int x_coord = point_current.x;
+				 int y_coord = point_current.y;
+				 draw_pixel(surface, x_coord, y_coord,  color);
+				 ei_point_t end_point = first_point->next->point; // Verifier que le deuxieme point est non nul
+				 int delta_x = end_point.x - x_coord;
+				 int delta_y = end_point.y - y_coord;
+				 int error = 0;
+				 while (x_coord != end_point.x && y_coord != end_point.y) {
+						 x_coord++;
+						 error += delta_y;
+						 if (2 * error > delta_x) {
+						 		y_coord++;
+								error -= delta_x;
+						 }
+						 draw_pixel(surface, x_coord, y_coord, color);
+				 }
+				 hw_surface_unlock(surface);
+				 hw_surface_update_rects(surface, NULL);
+}
+
 
 /**
  * \brief	Draws a filled polygon.
