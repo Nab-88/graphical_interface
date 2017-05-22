@@ -1,5 +1,8 @@
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_types.h"
@@ -112,7 +115,7 @@ void			ei_draw_text		(ei_surface_t		surface,
 						 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
 						 hw_surface_unlock(surface);
 						 hw_surface_unlock(text_surface);
-						 hw_surface_update_rects(surface);
+						 hw_surface_update_rects(surface, NULL);
 						 }
 
 void			ei_fill			(ei_surface_t		surface,
@@ -120,7 +123,7 @@ void			ei_fill			(ei_surface_t		surface,
 						 const ei_rect_t*	clipper)
 //PAS DE GESTION DU CLIPPING POUR L'INSTANT.
              {
-             ei_size_t suface_size = hw_surface_get_size(surface);
+             ei_size_t surface_size = hw_surface_get_size(surface);
              if(color == NULL){
                uint32_t converted_color = 0;
              }
@@ -129,12 +132,12 @@ void			ei_fill			(ei_surface_t		surface,
              }
              hw_surface_lock(surface);
              uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
-             for (i = 0; i < (suface_size.width * surface_size.height); i++){
+             for (uint32_t i = 0; i < (suface_size.width * surface_size.height); i++){
                	*pixel_ptr =  converted_color;
                 *pixel_ptr ++;
               }
               hw_surface_unlock(surface);
-              hw_surface_update_rects(surface);
+              hw_surface_update_rects(surface, NULL);
              };
 
 int			ei_copy_surface		(ei_surface_t		destination,
