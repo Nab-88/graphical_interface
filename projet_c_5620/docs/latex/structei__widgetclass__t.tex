@@ -1,0 +1,134 @@
+\hypertarget{structei__widgetclass__t}{\section{ei\-\_\-widgetclass\-\_\-t Struct Reference}
+\label{structei__widgetclass__t}\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}}
+}
+
+
+A structure that stores information about a class of widgets.  
+
+
+
+
+{\ttfamily \#include $<$ei\-\_\-widgetclass.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}{ei\-\_\-widgetclass\-\_\-name\-\_\-t} \hyperlink{structei__widgetclass__t_aa5799b5999890cf04915bf0fe5151ec8}{name}
+\begin{DoxyCompactList}\small\item\em The string name of this class of widget. \end{DoxyCompactList}\item 
+\hyperlink{ei__widgetclass_8h_a4c7f455367004f9a620df19123cdaab8}{ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t} \hyperlink{structei__widgetclass__t_a233446250cdde4347c1381427923d21a}{allocfunc}
+\begin{DoxyCompactList}\small\item\em The function that allocated instances of this class of widget. \end{DoxyCompactList}\item 
+\hyperlink{ei__widgetclass_8h_ac52af60159f39628ed8ed6b1d9af5493}{ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t} \hyperlink{structei__widgetclass__t_aebe6139b31816495e866c99ec3e83de6}{releasefunc}
+\begin{DoxyCompactList}\small\item\em The function that releases all the resources used by an instance of this class of widget. \end{DoxyCompactList}\item 
+\hyperlink{ei__widgetclass_8h_a72107c7b4e8a6d3f91d4a02e51cb3bd3}{ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t} \hyperlink{structei__widgetclass__t_a528168099a2a1515c4cf65400ccbfff2}{drawfunc}
+\begin{DoxyCompactList}\small\item\em The function that draws on screen an instance of this class of widget. \end{DoxyCompactList}\item 
+\hyperlink{ei__widgetclass_8h_aa04d729c9dca14d3ac92c0f9aa8cc5cb}{ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t} \hyperlink{structei__widgetclass__t_a5fec706eefca10172d897cf61b268510}{setdefaultsfunc}
+\begin{DoxyCompactList}\small\item\em The function that sets the default values to all the parameters of an instance of this class of widget. \end{DoxyCompactList}\item 
+\hyperlink{ei__widgetclass_8h_a751dc2e4c264c3597fcc2d59878f6265}{ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t} \hyperlink{structei__widgetclass__t_aaf0aa3f54a48a6b3f8b8e12574ede4b7}{geomnotifyfunc}
+\begin{DoxyCompactList}\small\item\em The function that is called to notify an instance of widget of this class that its geometry has changed. \end{DoxyCompactList}\item 
+\hyperlink{ei__widgetclass_8h_a003bfd0e21f41f04058ee0065bbf43d7}{ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t} \hyperlink{structei__widgetclass__t_a5ed633370e3c90d21244d93d5467227e}{handlefunc}
+\begin{DoxyCompactList}\small\item\em The function that is called when the application has received a user event referring to an instance of this class of widget. \end{DoxyCompactList}\item 
+struct \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} $\ast$ \hyperlink{structei__widgetclass__t_aa184e650475ec2451f033858db1876f0}{next}
+\begin{DoxyCompactList}\small\item\em A pointer to the next instance of ei\-\_\-widget\-\_\-class\-\_\-t, allows widget class descriptions to be chained. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A structure that stores information about a class of widgets. 
+
+Definition at line 102 of file ei\-\_\-widgetclass.\-h.
+
+
+
+\subsection{Field Documentation}
+\hypertarget{structei__widgetclass__t_a233446250cdde4347c1381427923d21a}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!allocfunc@{allocfunc}}
+\index{allocfunc@{allocfunc}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{allocfunc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::allocfunc}}\label{structei__widgetclass__t_a233446250cdde4347c1381427923d21a}
+
+
+The function that allocated instances of this class of widget. 
+
+
+
+Definition at line 104 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_a528168099a2a1515c4cf65400ccbfff2}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!drawfunc@{drawfunc}}
+\index{drawfunc@{drawfunc}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{drawfunc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::drawfunc}}\label{structei__widgetclass__t_a528168099a2a1515c4cf65400ccbfff2}
+
+
+The function that draws on screen an instance of this class of widget. 
+
+
+
+Definition at line 106 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_aaf0aa3f54a48a6b3f8b8e12574ede4b7}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!geomnotifyfunc@{geomnotifyfunc}}
+\index{geomnotifyfunc@{geomnotifyfunc}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{geomnotifyfunc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::geomnotifyfunc}}\label{structei__widgetclass__t_aaf0aa3f54a48a6b3f8b8e12574ede4b7}
+
+
+The function that is called to notify an instance of widget of this class that its geometry has changed. 
+
+
+
+Definition at line 108 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_a5ed633370e3c90d21244d93d5467227e}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!handlefunc@{handlefunc}}
+\index{handlefunc@{handlefunc}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{handlefunc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::handlefunc}}\label{structei__widgetclass__t_a5ed633370e3c90d21244d93d5467227e}
+
+
+The function that is called when the application has received a user event referring to an instance of this class of widget. 
+
+
+
+Definition at line 109 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_aa5799b5999890cf04915bf0fe5151ec8}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!name@{name}}
+\index{name@{name}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{name}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-name\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::name}}\label{structei__widgetclass__t_aa5799b5999890cf04915bf0fe5151ec8}
+
+
+The string name of this class of widget. 
+
+
+
+Definition at line 103 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_aa184e650475ec2451f033858db1876f0}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!next@{next}}
+\index{next@{next}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{next}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf ei\-\_\-widgetclass\-\_\-t}$\ast$ ei\-\_\-widgetclass\-\_\-t\-::next}}\label{structei__widgetclass__t_aa184e650475ec2451f033858db1876f0}
+
+
+A pointer to the next instance of ei\-\_\-widget\-\_\-class\-\_\-t, allows widget class descriptions to be chained. 
+
+
+
+Definition at line 110 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_aebe6139b31816495e866c99ec3e83de6}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!releasefunc@{releasefunc}}
+\index{releasefunc@{releasefunc}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{releasefunc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::releasefunc}}\label{structei__widgetclass__t_aebe6139b31816495e866c99ec3e83de6}
+
+
+The function that releases all the resources used by an instance of this class of widget. 
+
+
+
+Definition at line 105 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{structei__widgetclass__t_a5fec706eefca10172d897cf61b268510}{\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!setdefaultsfunc@{setdefaultsfunc}}
+\index{setdefaultsfunc@{setdefaultsfunc}!ei_widgetclass_t@{ei\-\_\-widgetclass\-\_\-t}}
+\subsubsection[{setdefaultsfunc}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t} ei\-\_\-widgetclass\-\_\-t\-::setdefaultsfunc}}\label{structei__widgetclass__t_a5fec706eefca10172d897cf61b268510}
+
+
+The function that sets the default values to all the parameters of an instance of this class of widget. 
+
+
+
+Definition at line 107 of file ei\-\_\-widgetclass.\-h.
+
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ei__widgetclass_8h}{ei\-\_\-widgetclass.\-h}\end{DoxyCompactItemize}

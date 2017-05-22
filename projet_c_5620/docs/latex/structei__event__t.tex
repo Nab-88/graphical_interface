@@ -1,0 +1,91 @@
+\hypertarget{structei__event__t}{\section{ei\-\_\-event\-\_\-t Struct Reference}
+\label{structei__event__t}\index{ei\-\_\-event\-\_\-t@{ei\-\_\-event\-\_\-t}}
+}
+
+
+Describes an event.  
+
+
+
+
+{\ttfamily \#include $<$ei\-\_\-event.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ei__event_8h_a132dde064150d861ad24e9d839cbe007}{ei\-\_\-eventtype\-\_\-t} \hyperlink{structei__event__t_aee18f11986ed603959de628558812c58}{type}
+\begin{DoxyCompactList}\small\item\em The type of the event. \end{DoxyCompactList}\item 
+\begin{tabbing}
+xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=xx\=\kill
+union \{\\
+\>\hyperlink{structei__key__event__t}{ei\_key\_event\_t} \hyperlink{structei__event__t_a0f146bb41b78f27e18ecccc71f50026d}{key}\\
+\>\>{\em Event parameters for keyboard-\/related events (see \hyperlink{structei__key__event__t}{ei\_key\_event\_t}). }\\
+\>\hyperlink{structei__mouse__event__t}{ei\_mouse\_event\_t} \hyperlink{structei__event__t_a7f0b0d0cf765a822aca7a435510d9d85}{mouse}\\
+\>\>{\em Event parameters for mouse-\/related events (see \hyperlink{structei__mouse__event__t}{ei\_mouse\_event\_t}). }\\
+\>\hyperlink{structei__app__event__t}{ei\_app\_event\_t} \hyperlink{structei__event__t_ab93b7dc04597613a3bd0195e74a9f7bb}{application}\\
+\>\>{\em Event parameters for application-\/related events (see \hyperlink{structei__app__event__t}{ei\_app\_event\_t}). }\\
+\} \hyperlink{structei__event__t_a03a01773dff790d4b772f6b16e4fbb4b}{param}\\
+
+\end{tabbing}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Describes an event. 
+
+Definition at line 93 of file ei\-\_\-event.\-h.
+
+
+
+\subsection{Field Documentation}
+\hypertarget{structei__event__t_ab93b7dc04597613a3bd0195e74a9f7bb}{\index{ei\-\_\-event\-\_\-t@{ei\-\_\-event\-\_\-t}!application@{application}}
+\index{application@{application}!ei_event_t@{ei\-\_\-event\-\_\-t}}
+\subsubsection[{application}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-app\-\_\-event\-\_\-t} ei\-\_\-event\-\_\-t\-::application}}\label{structei__event__t_ab93b7dc04597613a3bd0195e74a9f7bb}
+
+
+Event parameters for application-\/related events (see \hyperlink{structei__app__event__t}{ei\-\_\-app\-\_\-event\-\_\-t}). 
+
+
+
+Definition at line 98 of file ei\-\_\-event.\-h.
+
+\hypertarget{structei__event__t_a0f146bb41b78f27e18ecccc71f50026d}{\index{ei\-\_\-event\-\_\-t@{ei\-\_\-event\-\_\-t}!key@{key}}
+\index{key@{key}!ei_event_t@{ei\-\_\-event\-\_\-t}}
+\subsubsection[{key}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-key\-\_\-event\-\_\-t} ei\-\_\-event\-\_\-t\-::key}}\label{structei__event__t_a0f146bb41b78f27e18ecccc71f50026d}
+
+
+Event parameters for keyboard-\/related events (see \hyperlink{structei__key__event__t}{ei\-\_\-key\-\_\-event\-\_\-t}). 
+
+
+
+Definition at line 96 of file ei\-\_\-event.\-h.
+
+\hypertarget{structei__event__t_a7f0b0d0cf765a822aca7a435510d9d85}{\index{ei\-\_\-event\-\_\-t@{ei\-\_\-event\-\_\-t}!mouse@{mouse}}
+\index{mouse@{mouse}!ei_event_t@{ei\-\_\-event\-\_\-t}}
+\subsubsection[{mouse}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-mouse\-\_\-event\-\_\-t} ei\-\_\-event\-\_\-t\-::mouse}}\label{structei__event__t_a7f0b0d0cf765a822aca7a435510d9d85}
+
+
+Event parameters for mouse-\/related events (see \hyperlink{structei__mouse__event__t}{ei\-\_\-mouse\-\_\-event\-\_\-t}). 
+
+
+
+Definition at line 97 of file ei\-\_\-event.\-h.
+
+\hypertarget{structei__event__t_a03a01773dff790d4b772f6b16e4fbb4b}{\index{ei\-\_\-event\-\_\-t@{ei\-\_\-event\-\_\-t}!param@{param}}
+\index{param@{param}!ei_event_t@{ei\-\_\-event\-\_\-t}}
+\subsubsection[{param}]{\setlength{\rightskip}{0pt plus 5cm}union \{ ... \}   ei\-\_\-event\-\_\-t\-::param}}\label{structei__event__t_a03a01773dff790d4b772f6b16e4fbb4b}
+\hypertarget{structei__event__t_aee18f11986ed603959de628558812c58}{\index{ei\-\_\-event\-\_\-t@{ei\-\_\-event\-\_\-t}!type@{type}}
+\index{type@{type}!ei_event_t@{ei\-\_\-event\-\_\-t}}
+\subsubsection[{type}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-eventtype\-\_\-t} ei\-\_\-event\-\_\-t\-::type}}\label{structei__event__t_aee18f11986ed603959de628558812c58}
+
+
+The type of the event. 
+
+
+
+Definition at line 94 of file ei\-\_\-event.\-h.
+
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ei__event_8h}{ei\-\_\-event.\-h}\end{DoxyCompactItemize}

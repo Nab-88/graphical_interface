@@ -1,0 +1,264 @@
+\hypertarget{ei__widgetclass_8h}{\section{ei\-\_\-widgetclass.\-h File Reference}
+\label{ei__widgetclass_8h}\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}}
+}
+{\ttfamily \#include \char`\"{}hw\-\_\-interface.\-h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}ei\-\_\-draw.\-h\char`\"{}}\\*
+\subsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t}
+\begin{DoxyCompactList}\small\item\em A structure that stores information about a class of widgets. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef char \hyperlink{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}{ei\-\_\-widgetclass\-\_\-name\-\_\-t} \mbox{[}20\mbox{]}
+\begin{DoxyCompactList}\small\item\em A name of a class of widget. \end{DoxyCompactList}\item 
+typedef void $\ast$($\ast$ \hyperlink{ei__widgetclass_8h_a4c7f455367004f9a620df19123cdaab8}{ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t} )()
+\begin{DoxyCompactList}\small\item\em A function that allocates a block of memory that is big enough to store the attributes of a widget of a class. After allocation, the function {\itshape must} initialize the memory to 0. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{ei__widgetclass_8h_ac52af60159f39628ed8ed6b1d9af5493}{ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t} )(struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget)
+\begin{DoxyCompactList}\small\item\em A function that releases the memory used by a widget before it is destroyed. The \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} structure itself, passed as parameter, must {\itshape not} by freed by these functions. Can be set to N\-U\-L\-L in \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} if no memory is used by a class of widget. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{ei__widgetclass_8h_a72107c7b4e8a6d3f91d4a02e51cb3bd3}{ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t} )(struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget, \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface, \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} pick\-\_\-surface, \hyperlink{structei__rect__t}{ei\-\_\-rect\-\_\-t} $\ast$clipper)
+\begin{DoxyCompactList}\small\item\em A function that draws widgets of a class. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{ei__widgetclass_8h_aa04d729c9dca14d3ac92c0f9aa8cc5cb}{ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t} )(struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget)
+\begin{DoxyCompactList}\small\item\em A function that sets the default values for a class. \end{DoxyCompactList}\item 
+typedef void($\ast$ \hyperlink{ei__widgetclass_8h_a751dc2e4c264c3597fcc2d59878f6265}{ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t} )(struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget, \hyperlink{structei__rect__t}{ei\-\_\-rect\-\_\-t} rect)
+\begin{DoxyCompactList}\small\item\em A function that is called to notify the widget that its geometry has been modified by its geometry manager. Can set to N\-U\-L\-L in \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t}. \end{DoxyCompactList}\item 
+typedef \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28}{ei\-\_\-bool\-\_\-t}($\ast$ \hyperlink{ei__widgetclass_8h_a003bfd0e21f41f04058ee0065bbf43d7}{ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t} )(struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget, struct \hyperlink{structei__event__t}{ei\-\_\-event\-\_\-t} $\ast$event)
+\begin{DoxyCompactList}\small\item\em A function that is called in response to an event. This function is internal to the library. It implements the generic behavior of a widget (for example a button looks sunken when clicked) \end{DoxyCompactList}\item 
+typedef struct \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} \hyperlink{ei__widgetclass_8h_a523ed389d21604de40776d33ef07b3a6}{ei\-\_\-widgetclass\-\_\-t}
+\begin{DoxyCompactList}\small\item\em A structure that stores information about a class of widgets. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static char $\ast$ \hyperlink{ei__widgetclass_8h_acc47bb0762815c5b3d47a5e795f3037a}{ei\-\_\-widgetclass\-\_\-stringname} (\hyperlink{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}{ei\-\_\-widgetclass\-\_\-name\-\_\-t} name)
+\begin{DoxyCompactList}\small\item\em Returns the string of the name of a class. \end{DoxyCompactList}\item 
+void \hyperlink{ei__widgetclass_8h_af742f16921cbf9c4a1a662ade31d91cc}{ei\-\_\-widgetclass\-\_\-register} (\hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} $\ast$widgetclass)
+\begin{DoxyCompactList}\small\item\em Registers a class to the program so that widgets of this class can be created. This must be done only once per widged class in the application. \end{DoxyCompactList}\item 
+\hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} $\ast$ \hyperlink{ei__widgetclass_8h_a00f3c7506df390ca8a5b52d8b386bced}{ei\-\_\-widgetclass\-\_\-from\-\_\-name} (\hyperlink{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}{ei\-\_\-widgetclass\-\_\-name\-\_\-t} name)
+\begin{DoxyCompactList}\small\item\em Returns the structure describing a class, from its name. \end{DoxyCompactList}\item 
+void \hyperlink{ei__widgetclass_8h_acdfaf4883aa16509c0d51e35177eb6b9}{ei\-\_\-frame\-\_\-register\-\_\-class} ()
+\begin{DoxyCompactList}\small\item\em Registers the \char`\"{}frame\char`\"{} widget class in the program. This must be called only once before widgets of the class \char`\"{}frame\char`\"{} can be created and configured with \hyperlink{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{ei\-\_\-frame\-\_\-configure}. \end{DoxyCompactList}\item 
+void \hyperlink{ei__widgetclass_8h_a838fccb1cd368bdb5dd486f5fcb07ac3}{ei\-\_\-button\-\_\-register\-\_\-class} ()
+\begin{DoxyCompactList}\small\item\em Registers the \char`\"{}button\char`\"{} widget class in the program. This must be called only once before widgets of the class \char`\"{}button\char`\"{} can be created and configured with \hyperlink{ei__widget_8h_a6aef3afd6aa8e6bab563735a0c54a76b}{ei\-\_\-button\-\_\-configure}. \end{DoxyCompactList}\item 
+void \hyperlink{ei__widgetclass_8h_a856904bc16ac897b9a2385e67402d570}{ei\-\_\-toplevel\-\_\-register\-\_\-class} ()
+\begin{DoxyCompactList}\small\item\em Registers the \char`\"{}toplevel\char`\"{} widget class in the program. This must be called only once before widgets of the class \char`\"{}toplevel\char`\"{} can be created and configured with \hyperlink{ei__widget_8h_a853349fd4f65ae575a1989a9713059b4}{ei\-\_\-toplevel\-\_\-configure}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{ei__widgetclass_8h_a4c7f455367004f9a620df19123cdaab8}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void$\ast$($\ast$ ei\-\_\-widgetclass\-\_\-allocfunc\-\_\-t)()}}\label{ei__widgetclass_8h_a4c7f455367004f9a620df19123cdaab8}
+
+
+A function that allocates a block of memory that is big enough to store the attributes of a widget of a class. After allocation, the function {\itshape must} initialize the memory to 0. 
+
+\begin{DoxyReturn}{Returns}
+A block of memory with all bytes set to 0. 
+\end{DoxyReturn}
+
+
+Definition at line 34 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_a72107c7b4e8a6d3f91d4a02e51cb3bd3}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ ei\-\_\-widgetclass\-\_\-drawfunc\-\_\-t)(struct {\bf ei\-\_\-widget\-\_\-t} $\ast$widget, {\bf ei\-\_\-surface\-\_\-t} surface, {\bf ei\-\_\-surface\-\_\-t} pick\-\_\-surface, {\bf ei\-\_\-rect\-\_\-t} $\ast$clipper)}}\label{ei__widgetclass_8h_a72107c7b4e8a6d3f91d4a02e51cb3bd3}
+
+
+A function that draws widgets of a class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em widget} & A pointer to the widget instance to draw. \\
+\hline
+{\em surface} & Where to draw the widget. The actual location of the widget in the surface is stored in its \char`\"{}screen\-\_\-location\char`\"{} field. \\
+\hline
+{\em clipper} & If not N\-U\-L\-L, the drawing is restricted within this rectangle (expressed in the surface reference frame). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 55 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_a751dc2e4c264c3597fcc2d59878f6265}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ ei\-\_\-widgetclass\-\_\-geomnotifyfunc\-\_\-t)(struct {\bf ei\-\_\-widget\-\_\-t} $\ast$widget, {\bf ei\-\_\-rect\-\_\-t} rect)}}\label{ei__widgetclass_8h_a751dc2e4c264c3597fcc2d59878f6265}
+
+
+A function that is called to notify the widget that its geometry has been modified by its geometry manager. Can set to N\-U\-L\-L in \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em widget} & The widget instance to notify of a geometry change. \\
+\hline
+{\em rect} & The new rectangular screen location of the widget (i.\-e. = widget-\/$>$screen\-\_\-location). \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 75 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_a003bfd0e21f41f04058ee0065bbf43d7}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef {\bf ei\-\_\-bool\-\_\-t}($\ast$ ei\-\_\-widgetclass\-\_\-handlefunc\-\_\-t)(struct {\bf ei\-\_\-widget\-\_\-t} $\ast$widget, struct {\bf ei\-\_\-event\-\_\-t} $\ast$event)}}\label{ei__widgetclass_8h_a003bfd0e21f41f04058ee0065bbf43d7}
+
+
+A function that is called in response to an event. This function is internal to the library. It implements the generic behavior of a widget (for example a button looks sunken when clicked) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em widget} & The widget for which the event was generated. \\
+\hline
+{\em event} & The event containing all its parameters (type, etc.)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A boolean telling if the event was consumed by the callback or not. If T\-R\-U\-E, the library does not try to call other callbacks for this event. If F\-A\-L\-S\-E, the library will call the next callback registered for this event, if any. Note\-: The callback may execute many operations and still return F\-A\-L\-S\-E, or return T\-R\-U\-E without having done anything. 
+\end{DoxyReturn}
+
+
+Definition at line 95 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-name\-\_\-t@{ei\-\_\-widgetclass\-\_\-name\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-name\-\_\-t@{ei\-\_\-widgetclass\-\_\-name\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-name\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef char ei\-\_\-widgetclass\-\_\-name\-\_\-t\mbox{[}20\mbox{]}}}\label{ei__widgetclass_8h_acfa18ebbfac8cbbc11345a01c2099aed}
+
+
+A name of a class of widget. 
+
+
+
+Definition at line 23 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_ac52af60159f39628ed8ed6b1d9af5493}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ ei\-\_\-widgetclass\-\_\-releasefunc\-\_\-t)(struct {\bf ei\-\_\-widget\-\_\-t} $\ast$widget)}}\label{ei__widgetclass_8h_ac52af60159f39628ed8ed6b1d9af5493}
+
+
+A function that releases the memory used by a widget before it is destroyed. The \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} structure itself, passed as parameter, must {\itshape not} by freed by these functions. Can be set to N\-U\-L\-L in \hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} if no memory is used by a class of widget. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em widget} & The widget which resources are to be freed. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 44 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_aa04d729c9dca14d3ac92c0f9aa8cc5cb}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t@{ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef void($\ast$ ei\-\_\-widgetclass\-\_\-setdefaultsfunc\-\_\-t)(struct {\bf ei\-\_\-widget\-\_\-t} $\ast$widget)}}\label{ei__widgetclass_8h_aa04d729c9dca14d3ac92c0f9aa8cc5cb}
+
+
+A function that sets the default values for a class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em widget} & A pointer to the widget instance to intialize. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 65 of file ei\-\_\-widgetclass.\-h.
+
+\hypertarget{ei__widgetclass_8h_a523ed389d21604de40776d33ef07b3a6}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}}
+\index{ei\-\_\-widgetclass\-\_\-t@{ei\-\_\-widgetclass\-\_\-t}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf ei\-\_\-widgetclass\-\_\-t}  {\bf ei\-\_\-widgetclass\-\_\-t}}}\label{ei__widgetclass_8h_a523ed389d21604de40776d33ef07b3a6}
+
+
+A structure that stores information about a class of widgets. 
+
+
+
+\subsection{Function Documentation}
+\hypertarget{ei__widgetclass_8h_a838fccb1cd368bdb5dd486f5fcb07ac3}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-button\-\_\-register\-\_\-class@{ei\-\_\-button\-\_\-register\-\_\-class}}
+\index{ei\-\_\-button\-\_\-register\-\_\-class@{ei\-\_\-button\-\_\-register\-\_\-class}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-button\-\_\-register\-\_\-class}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-button\-\_\-register\-\_\-class (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ei__widgetclass_8h_a838fccb1cd368bdb5dd486f5fcb07ac3}
+
+
+Registers the \char`\"{}button\char`\"{} widget class in the program. This must be called only once before widgets of the class \char`\"{}button\char`\"{} can be created and configured with \hyperlink{ei__widget_8h_a6aef3afd6aa8e6bab563735a0c54a76b}{ei\-\_\-button\-\_\-configure}. 
+
+\hypertarget{ei__widgetclass_8h_acdfaf4883aa16509c0d51e35177eb6b9}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-frame\-\_\-register\-\_\-class@{ei\-\_\-frame\-\_\-register\-\_\-class}}
+\index{ei\-\_\-frame\-\_\-register\-\_\-class@{ei\-\_\-frame\-\_\-register\-\_\-class}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-frame\-\_\-register\-\_\-class}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-frame\-\_\-register\-\_\-class (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ei__widgetclass_8h_acdfaf4883aa16509c0d51e35177eb6b9}
+
+
+Registers the \char`\"{}frame\char`\"{} widget class in the program. This must be called only once before widgets of the class \char`\"{}frame\char`\"{} can be created and configured with \hyperlink{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{ei\-\_\-frame\-\_\-configure}. 
+
+\hypertarget{ei__widgetclass_8h_a856904bc16ac897b9a2385e67402d570}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-toplevel\-\_\-register\-\_\-class@{ei\-\_\-toplevel\-\_\-register\-\_\-class}}
+\index{ei\-\_\-toplevel\-\_\-register\-\_\-class@{ei\-\_\-toplevel\-\_\-register\-\_\-class}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-toplevel\-\_\-register\-\_\-class}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-toplevel\-\_\-register\-\_\-class (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{ei__widgetclass_8h_a856904bc16ac897b9a2385e67402d570}
+
+
+Registers the \char`\"{}toplevel\char`\"{} widget class in the program. This must be called only once before widgets of the class \char`\"{}toplevel\char`\"{} can be created and configured with \hyperlink{ei__widget_8h_a853349fd4f65ae575a1989a9713059b4}{ei\-\_\-toplevel\-\_\-configure}. 
+
+\hypertarget{ei__widgetclass_8h_a00f3c7506df390ca8a5b52d8b386bced}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-from\-\_\-name@{ei\-\_\-widgetclass\-\_\-from\-\_\-name}}
+\index{ei\-\_\-widgetclass\-\_\-from\-\_\-name@{ei\-\_\-widgetclass\-\_\-from\-\_\-name}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-from\-\_\-name}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-t}$\ast$ ei\-\_\-widgetclass\-\_\-from\-\_\-name (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-widgetclass\-\_\-name\-\_\-t}}]{name}
+\end{DoxyParamCaption}
+)}}\label{ei__widgetclass_8h_a00f3c7506df390ca8a5b52d8b386bced}
+
+
+Returns the structure describing a class, from its name. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the class of widget.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The structure describing the class. 
+\end{DoxyReturn}
+\hypertarget{ei__widgetclass_8h_af742f16921cbf9c4a1a662ade31d91cc}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-register@{ei\-\_\-widgetclass\-\_\-register}}
+\index{ei\-\_\-widgetclass\-\_\-register@{ei\-\_\-widgetclass\-\_\-register}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-register}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-widgetclass\-\_\-register (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-widgetclass\-\_\-t} $\ast$}]{widgetclass}
+\end{DoxyParamCaption}
+)}}\label{ei__widgetclass_8h_af742f16921cbf9c4a1a662ade31d91cc}
+
+
+Registers a class to the program so that widgets of this class can be created. This must be done only once per widged class in the application. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em widgetclass} & The structure describing the class. \\
+\hline
+\end{DoxyParams}
+\hypertarget{ei__widgetclass_8h_acc47bb0762815c5b3d47a5e795f3037a}{\index{ei\-\_\-widgetclass.\-h@{ei\-\_\-widgetclass.\-h}!ei\-\_\-widgetclass\-\_\-stringname@{ei\-\_\-widgetclass\-\_\-stringname}}
+\index{ei\-\_\-widgetclass\-\_\-stringname@{ei\-\_\-widgetclass\-\_\-stringname}!ei_widgetclass.h@{ei\-\_\-widgetclass.\-h}}
+\subsubsection[{ei\-\_\-widgetclass\-\_\-stringname}]{\setlength{\rightskip}{0pt plus 5cm}static char $\ast$ ei\-\_\-widgetclass\-\_\-stringname (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-widgetclass\-\_\-name\-\_\-t}}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}}\label{ei__widgetclass_8h_acc47bb0762815c5b3d47a5e795f3037a}
+
+
+Returns the string of the name of a class. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The class name.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The string representing the name of the class. 
+\end{DoxyReturn}
+
+
+Definition at line 168 of file ei\-\_\-widgetclass.\-h.
+

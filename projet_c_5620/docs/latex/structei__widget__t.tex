@@ -1,0 +1,173 @@
+\hypertarget{structei__widget__t}{\section{ei\-\_\-widget\-\_\-t Struct Reference}
+\label{structei__widget__t}\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}}
+}
+
+
+Fields common to all types of widget. Every widget classes specializes this base class by adding its own fields.  
+
+
+
+
+{\ttfamily \#include $<$ei\-\_\-widget.\-h$>$}
+
+\subsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structei__widgetclass__t}{ei\-\_\-widgetclass\-\_\-t} $\ast$ \hyperlink{structei__widget__t_a429e970e1d266252df4dbe55296b9f70}{wclass}
+\begin{DoxyCompactList}\small\item\em The class of widget of this widget. Avoid the field name \char`\"{}class\char`\"{} which is a keyword in C++. \end{DoxyCompactList}\item 
+uint32\-\_\-t \hyperlink{structei__widget__t_ada7ce878377d653d930a57e175b61182}{pick\-\_\-id}
+\begin{DoxyCompactList}\small\item\em Id of this widget in the picking offscreen. \end{DoxyCompactList}\item 
+\hyperlink{structei__color__t}{ei\-\_\-color\-\_\-t} $\ast$ \hyperlink{structei__widget__t_ad1477adf8e6b5cb6a5f11f657fe4781b}{pick\-\_\-color}
+\begin{DoxyCompactList}\small\item\em pick\-\_\-id encoded as a color. \end{DoxyCompactList}\item 
+struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$ \hyperlink{structei__widget__t_adb1b43eda89c8e86d6337c939f1a4473}{parent}
+\begin{DoxyCompactList}\small\item\em Pointer to the parent of this widget. \end{DoxyCompactList}\item 
+struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$ \hyperlink{structei__widget__t_a190316f0ec41d2d98b919414c860f828}{children\-\_\-head}
+\begin{DoxyCompactList}\small\item\em Pointer to the first child of this widget. Children are chained with the \char`\"{}next\-\_\-sibling\char`\"{} field. \end{DoxyCompactList}\item 
+struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$ \hyperlink{structei__widget__t_aece2f3059f252538ae787857e7eea2a2}{children\-\_\-tail}
+\begin{DoxyCompactList}\small\item\em Pointer to the last child of this widget. \end{DoxyCompactList}\item 
+struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$ \hyperlink{structei__widget__t_ada15cedaf8e6e104a1461c1754ff6cb3}{next\-\_\-sibling}
+\begin{DoxyCompactList}\small\item\em Pointer to the next child of this widget's parent widget. \end{DoxyCompactList}\item 
+\hyperlink{structei__placer__params__t}{ei\-\_\-placer\-\_\-params\-\_\-t} $\ast$ \hyperlink{structei__widget__t_a82c675bf68aa3fa5b14b1f20bd157897}{placer\-\_\-params}
+\begin{DoxyCompactList}\small\item\em Pointer to the placer parameters for this widget. If N\-U\-L\-L, the widget is not currently managed and thus, is not displayed on the screen. \end{DoxyCompactList}\item 
+\hyperlink{structei__size__t}{ei\-\_\-size\-\_\-t} \hyperlink{structei__widget__t_ae82b19958b3ec72a855986dffb9b92ea}{requested\-\_\-size}
+\begin{DoxyCompactList}\small\item\em Size requested by the widget (big enough for its label, for example), or by the programmer. This can be different than its screen size defined by the placer. \end{DoxyCompactList}\item 
+\hyperlink{structei__rect__t}{ei\-\_\-rect\-\_\-t} \hyperlink{structei__widget__t_ad139e1541329b54e0b4c8d746e14b204}{screen\-\_\-location}
+\begin{DoxyCompactList}\small\item\em Position and size of the widget expressed in the root window reference. \end{DoxyCompactList}\item 
+\hyperlink{structei__rect__t}{ei\-\_\-rect\-\_\-t} $\ast$ \hyperlink{structei__widget__t_a75c29d388a5f5b32cdd8a9c855bc2a75}{content\-\_\-rect}
+\begin{DoxyCompactList}\small\item\em Where to place children, when this widget is used as a container. By defaults, points to the screen\-\_\-location. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Fields common to all types of widget. Every widget classes specializes this base class by adding its own fields. 
+
+Definition at line 25 of file ei\-\_\-widget.\-h.
+
+
+
+\subsection{Field Documentation}
+\hypertarget{structei__widget__t_a190316f0ec41d2d98b919414c860f828}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!children\-\_\-head@{children\-\_\-head}}
+\index{children\-\_\-head@{children\-\_\-head}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{children\-\_\-head}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::children\-\_\-head}}\label{structei__widget__t_a190316f0ec41d2d98b919414c860f828}
+
+
+Pointer to the first child of this widget. Children are chained with the \char`\"{}next\-\_\-sibling\char`\"{} field. 
+
+
+
+Definition at line 32 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_aece2f3059f252538ae787857e7eea2a2}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!children\-\_\-tail@{children\-\_\-tail}}
+\index{children\-\_\-tail@{children\-\_\-tail}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{children\-\_\-tail}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::children\-\_\-tail}}\label{structei__widget__t_aece2f3059f252538ae787857e7eea2a2}
+
+
+Pointer to the last child of this widget. 
+
+
+
+Definition at line 33 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_a75c29d388a5f5b32cdd8a9c855bc2a75}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!content\-\_\-rect@{content\-\_\-rect}}
+\index{content\-\_\-rect@{content\-\_\-rect}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{content\-\_\-rect}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-rect\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::content\-\_\-rect}}\label{structei__widget__t_a75c29d388a5f5b32cdd8a9c855bc2a75}
+
+
+Where to place children, when this widget is used as a container. By defaults, points to the screen\-\_\-location. 
+
+
+
+Definition at line 40 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_ada15cedaf8e6e104a1461c1754ff6cb3}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!next\-\_\-sibling@{next\-\_\-sibling}}
+\index{next\-\_\-sibling@{next\-\_\-sibling}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{next\-\_\-sibling}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::next\-\_\-sibling}}\label{structei__widget__t_ada15cedaf8e6e104a1461c1754ff6cb3}
+
+
+Pointer to the next child of this widget's parent widget. 
+
+
+
+Definition at line 34 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_adb1b43eda89c8e86d6337c939f1a4473}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!parent@{parent}}
+\index{parent@{parent}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{parent}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::parent}}\label{structei__widget__t_adb1b43eda89c8e86d6337c939f1a4473}
+
+
+Pointer to the parent of this widget. 
+
+
+
+Definition at line 31 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_ad1477adf8e6b5cb6a5f11f657fe4781b}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!pick\-\_\-color@{pick\-\_\-color}}
+\index{pick\-\_\-color@{pick\-\_\-color}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{pick\-\_\-color}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-color\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::pick\-\_\-color}}\label{structei__widget__t_ad1477adf8e6b5cb6a5f11f657fe4781b}
+
+
+pick\-\_\-id encoded as a color. 
+
+
+
+Definition at line 28 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_ada7ce878377d653d930a57e175b61182}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!pick\-\_\-id@{pick\-\_\-id}}
+\index{pick\-\_\-id@{pick\-\_\-id}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{pick\-\_\-id}]{\setlength{\rightskip}{0pt plus 5cm}uint32\-\_\-t ei\-\_\-widget\-\_\-t\-::pick\-\_\-id}}\label{structei__widget__t_ada7ce878377d653d930a57e175b61182}
+
+
+Id of this widget in the picking offscreen. 
+
+
+
+Definition at line 27 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_a82c675bf68aa3fa5b14b1f20bd157897}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!placer\-\_\-params@{placer\-\_\-params}}
+\index{placer\-\_\-params@{placer\-\_\-params}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{placer\-\_\-params}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-placer\-\_\-params\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::placer\-\_\-params}}\label{structei__widget__t_a82c675bf68aa3fa5b14b1f20bd157897}
+
+
+Pointer to the placer parameters for this widget. If N\-U\-L\-L, the widget is not currently managed and thus, is not displayed on the screen. 
+
+
+
+Definition at line 37 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_ae82b19958b3ec72a855986dffb9b92ea}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!requested\-\_\-size@{requested\-\_\-size}}
+\index{requested\-\_\-size@{requested\-\_\-size}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{requested\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-size\-\_\-t} ei\-\_\-widget\-\_\-t\-::requested\-\_\-size}}\label{structei__widget__t_ae82b19958b3ec72a855986dffb9b92ea}
+
+
+Size requested by the widget (big enough for its label, for example), or by the programmer. This can be different than its screen size defined by the placer. 
+
+
+
+Definition at line 38 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_ad139e1541329b54e0b4c8d746e14b204}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!screen\-\_\-location@{screen\-\_\-location}}
+\index{screen\-\_\-location@{screen\-\_\-location}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{screen\-\_\-location}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-rect\-\_\-t} ei\-\_\-widget\-\_\-t\-::screen\-\_\-location}}\label{structei__widget__t_ad139e1541329b54e0b4c8d746e14b204}
+
+
+Position and size of the widget expressed in the root window reference. 
+
+
+
+Definition at line 39 of file ei\-\_\-widget.\-h.
+
+\hypertarget{structei__widget__t_a429e970e1d266252df4dbe55296b9f70}{\index{ei\-\_\-widget\-\_\-t@{ei\-\_\-widget\-\_\-t}!wclass@{wclass}}
+\index{wclass@{wclass}!ei_widget_t@{ei\-\_\-widget\-\_\-t}}
+\subsubsection[{wclass}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widgetclass\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-t\-::wclass}}\label{structei__widget__t_a429e970e1d266252df4dbe55296b9f70}
+
+
+The class of widget of this widget. Avoid the field name \char`\"{}class\char`\"{} which is a keyword in C++. 
+
+
+
+Definition at line 26 of file ei\-\_\-widget.\-h.
+
+
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ei__widget_8h}{ei\-\_\-widget.\-h}\end{DoxyCompactItemize}

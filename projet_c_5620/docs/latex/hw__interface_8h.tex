@@ -1,0 +1,530 @@
+\hypertarget{hw__interface_8h}{\section{hw\-\_\-interface.\-h File Reference}
+\label{hw__interface_8h}\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}}
+}
+
+
+Low level interface with the graphic hadware. This interface is based on the S\-D\-L library.  
+
+
+{\ttfamily \#include $<$stdint.\-h$>$}\\*
+{\ttfamily \#include \char`\"{}ei\-\_\-types.\-h\char`\"{}}\\*
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef void $\ast$ \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t}
+\begin{DoxyCompactList}\small\item\em Surface hidden type. A surface represents a 2 dimentional array of pixels where drawing can be done. The displayed screen itself is represented by a surface, it is accessed by \hyperlink{hw__interface_8h_a91dcf1275fecec719a60dd6dfeca40c6}{hw\-\_\-create\-\_\-window}. Other \char`\"{}offscreen\char`\"{} surfaces can be created by \hyperlink{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}{hw\-\_\-surface\-\_\-create}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{hw__interface_8h_acf938165e604a675fe09218a1b3cfb5f}{hw\-\_\-init} ()
+\begin{DoxyCompactList}\small\item\em Initialises access to the low-\/level operating system services. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a6e856924f3b4c8966a870e56a3b1dcb1}{hw\-\_\-quit} ()
+\begin{DoxyCompactList}\small\item\em Closes the access to the low-\/level operating system services. \end{DoxyCompactList}\item 
+\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} \hyperlink{hw__interface_8h_a91dcf1275fecec719a60dd6dfeca40c6}{hw\-\_\-create\-\_\-window} (\hyperlink{structei__size__t}{ei\-\_\-size\-\_\-t} $\ast$size, const \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28}{ei\-\_\-bool\-\_\-t} full\-Screen)
+\begin{DoxyCompactList}\small\item\em Opens the main graphical window of the application. \end{DoxyCompactList}\item 
+\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} \hyperlink{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}{hw\-\_\-surface\-\_\-create} (const \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} root, const \hyperlink{structei__size__t}{ei\-\_\-size\-\_\-t} $\ast$size, \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28}{ei\-\_\-bool\-\_\-t} force\-\_\-alpha)
+\begin{DoxyCompactList}\small\item\em Allocates an off-\/screen drawing surface. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Frees a surface allocated by \hyperlink{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}{hw\-\_\-surface\-\_\-create}. This must be called on an unlocked surface (see \hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}). \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Gains exclusive access to a surface. Every call to this function must be matched by a call to \hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}. The address of the pixel buffer may change while the surface is unlocked. Thus, \hyperlink{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}{hw\-\_\-surface\-\_\-get\-\_\-buffer} must called after each call to this function. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Releases the exclusive access to a surface that was locked by \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock}. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a6fa41442ed6ec84a120734f7c4fca9a3}{hw\-\_\-surface\-\_\-update\-\_\-rects} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface, const \hyperlink{structei__linked__rect__t}{ei\-\_\-linked\-\_\-rect\-\_\-t} $\ast$rects)
+\begin{DoxyCompactList}\small\item\em Requests that a list of rectangular regions of the root surface be updated on screen. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_afd8e86abad6a3f16317d74e541d5034d}{hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface, int $\ast$ir, int $\ast$ig, int $\ast$ib, int $\ast$ia)
+\begin{DoxyCompactList}\small\item\em Returns the R, G, B, and Alpha channel indices of a surface. For example, if $\ast$ir is 2, this means that red is encoded in the third byte of the 4 byte pixels of this surface. $\ast$ia may be -\/1, this means that the surface does not handle alpha. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a5bfe7b0284f7d6dad28541d49714faf7}{hw\-\_\-surface\-\_\-set\-\_\-origin} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface, const \hyperlink{structei__point__t}{ei\-\_\-point\-\_\-t} origin)
+\begin{DoxyCompactList}\small\item\em Sets the coordinates of the first pixel of the surface's memory. By default, the coordinates of the first pixel are (0, 0). This can be changed by a call to this function. After a call to this function, the function \hyperlink{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}{hw\-\_\-surface\-\_\-get\-\_\-buffer} returns a different address than before. \end{DoxyCompactList}\item 
+uint8\-\_\-t $\ast$ \hyperlink{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}{hw\-\_\-surface\-\_\-get\-\_\-buffer} (const \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the address of the pixel at coordinated (0, 0) of a surface. This is usually the first pixel of the surface's memory. But after a call to \hyperlink{hw__interface_8h_a5bfe7b0284f7d6dad28541d49714faf7}{hw\-\_\-surface\-\_\-set\-\_\-origin}, the (0, 0) pixel may point within the surface memory or not. Pixels are ordered by horizontal lines, from top to bottom, and from left to right whitin lines. The pixel buffer of a surface may be moved when the surface is unlocked (\hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}), you must thus call this function after each call to \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock}. \end{DoxyCompactList}\item 
+\hyperlink{structei__size__t}{ei\-\_\-size\-\_\-t} \hyperlink{hw__interface_8h_a7b92235ad70d5017c843c66affccdcd2}{hw\-\_\-surface\-\_\-get\-\_\-size} (const \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Returns the size of a surface. \end{DoxyCompactList}\item 
+\hyperlink{structei__rect__t}{ei\-\_\-rect\-\_\-t} \hyperlink{hw__interface_8h_a6ca488fe7d5e254ffa9d9e332ee76996}{hw\-\_\-surface\-\_\-get\-\_\-rect} (const \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Returns the rectangle of a surface (origin and size). \end{DoxyCompactList}\item 
+\hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28}{ei\-\_\-bool\-\_\-t} \hyperlink{hw__interface_8h_a45d51156efa4a28bfccf9f239a132db5}{hw\-\_\-surface\-\_\-has\-\_\-alpha} (\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} surface)
+\begin{DoxyCompactList}\small\item\em Tells if a surface manages transparency, i.\-e. if the surface has an alpha channel. \end{DoxyCompactList}\item 
+\hyperlink{ei__types_8h_a22c8198e4d641e4bc67bb17f9c6bcda7}{ei\-\_\-font\-\_\-t} \hyperlink{hw__interface_8h_ad391b77a24c628dc8601111f562aafbc}{hw\-\_\-text\-\_\-font\-\_\-create} (const char $\ast$filename, \hyperlink{ei__types_8h_a2438d9879374e1d4805231e9e407bbae}{ei\-\_\-fontstyle\-\_\-t} style, int size)
+\begin{DoxyCompactList}\small\item\em Creates a font that can be used to render text. The font must be freed by calling \hyperlink{hw__interface_8h_a2ac46d37db4c40adc10e3afb137f9f02}{hw\-\_\-text\-\_\-font\-\_\-free}. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a2ac46d37db4c40adc10e3afb137f9f02}{hw\-\_\-text\-\_\-font\-\_\-free} (\hyperlink{ei__types_8h_a22c8198e4d641e4bc67bb17f9c6bcda7}{ei\-\_\-font\-\_\-t} font)
+\begin{DoxyCompactList}\small\item\em Frees a font created by \hyperlink{hw__interface_8h_ad391b77a24c628dc8601111f562aafbc}{hw\-\_\-text\-\_\-font\-\_\-create}. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a0dd8c0a9599e8cf6f2839bbb049d9358}{hw\-\_\-text\-\_\-compute\-\_\-size} (const char $\ast$text, const \hyperlink{ei__types_8h_a22c8198e4d641e4bc67bb17f9c6bcda7}{ei\-\_\-font\-\_\-t} font, int $\ast$width, int $\ast$height)
+\begin{DoxyCompactList}\small\item\em Computes the size of a text surface givent the font and the text. \end{DoxyCompactList}\item 
+\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} \hyperlink{hw__interface_8h_a806521541c5a5a80fbf43105270919e4}{hw\-\_\-text\-\_\-create\-\_\-surface} (const char $\ast$text, const \hyperlink{ei__types_8h_a22c8198e4d641e4bc67bb17f9c6bcda7}{ei\-\_\-font\-\_\-t} font, const \hyperlink{structei__color__t}{ei\-\_\-color\-\_\-t} $\ast$color)
+\begin{DoxyCompactList}\small\item\em Creates a surface containing a text. The size of the created surface is just big enough to contain the text. The caller is responsible to release this surface (\hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free}) when it is no more needed. \end{DoxyCompactList}\item 
+\hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} \hyperlink{hw__interface_8h_a516f601afd0c045c9fb0af0f92ec82d4}{hw\-\_\-image\-\_\-load} (const char $\ast$filename, \hyperlink{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{ei\-\_\-surface\-\_\-t} channels)
+\begin{DoxyCompactList}\small\item\em Creates a surface and loads into it an image read from a file. The caller is responsible to release this surface (\hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free}) when it is no more needed. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}{hw\-\_\-event\-\_\-wait\-\_\-next} (struct \hyperlink{structei__event__t}{ei\-\_\-event\-\_\-t} $\ast$event)
+\begin{DoxyCompactList}\small\item\em Lets this processus sleep until a new event is available. \end{DoxyCompactList}\item 
+int \hyperlink{hw__interface_8h_a5229a2fd0d772c02890084e3cfd405ee}{hw\-\_\-event\-\_\-post\-\_\-app} (void $\ast$user\-\_\-param)
+\begin{DoxyCompactList}\small\item\em Put an application-\/generated event on the event queue. This will cause \hyperlink{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}{hw\-\_\-event\-\_\-wait\-\_\-next} to wake. \end{DoxyCompactList}\item 
+void \hyperlink{hw__interface_8h_a905a7cf30db98048223f17f253e27613}{hw\-\_\-event\-\_\-schedule\-\_\-app} (int ms\-\_\-delay, void $\ast$user\-\_\-param)
+\begin{DoxyCompactList}\small\item\em Schedule an application-\/generated event to be posted after some amount of time. This will cause \hyperlink{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}{hw\-\_\-event\-\_\-wait\-\_\-next} to wake after this amount of time. \end{DoxyCompactList}\item 
+double \hyperlink{hw__interface_8h_a55b51924e6fa16839af0576bc8886c02}{hw\-\_\-now} ()
+\begin{DoxyCompactList}\small\item\em Returns the current time, in seconds, from some arbitraty origin. Can be used to measure elpased time between to calls. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int \hyperlink{hw__interface_8h_a026cb381ddcadffd54b5da73d782dea2}{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T}
+\item 
+const int \hyperlink{hw__interface_8h_a18a48d087980072d755e0c585454c48b}{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E}
+\item 
+const int \hyperlink{hw__interface_8h_add78e49422c7326a48963b9f288da47c}{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Low level interface with the graphic hadware. This interface is based on the S\-D\-L library. Created by François Bérard on 30.\-12.\-11. Copyright 2011 Ensimag. All rights reserved. 
+
+Definition in file \hyperlink{hw__interface_8h_source}{hw\-\_\-interface.\-h}.
+
+
+
+\subsection{Typedef Documentation}
+\hypertarget{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!ei\-\_\-surface\-\_\-t@{ei\-\_\-surface\-\_\-t}}
+\index{ei\-\_\-surface\-\_\-t@{ei\-\_\-surface\-\_\-t}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{ei\-\_\-surface\-\_\-t}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-surface\-\_\-t}}}\label{hw__interface_8h_ad9970ae727c438faaf09c58c5defb796}
+
+
+Surface hidden type. A surface represents a 2 dimentional array of pixels where drawing can be done. The displayed screen itself is represented by a surface, it is accessed by \hyperlink{hw__interface_8h_a91dcf1275fecec719a60dd6dfeca40c6}{hw\-\_\-create\-\_\-window}. Other \char`\"{}offscreen\char`\"{} surfaces can be created by \hyperlink{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}{hw\-\_\-surface\-\_\-create}. 
+
+
+
+Definition at line 30 of file hw\-\_\-interface.\-h.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{hw__interface_8h_a91dcf1275fecec719a60dd6dfeca40c6}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-create\-\_\-window@{hw\-\_\-create\-\_\-window}}
+\index{hw\-\_\-create\-\_\-window@{hw\-\_\-create\-\_\-window}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-create\-\_\-window}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-surface\-\_\-t} hw\-\_\-create\-\_\-window (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-size\-\_\-t} $\ast$}]{size, }
+\item[{const {\bf ei\-\_\-bool\-\_\-t}}]{full\-Screen}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a91dcf1275fecec719a60dd6dfeca40c6}
+
+
+Opens the main graphical window of the application. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em size} & Number of horizontal and vertical pixels. \\
+\hline
+{\em full\-Screen} & If true, opens the window in full screen. Otherwise opens a floating window.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The unlocked drawing surface (see \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock}). This surface should not be freed by calling \hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free}, it is freed when releasing access to the low-\/level services by calling \hyperlink{hw__interface_8h_a6e856924f3b4c8966a870e56a3b1dcb1}{hw\-\_\-quit}. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a5229a2fd0d772c02890084e3cfd405ee}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-event\-\_\-post\-\_\-app@{hw\-\_\-event\-\_\-post\-\_\-app}}
+\index{hw\-\_\-event\-\_\-post\-\_\-app@{hw\-\_\-event\-\_\-post\-\_\-app}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-event\-\_\-post\-\_\-app}]{\setlength{\rightskip}{0pt plus 5cm}int hw\-\_\-event\-\_\-post\-\_\-app (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{user\-\_\-param}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a5229a2fd0d772c02890084e3cfd405ee}
+
+
+Put an application-\/generated event on the event queue. This will cause \hyperlink{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}{hw\-\_\-event\-\_\-wait\-\_\-next} to wake. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em user\-\_\-param} & The user parameter that will be retrievable in the event. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a905a7cf30db98048223f17f253e27613}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-event\-\_\-schedule\-\_\-app@{hw\-\_\-event\-\_\-schedule\-\_\-app}}
+\index{hw\-\_\-event\-\_\-schedule\-\_\-app@{hw\-\_\-event\-\_\-schedule\-\_\-app}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-event\-\_\-schedule\-\_\-app}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-event\-\_\-schedule\-\_\-app (
+\begin{DoxyParamCaption}
+\item[{int}]{ms\-\_\-delay, }
+\item[{void $\ast$}]{user\-\_\-param}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a905a7cf30db98048223f17f253e27613}
+
+
+Schedule an application-\/generated event to be posted after some amount of time. This will cause \hyperlink{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}{hw\-\_\-event\-\_\-wait\-\_\-next} to wake after this amount of time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ms\-\_\-delay} & The amount of time, in milliseconds, to wait before the event is posted in the event queue. \\
+\hline
+{\em user\-\_\-param} & The user parameter that will be retrievable in the event. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-event\-\_\-wait\-\_\-next@{hw\-\_\-event\-\_\-wait\-\_\-next}}
+\index{hw\-\_\-event\-\_\-wait\-\_\-next@{hw\-\_\-event\-\_\-wait\-\_\-next}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-event\-\_\-wait\-\_\-next}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-event\-\_\-wait\-\_\-next (
+\begin{DoxyParamCaption}
+\item[{struct {\bf ei\-\_\-event\-\_\-t} $\ast$}]{event}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a512ddccf5f945ac12df4b5e226b2a974}
+
+
+Lets this processus sleep until a new event is available. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & Where to store the new event. The structure must be allocated by the caller. On return, the structure is filled with informations about the new event. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a516f601afd0c045c9fb0af0f92ec82d4}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-image\-\_\-load@{hw\-\_\-image\-\_\-load}}
+\index{hw\-\_\-image\-\_\-load@{hw\-\_\-image\-\_\-load}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-image\-\_\-load}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-surface\-\_\-t} hw\-\_\-image\-\_\-load (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{channels}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a516f601afd0c045c9fb0af0f92ec82d4}
+
+
+Creates a surface and loads into it an image read from a file. The caller is responsible to release this surface (\hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free}) when it is no more needed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The name of the file containing the image. The file can be .png, .tiff, .jpg, etc. \\
+\hline
+{\em channels} & A surface to define channel ordering\-: the newly created surface that is returned by this function will have the same channel order as this surface.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new unlocked surface containing the image. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_acf938165e604a675fe09218a1b3cfb5f}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-init@{hw\-\_\-init}}
+\index{hw\-\_\-init@{hw\-\_\-init}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-init}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_acf938165e604a675fe09218a1b3cfb5f}
+
+
+Initialises access to the low-\/level operating system services. 
+
+\hypertarget{hw__interface_8h_a55b51924e6fa16839af0576bc8886c02}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-now@{hw\-\_\-now}}
+\index{hw\-\_\-now@{hw\-\_\-now}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-now}]{\setlength{\rightskip}{0pt plus 5cm}double hw\-\_\-now (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a55b51924e6fa16839af0576bc8886c02}
+
+
+Returns the current time, in seconds, from some arbitraty origin. Can be used to measure elpased time between to calls. 
+
+\begin{DoxyReturn}{Returns}
+The current time, in seconds. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a6e856924f3b4c8966a870e56a3b1dcb1}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-quit@{hw\-\_\-quit}}
+\index{hw\-\_\-quit@{hw\-\_\-quit}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-quit}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-quit (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a6e856924f3b4c8966a870e56a3b1dcb1}
+
+
+Closes the access to the low-\/level operating system services. 
+
+\hypertarget{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-create@{hw\-\_\-surface\-\_\-create}}
+\index{hw\-\_\-surface\-\_\-create@{hw\-\_\-surface\-\_\-create}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-surface\-\_\-t} hw\-\_\-surface\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{const {\bf ei\-\_\-surface\-\_\-t}}]{root, }
+\item[{const {\bf ei\-\_\-size\-\_\-t} $\ast$}]{size, }
+\item[{{\bf ei\-\_\-bool\-\_\-t}}]{force\-\_\-alpha}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}
+
+
+Allocates an off-\/screen drawing surface. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em root} & The root window which channel indices will be used. This insures that the offscreen uses the same channel indices (Red, Green, Blue, Alpha) as the root surface. \\
+\hline
+{\em size} & Number of horizontal and vertical pixels. \\
+\hline
+{\em force\-\_\-alpha} & If true, then the returned surface will use an alpha channel regardless of root having an alpha channel or not.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The unlocked drawing surface (see \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock}). The surface should be freed by calling \hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free}. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-free@{hw\-\_\-surface\-\_\-free}}
+\index{hw\-\_\-surface\-\_\-free@{hw\-\_\-surface\-\_\-free}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-free}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-surface\-\_\-free (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}
+
+
+Frees a surface allocated by \hyperlink{hw__interface_8h_a2e6d0d669973f8e57198909c60410aa9}{hw\-\_\-surface\-\_\-create}. This must be called on an unlocked surface (see \hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface to be freed. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-get\-\_\-buffer@{hw\-\_\-surface\-\_\-get\-\_\-buffer}}
+\index{hw\-\_\-surface\-\_\-get\-\_\-buffer@{hw\-\_\-surface\-\_\-get\-\_\-buffer}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-get\-\_\-buffer}]{\setlength{\rightskip}{0pt plus 5cm}uint8\-\_\-t$\ast$ hw\-\_\-surface\-\_\-get\-\_\-buffer (
+\begin{DoxyParamCaption}
+\item[{const {\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}
+
+
+Returns a pointer to the address of the pixel at coordinated (0, 0) of a surface. This is usually the first pixel of the surface's memory. But after a call to \hyperlink{hw__interface_8h_a5bfe7b0284f7d6dad28541d49714faf7}{hw\-\_\-surface\-\_\-set\-\_\-origin}, the (0, 0) pixel may point within the surface memory or not. Pixels are ordered by horizontal lines, from top to bottom, and from left to right whitin lines. The pixel buffer of a surface may be moved when the surface is unlocked (\hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}), you must thus call this function after each call to \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface from which the pixel address is returned. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_afd8e86abad6a3f16317d74e541d5034d}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices@{hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices}}
+\index{hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices@{hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-surface\-\_\-get\-\_\-channel\-\_\-indices (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface, }
+\item[{int $\ast$}]{ir, }
+\item[{int $\ast$}]{ig, }
+\item[{int $\ast$}]{ib, }
+\item[{int $\ast$}]{ia}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_afd8e86abad6a3f16317d74e541d5034d}
+
+
+Returns the R, G, B, and Alpha channel indices of a surface. For example, if $\ast$ir is 2, this means that red is encoded in the third byte of the 4 byte pixels of this surface. $\ast$ia may be -\/1, this means that the surface does not handle alpha. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface. \\
+\hline
+{\em ir,ig,ib,ia} & Where to store the resulting indices. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a6ca488fe7d5e254ffa9d9e332ee76996}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-get\-\_\-rect@{hw\-\_\-surface\-\_\-get\-\_\-rect}}
+\index{hw\-\_\-surface\-\_\-get\-\_\-rect@{hw\-\_\-surface\-\_\-get\-\_\-rect}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-get\-\_\-rect}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-rect\-\_\-t} hw\-\_\-surface\-\_\-get\-\_\-rect (
+\begin{DoxyParamCaption}
+\item[{const {\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a6ca488fe7d5e254ffa9d9e332ee76996}
+
+
+Returns the rectangle of a surface (origin and size). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface which rectangle is requested.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The rectangle of the surface. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a7b92235ad70d5017c843c66affccdcd2}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-get\-\_\-size@{hw\-\_\-surface\-\_\-get\-\_\-size}}
+\index{hw\-\_\-surface\-\_\-get\-\_\-size@{hw\-\_\-surface\-\_\-get\-\_\-size}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-get\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-size\-\_\-t} hw\-\_\-surface\-\_\-get\-\_\-size (
+\begin{DoxyParamCaption}
+\item[{const {\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a7b92235ad70d5017c843c66affccdcd2}
+
+
+Returns the size of a surface. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface which size is requested.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The size of the surface. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a45d51156efa4a28bfccf9f239a132db5}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-has\-\_\-alpha@{hw\-\_\-surface\-\_\-has\-\_\-alpha}}
+\index{hw\-\_\-surface\-\_\-has\-\_\-alpha@{hw\-\_\-surface\-\_\-has\-\_\-alpha}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-has\-\_\-alpha}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-bool\-\_\-t} hw\-\_\-surface\-\_\-has\-\_\-alpha (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a45d51156efa4a28bfccf9f239a132db5}
+
+
+Tells if a surface manages transparency, i.\-e. if the surface has an alpha channel. 
+
+\begin{DoxyReturn}{Returns}
+A boolean\-: \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28a26fdc833ef14f44fa15d81522b6802ec}{E\-I\-\_\-\-T\-R\-U\-E} means that the surface has an alpha (transparency) channel, \hyperlink{ei__types_8h_a383b9af13bd6a0a893096ead3c4d8e28ad2686863dafff40367aabad2dfdf17db}{E\-I\-\_\-\-F\-A\-L\-S\-E} means it does not. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-lock@{hw\-\_\-surface\-\_\-lock}}
+\index{hw\-\_\-surface\-\_\-lock@{hw\-\_\-surface\-\_\-lock}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-lock}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-surface\-\_\-lock (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}
+
+
+Gains exclusive access to a surface. Every call to this function must be matched by a call to \hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}. The address of the pixel buffer may change while the surface is unlocked. Thus, \hyperlink{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}{hw\-\_\-surface\-\_\-get\-\_\-buffer} must called after each call to this function. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface to lock. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a5bfe7b0284f7d6dad28541d49714faf7}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-set\-\_\-origin@{hw\-\_\-surface\-\_\-set\-\_\-origin}}
+\index{hw\-\_\-surface\-\_\-set\-\_\-origin@{hw\-\_\-surface\-\_\-set\-\_\-origin}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-set\-\_\-origin}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-surface\-\_\-set\-\_\-origin (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface, }
+\item[{const {\bf ei\-\_\-point\-\_\-t}}]{origin}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a5bfe7b0284f7d6dad28541d49714faf7}
+
+
+Sets the coordinates of the first pixel of the surface's memory. By default, the coordinates of the first pixel are (0, 0). This can be changed by a call to this function. After a call to this function, the function \hyperlink{hw__interface_8h_a8942e332c58a06edd0e639e6743532d1}{hw\-\_\-surface\-\_\-get\-\_\-buffer} returns a different address than before. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface which origin must be changed. \\
+\hline
+{\em origin} & The new coordinates of the first pixel of the surface. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-unlock@{hw\-\_\-surface\-\_\-unlock}}
+\index{hw\-\_\-surface\-\_\-unlock@{hw\-\_\-surface\-\_\-unlock}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-unlock}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-surface\-\_\-unlock (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}
+
+
+Releases the exclusive access to a surface that was locked by \hyperlink{hw__interface_8h_a1b9b22f29bb9de0b39ea904fd66251be}{hw\-\_\-surface\-\_\-lock}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface to unlock. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a6fa41442ed6ec84a120734f7c4fca9a3}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-surface\-\_\-update\-\_\-rects@{hw\-\_\-surface\-\_\-update\-\_\-rects}}
+\index{hw\-\_\-surface\-\_\-update\-\_\-rects@{hw\-\_\-surface\-\_\-update\-\_\-rects}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-surface\-\_\-update\-\_\-rects}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-surface\-\_\-update\-\_\-rects (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-surface\-\_\-t}}]{surface, }
+\item[{const {\bf ei\-\_\-linked\-\_\-rect\-\_\-t} $\ast$}]{rects}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a6fa41442ed6ec84a120734f7c4fca9a3}
+
+
+Requests that a list of rectangular regions of the root surface be updated on screen. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em surface} & The surface returned by \hyperlink{hw__interface_8h_a91dcf1275fecec719a60dd6dfeca40c6}{hw\-\_\-create\-\_\-window}. This function can only be called on {\itshape unlocked surfaces} (\hyperlink{hw__interface_8h_abf4681e5ead295ccf5b3df3ec8adab66}{hw\-\_\-surface\-\_\-unlock}). \\
+\hline
+{\em rects} & The list of rectangle to be updated on screen. If N\-U\-L\-L, them the entire surface is updated. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a0dd8c0a9599e8cf6f2839bbb049d9358}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-text\-\_\-compute\-\_\-size@{hw\-\_\-text\-\_\-compute\-\_\-size}}
+\index{hw\-\_\-text\-\_\-compute\-\_\-size@{hw\-\_\-text\-\_\-compute\-\_\-size}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-text\-\_\-compute\-\_\-size}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-text\-\_\-compute\-\_\-size (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{text, }
+\item[{const {\bf ei\-\_\-font\-\_\-t}}]{font, }
+\item[{int $\ast$}]{width, }
+\item[{int $\ast$}]{height}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a0dd8c0a9599e8cf6f2839bbb049d9358}
+
+
+Computes the size of a text surface givent the font and the text. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & The string of the message. \\
+\hline
+{\em font} & The font used to render the text. \\
+\hline
+{\em width,height} & Addresses where to store the computed width and height of the text surface. \\
+\hline
+\end{DoxyParams}
+\hypertarget{hw__interface_8h_a806521541c5a5a80fbf43105270919e4}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-text\-\_\-create\-\_\-surface@{hw\-\_\-text\-\_\-create\-\_\-surface}}
+\index{hw\-\_\-text\-\_\-create\-\_\-surface@{hw\-\_\-text\-\_\-create\-\_\-surface}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-text\-\_\-create\-\_\-surface}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-surface\-\_\-t} hw\-\_\-text\-\_\-create\-\_\-surface (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{text, }
+\item[{const {\bf ei\-\_\-font\-\_\-t}}]{font, }
+\item[{const {\bf ei\-\_\-color\-\_\-t} $\ast$}]{color}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a806521541c5a5a80fbf43105270919e4}
+
+
+Creates a surface containing a text. The size of the created surface is just big enough to contain the text. The caller is responsible to release this surface (\hyperlink{hw__interface_8h_a97d0cca63330b33140dd40288ae1022b}{hw\-\_\-surface\-\_\-free}) when it is no more needed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em text} & The string of the message. \\
+\hline
+{\em font} & The font used to render the text. \\
+\hline
+{\em color} & The text color. The alpha parameter is not used. However, the text is rendered with alpha blending to smooth the curves of the letters (anti-\/aliasing).\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A newly created unlocked surface containing an anti-\/aliased rendering of the text. The anti-\/aliasing is implemented with the alpha channel of the surface\-: pixels on the text's boundaries have some transparency. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_ad391b77a24c628dc8601111f562aafbc}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-text\-\_\-font\-\_\-create@{hw\-\_\-text\-\_\-font\-\_\-create}}
+\index{hw\-\_\-text\-\_\-font\-\_\-create@{hw\-\_\-text\-\_\-font\-\_\-create}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-text\-\_\-font\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-font\-\_\-t} hw\-\_\-text\-\_\-font\-\_\-create (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{filename, }
+\item[{{\bf ei\-\_\-fontstyle\-\_\-t}}]{style, }
+\item[{int}]{size}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_ad391b77a24c628dc8601111f562aafbc}
+
+
+Creates a font that can be used to render text. The font must be freed by calling \hyperlink{hw__interface_8h_a2ac46d37db4c40adc10e3afb137f9f02}{hw\-\_\-text\-\_\-font\-\_\-free}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & The path to the file containing the ttf font definition. Can be relative. \\
+\hline
+{\em style} & The style of the font (normal, bold, ...). \\
+\hline
+{\em size} & The size of the characters in pixels.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The font. 
+\end{DoxyReturn}
+\hypertarget{hw__interface_8h_a2ac46d37db4c40adc10e3afb137f9f02}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!hw\-\_\-text\-\_\-font\-\_\-free@{hw\-\_\-text\-\_\-font\-\_\-free}}
+\index{hw\-\_\-text\-\_\-font\-\_\-free@{hw\-\_\-text\-\_\-font\-\_\-free}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{hw\-\_\-text\-\_\-font\-\_\-free}]{\setlength{\rightskip}{0pt plus 5cm}void hw\-\_\-text\-\_\-font\-\_\-free (
+\begin{DoxyParamCaption}
+\item[{{\bf ei\-\_\-font\-\_\-t}}]{font}
+\end{DoxyParamCaption}
+)}}\label{hw__interface_8h_a2ac46d37db4c40adc10e3afb137f9f02}
+
+
+Frees a font created by \hyperlink{hw__interface_8h_ad391b77a24c628dc8601111f562aafbc}{hw\-\_\-text\-\_\-font\-\_\-create}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em font} & The font to be freed. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Variable Documentation}
+\hypertarget{hw__interface_8h_a026cb381ddcadffd54b5da73d782dea2}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T@{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T}}
+\index{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T@{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T}]{\setlength{\rightskip}{0pt plus 5cm}const int E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-L\-E\-F\-T}}\label{hw__interface_8h_a026cb381ddcadffd54b5da73d782dea2}
+\hypertarget{hw__interface_8h_a18a48d087980072d755e0c585454c48b}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E@{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E}}
+\index{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E@{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E}]{\setlength{\rightskip}{0pt plus 5cm}const int E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-M\-I\-D\-D\-L\-E}}\label{hw__interface_8h_a18a48d087980072d755e0c585454c48b}
+\hypertarget{hw__interface_8h_add78e49422c7326a48963b9f288da47c}{\index{hw\-\_\-interface.\-h@{hw\-\_\-interface.\-h}!E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T@{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T}}
+\index{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T@{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T}!hw_interface.h@{hw\-\_\-interface.\-h}}
+\subsubsection[{E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T}]{\setlength{\rightskip}{0pt plus 5cm}const int E\-I\-\_\-\-M\-O\-U\-S\-E\-B\-U\-T\-T\-O\-N\-\_\-\-R\-I\-G\-H\-T}}\label{hw__interface_8h_add78e49422c7326a48963b9f288da47c}
