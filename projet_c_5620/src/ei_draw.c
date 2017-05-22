@@ -81,7 +81,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 				 ei_point_t point_current = first_point->point; // Verifier que le premier point est non nul
 				 int x_coord = point_current.x;
 				 int y_coord = point_current.y;
-				 draw_pixel(surface, x_coord, y_coord,  color);
+				 draw_pixel(surface, x_coord, y_coord, color_rgba);
 				 ei_point_t end_point = first_point->next->point; // Verifier que le deuxieme point est non nul
 				 int delta_x = end_point.x - x_coord;
 				 int delta_y = end_point.y - y_coord;
@@ -93,7 +93,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 						 		y_coord++;
 								error -= delta_x;
 						 }
-						 draw_pixel(surface, x_coord, y_coord, color);
+						 draw_pixel(surface, x_coord, y_coord, color_rgba);
 				 }
 				 hw_surface_unlock(surface);
 				 hw_surface_update_rects(surface, NULL);
