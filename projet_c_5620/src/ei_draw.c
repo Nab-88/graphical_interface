@@ -1,4 +1,3 @@
-# fichier ei_draw
 #include <stdint.h>
 #include "ei_types.h"
 #include "hw_interface.h"
@@ -17,7 +16,37 @@
  *				of the color is ignored in the case of surfaces the don't have an
  *				alpha channel.
  */
-uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color);
+uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
+    /* ir -> Position of the red in the 32 bit integer
+     * ig -> Position of the green in the 32 bit integer
+     * ib -> Position of the blue in the 32 bit integer
+     * ia -> Position of the aplha value in the 32 bit integer
+     * *ia may be -1, this means that the surface does not handle alpha. 
+     */
+    int ir;
+    int ig;
+    int ib;
+    int ia;
+    uint32_t couleur = 0;
+    hw_surface_get_channel_indices(surface, &ir, &ig, &ib, &ia);
+    // We must we recalculate ir, ig, ib, ia
+    ir = 3 - ir;
+    ig = 3 - ig;
+    ib = 3 - ib;
+    ia = 3 - ia;
+    bleu = atoi(color -> blue);
+    rouge = atoi(color -> red);
+    vert = atoi(color -> green);
+    alpha = atoi(color -> alpha);
+    couleur = couleur && (((uint32_t) bleu) << ib);
+    couleur = couleur && (((uint32_t) rouge) << ir);
+    couleur = couleur && (((uint32_t) vert) << ig);
+    if (ia > 3){
+        couleur = couleur && (((uint32_t) alpha) << ia);
+    }
+    return couleur;
+
+
 
 
 
