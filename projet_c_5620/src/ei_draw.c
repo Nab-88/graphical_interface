@@ -160,7 +160,7 @@ void			ei_fill			(ei_surface_t		surface,
              }
              hw_surface_lock(surface);
              uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
-             for (uint32_t i = 0; i < (suface_size.width * surface_size.height); i++){
+             for (uint32_t i = 0; i < (surface_size.width * surface_size.height); i++){
                	*pixel_ptr =  converted_color;
                 *pixel_ptr ++;
               }
