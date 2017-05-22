@@ -13,6 +13,7 @@
 #define EI_DRAW_H
 
 #include <stdint.h>
+#include <string.h>
 #include "ei_types.h"
 #include "hw_interface.h"
 
