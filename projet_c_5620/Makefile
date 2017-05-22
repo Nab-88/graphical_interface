@@ -12,7 +12,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= 	
+LIBEIOBJS	:= 	./src
 
 
 
@@ -63,8 +63,12 @@ all : ${TARGETS}
 
 # minimal
 
-minimal : ${OBJDIR}/minimal.o ${LIBEIBASE}
-	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS}
+minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+
+${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${LIBEIOBJS}/ei_draw.c -o ${OBJDIR}/ei_draw.o
 
 ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
