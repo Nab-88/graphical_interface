@@ -178,6 +178,9 @@ int* init_scanline(ei_linked_point_t* first_point){
  *
  * @param	first_point 	The head of a linked list of the points of the line. It is either
  *				NULL (i.e. draws nothing), or has more than 2 points.
+ * @param y_min  The lowest abscissa
+ * @param y_max  The highest abscissa
+ * @return Returns the table of sides list
  */
 
 ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
@@ -218,6 +221,31 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
 }
 
 /**
+ * \brief	Removes from TCA all the sides with y_max = y
+ *
+ * @param	TCA 	The active list of sides
+ * @param y  The abscissa where we are
+ */
+void delete_side(ei_TCA_t *TCA, int y) {
+  if (TCA -> head) {
+    ei_side_t *current_side = TCA -> head;
+    ei_side_t *ancien = TCA -> head;
+    if (current_side -> y_max == y) {
+      TCA -> head = (ei_side_t*) current_side->next;
+    }
+    ancien = current_side;
+    current_side = (ei_side_t*) current_side -> next;
+    while (current_side) {
+      if (current_side -> y_max == y) {
+        ancien -> next = current_side -> next;
+      }
+      ancien = current_side;
+      current_side = (ei_side_t*) current_side -> next;
+    }
+  }
+}
+
+/**
  * \brief	Draws a filled polygon.
  *
  * @param	surface 	Where to draw the polygon. The surface must be *locked* by
@@ -233,15 +261,16 @@ void			ei_draw_polygon		(ei_surface_t			surface,
 						 const ei_rect_t*		clipper) {
         int* tab = init_scanline((ei_linked_point_t*)first_point);
         ei_TC_t *TC = init_TC(first_point, tab[0], tab[1]);
-        // ei_TCA_t* TCA = NULL;
-        // while (TC != NULL && TCA != NULL) {
-        //   move_side();
-        //   delete_side();
+        int y = tab[0];
+        ei_TCA_t* TCA = malloc(sizeof(ei_TCA_t));
+        while (TC != NULL && TCA != NULL) {
+          // move_side();
+          delete_side(TCA, y);
         //   order_TCA();
         //   draw_scanline();
         //   y++;
         //   update_intersect();
-        // }
+        }
         // free_all();
 }
 
