@@ -73,6 +73,17 @@ ${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
 ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
 
+# map_rgba
+map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/map_rgba.o
+	${LINK} -o map_rgba ${LDFLAGS} ${OBJDIR}/map_rgba.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+
+${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${LIBEIOBJS}/ei_draw.c -o ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/map_rgba.o : ${TESTS}/map_rgba.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/map_rgba.c -o ${OBJDIR}/map_rgba.o
+
 # lines
 
 lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${LIBEI}
