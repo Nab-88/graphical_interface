@@ -141,6 +141,81 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 
 
 /**
+ * \brief	Initialize the table of sides
+ *
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ */
+
+ei_TC_t init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
+  ei_TC_t TC;
+  if (first_point) {
+    TC.tab = malloc(sizeof(ei_list_side_t)* (y_max-y_min));
+    int y = y_min;
+    for (int i = 0; i <= y_max-y_min; i++) {
+      printf("bonojur\n");
+      TC.tab[i]->scanline_number = y;
+      y++;
+    }
+    ei_linked_point_t* current_point = first_point;
+    const ei_linked_point_t* reference = first_point;
+    while (current_point -> next != reference) {
+        ei_linked_point_t* next_point = current_point -> next;
+        int x1 = (current_point -> point).x;
+        int y1 = (current_point -> point).y;
+        int x2 = (next_point -> point).x;
+        int y2 = (next_point -> point).y;
+        if (y1 != y2) {
+            // Add this side because not horizontal
+            int scanline = 0;
+            if (y1 > y2) {
+              scanline = y1;
+            } else {
+              scanline = y2;
+            }
+            ei_side_t *side = malloc(sizeof(ei_side_t));
+            side -> y_max = scanline;
+            if (scanline == y2) {
+              side -> x_y = x1;
+            } else {
+              side -> x_y = x2;
+            }
+            side -> slope = (x2 - x1) / (y2 - y1);
+            side -> next = (TC.tab[scanline - y_min]) -> first_side;
+            TC.tab[scanline - y_min] -> first_side = side;
+        }
+        current_point = next_point;
+    }
+    ei_linked_point_t* next_point = current_point -> next;
+    int x1 = (current_point -> point).x;
+    int y1 = (current_point -> point).y;
+    int x2 = (next_point -> point).x;
+    int y2 = (next_point -> point).y;
+    if (y1 != y2) {
+        // Add this side because not horizontal
+        int scanline = 0;
+        if (y1 > y2) {
+          scanline = y1;
+        } else {
+          scanline = y2;
+        }
+        ei_side_t *side = malloc(sizeof(ei_side_t));
+        side -> y_max = scanline;
+        if (scanline == y2) {
+          side -> x_y = x1;
+        } else {
+          side -> x_y = x2;
+        }
+        side -> slope = (x2 - x1) / (y2 - y1);
+        side -> next = (TC.tab[scanline - y_min]) -> first_side;
+        TC.tab[scanline - y_min] -> first_side = side;
+    }
+    return TC;
+  }
+  return TC;
+}
+
+/**
  * \brief	Draws a filled polygon.
  *
  * @param	surface 	Where to draw the polygon. The surface must be *locked* by
@@ -150,21 +225,26 @@ void			ei_draw_polyline	(ei_surface_t			surface,
  * @param	color		The color used to draw the polygon, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-// void			ei_draw_polygon		(ei_surface_t			surface,
-// 						 const ei_linked_point_t*	first_point,
-// 						 const ei_color_t		color,
-// 						 const ei_rect_t*		clipper);
-//         ei_TC_t* TC =  init_TC();
-//         ei_TCA_t* TCA = NULL;
-//         int y = init_scanline();
-//         while (TC != NULL && TCA != NULL) {
-//           move_side();
-//           delete_side();
-//           order_TCA();
-//           draw_scanline();
-//           y++;
-//           update_intersect();
-//         }
+void			ei_draw_polygon		(ei_surface_t			surface,
+						 const ei_linked_point_t*	first_point,
+						 const ei_color_t		color,
+						 const ei_rect_t*		clipper) {
+        // int y = init_scanline();
+        ei_TC_t TC = init_TC(first_point, 1, 300);
+        for (int i = 0; i < 300; i++) {
+          printf("%u : %s\n", TC.tab[i]->scanline_number, TC.tab[i]->first_side);
+        }
+        // ei_TCA_t* TCA = NULL;
+        // while (TC != NULL && TCA != NULL) {
+        //   move_side();
+        //   delete_side();
+        //   order_TCA();
+        //   draw_scanline();
+        //   y++;
+        //   update_intersect();
+        // }
+        // free_all();
+}
 
 /**
  * \brief	Draws text by calling \ref hw_text_create_surface.

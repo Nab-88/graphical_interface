@@ -20,7 +20,7 @@ typedef struct {
 	 int y_max; ///< The maximum ordinate where the scanline will meet the side
    int x_y; ///< The abscissa where te scanline intersects the side
    float slope; ///< The slope of the side
-   ei_side_t *next; ///< The pointer to the next side, NULL if there is none
+   struct ei_side_t *next; ///< The pointer to the next side, NULL if there is none
 } ei_side_t;
 
 /**
@@ -46,6 +46,6 @@ typedef struct {
 
 typedef struct {
 	ei_side_t *head; ///< The pointer to the head of the table of active sides
-} ei_TCA_t
+} ei_TCA_t;
 
 #endif

@@ -13,7 +13,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= 	
+LIBEIOBJS	:=
 
 
 # Platform specific definitions (OS X, Linux)
@@ -59,6 +59,14 @@ all : ${TARGETS}
 
 ########## Test-programs
 
+# test_polygon
+test_polygon : ${OBJDIR}/test_polygon.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o test_polygon ${LDFLAGS} ${OBJDIR}/test_polygon.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/test_polygon.o : ${TESTS}/test_polygon.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_polygon.c -o ${OBJDIR}/test_polygon.o
+
+
 # init_skyline
 init_scanline : ${OBJDIR}/init_scanline.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o init_scanline ${LDFLAGS} ${OBJDIR}/init_scanline.o ${LIBS} ${OBJDIR}/ei_draw.o
@@ -87,7 +95,7 @@ test_fill : ${OBJDIR}/test_fill.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 
 ${OBJDIR}/test_fill.o : ${TESTS}/test_fill.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_fill.c -o ${OBJDIR}/test_fill.o
-	
+
 # map_rgba
 map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o map_rgba ${LDFLAGS} ${OBJDIR}/map_rgba.o ${LIBS} ${OBJDIR}/ei_draw.o
@@ -98,8 +106,8 @@ ${OBJDIR}/map_rgba.o : ${TESTS}/map_rgba.c
 
 # lines
 
-lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${LIBEI} 
-	${LINK} -o lines ${OBJDIR}/lines.o ${OBJDIR}/ei_draw.o ${LIBEI} ${LIBS} 
+lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${LIBEI}
+	${LINK} -o lines ${OBJDIR}/lines.o ${OBJDIR}/ei_draw.o ${LIBEI} ${LIBS}
 
 ${OBJDIR}/lines.o : ${TESTS}/lines.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/lines.c -o ${OBJDIR}/lines.o
