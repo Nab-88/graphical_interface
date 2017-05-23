@@ -5,6 +5,7 @@ CC		= gcc
 OBJDIR		= ./objs
 TESTS		= ./tests
 INCLUDES	= ./include
+SRC = ./src
 INCFLAGS	:= -I${INCLUDES} -I${TESTS}
 #OPTFLAGS	:= -Os -DNDEBUG
 OPTFLAGS	:= -g
@@ -12,8 +13,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= 	./src
-
+LIBEIOBJS	:= 	
 
 
 # Platform specific definitions (OS X, Linux)
@@ -68,8 +68,8 @@ minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 
 # ei_draw
 
-${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${LIBEIOBJS}/ei_draw.c -o ${OBJDIR}/ei_draw.o
+${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw.c -o ${OBJDIR}/ei_draw.o
 
 ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
@@ -92,8 +92,8 @@ ${OBJDIR}/map_rgba.o : ${TESTS}/map_rgba.c
 
 # lines
 
-lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${LIBEI} ${OBJDIR}/ei_draw.o
-	${LINK} -o lines ${OBJDIR}/lines.o ${LIBEI} ${OBJDIR}/ei_draw.o ${LIBS} 
+lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${LIBEI} 
+	${LINK} -o lines ${OBJDIR}/lines.o ${OBJDIR}/ei_draw.o ${LIBEI} ${LIBS} 
 
 ${OBJDIR}/lines.o : ${TESTS}/lines.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/lines.c -o ${OBJDIR}/lines.o
