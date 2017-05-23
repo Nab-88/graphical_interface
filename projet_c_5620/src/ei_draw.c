@@ -70,7 +70,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
          hw_surface_lock(surface);
-				 uint32_t color_rgba = ei_map_rgba(surface, &color);
+         uint32_t color_rgba = ei_map_rgba(surface, &color);
          const ei_linked_point_t *reference = first_point;
          if (first_point) {
            ei_point_t point_current = first_point->point;
@@ -138,6 +138,39 @@ void			ei_draw_polyline	(ei_surface_t			surface,
            hw_surface_update_rects(surface, NULL);
          }
 }
+
+/**
+ * \brief	Finds skyline min and skyline max.
+ *
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ * @return                  int* returns skyline min and max
+ */
+int *init_scanline(ei_linked_point_t* first_point){
+    ei_linked_point_t* current;
+    current = first_point;
+    int* tab = malloc(sizeof(int)*2);
+    ei_point_t point = current -> point;
+    int min = point.y;
+    int max = point.y;
+    current = first_point -> next;
+    while (current != NULL){
+        point = current -> point;
+        if (min > point.y) {
+            min = point.y;
+        }
+        if (max < point.y) {
+            max = point.y;
+        }
+        current = current -> next;
+    }
+    tab[0] = min;
+    tab[1] = max;
+    return tab;
+}
+
+
+
 
 
 /**
