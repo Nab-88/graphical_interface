@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "ei_types.h"
@@ -69,7 +70,7 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
 	 uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
 	 ei_size_t surface_size = hw_surface_get_size(surface);
 	 pixel_ptr += x_coord + y_coord * surface_size.width;
-	 *pixel_ptr = color_rgba;
+	 *pixel_ptr = 0;
  }
 
 void			ei_draw_polyline	(ei_surface_t			surface,
@@ -78,25 +79,58 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 						 const ei_rect_t*		clipper) {
 				 hw_surface_lock(surface);
 				 uint32_t color_rgba = ei_map_rgba(surface, &color);
-				 ei_point_t point_current = first_point->point; // Verifier que le premier point est non nul
-				 int x_coord = point_current.x;
-				 int y_coord = point_current.y;
-				 draw_pixel(surface, x_coord, y_coord, color_rgba);
-				 ei_point_t end_point = first_point->next->point; // Verifier que le deuxieme point est non nul
-				 int delta_x = end_point.x - x_coord;
-				 int delta_y = end_point.y - y_coord;
-				 int error = 0;
-				 while (x_coord != end_point.x && y_coord != end_point.y) {
-						 x_coord++;
-						 error += delta_y;
-						 if (2 * error > delta_x) {
-						 		y_coord++;
-								error -= delta_x;
-						 }
-						 draw_pixel(surface, x_coord, y_coord, color_rgba);
-				 }
-				 hw_surface_unlock(surface);
-				 hw_surface_update_rects(surface, NULL);
+         const ei_linked_point_t *reference = first_point;
+         if (first_point) {
+           ei_point_t point_current = first_point->point; // Verifier que le premier point est non nul
+           int x_coord = point_current.x;
+           int y_coord = point_current.y;
+           draw_pixel(surface, x_coord, y_coord, color_rgba);
+           while (first_point -> next) {
+             ei_point_t end_point = first_point->next->point;
+             int delta_x = end_point.x - x_coord;
+             int delta_y = end_point.y - y_coord;
+             int variable_x = 1;
+             int variable_y = 1;
+             if (delta_x < 0) {
+                variable_x = -1;
+                delta_x = - delta_x;
+             }
+             if (delta_y < 0) {
+                variable_y = -1;
+                delta_y = - delta_y;
+             }
+             if (abs(delta_x) < abs(delta_y)) {
+                 int error = 0;
+                 while (x_coord != end_point.x && y_coord != end_point.y) {
+                   y_coord += variable_y;
+                   error += delta_x;
+                   if (2 * error > delta_y) {
+                     x_coord += variable_x;
+                     error -= delta_y;
+                   }
+                   draw_pixel(surface, x_coord, y_coord, color_rgba);
+                 }
+             } else {
+               int error = 0;
+               while (x_coord != end_point.x && y_coord != end_point.y) {
+                 x_coord += variable_x;
+                 error += delta_y;
+                 if (2 * error > delta_x) {
+                   y_coord += variable_y;
+                   error -= delta_x;
+                 }
+                 draw_pixel(surface, x_coord, y_coord, color_rgba);
+               }
+             }
+             first_point = first_point->next;
+             if (first_point == reference) {
+               break;
+             }
+           }
+           hw_surface_unlock(surface);
+           hw_surface_update_rects(surface, NULL);
+         }
+
 }
 
 
@@ -128,45 +162,45 @@ void			ei_draw_polygon		(ei_surface_t			surface,
  * @param	color		The text color. Can't be NULL. The alpha parameter is not used.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-void			ei_draw_text		(ei_surface_t		surface,
-						 const ei_point_t*	where,
-						 const char*		text,
-						 const ei_font_t	font,
-						 const ei_color_t*	color,
-						 const ei_rect_t*	clipper)
-						 {
-						 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
-						 hw_surface_lock(text_surface);
-						 hw_surface_set_origin(surface, *where);
-						 ei_rect_t rectangle = hw_surface_get_rect(surface);
-						 hw_surface_lock(surface);
-						 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
-						 hw_surface_unlock(surface);
-						 hw_surface_unlock(text_surface);
-						 hw_surface_update_rects(surface, NULL);
-						 }
-
-void			ei_fill			(ei_surface_t		surface,
-						 const ei_color_t*	color,
-						 const ei_rect_t*	clipper)
-//PAS DE GESTION DU CLIPPING POUR L'INSTANT.
-             {
-             ei_size_t surface_size = hw_surface_get_size(surface);
-             if(color == NULL){
-               uint32_t converted_color = 0;
-             }
-             else{
-               uint32_t converted_color = ei_map_rgba(surface, *color);
-             }
-             hw_surface_lock(surface);
-             uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
-             for (uint32_t i = 0; i < (surface_size.width * surface_size.height); i++){
-               	*pixel_ptr =  converted_color;
-                *pixel_ptr ++;
-              }
-              hw_surface_unlock(surface);
-              hw_surface_update_rects(surface, NULL);
-             };
+// void			ei_draw_text		(ei_surface_t		surface,
+// 						 const ei_point_t*	where,
+// 						 const char*		text,
+// 						 const ei_font_t	font,
+// 						 const ei_color_t*	color,
+// 						 const ei_rect_t*	clipper)
+// 						 {
+// 						 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
+// 						 hw_surface_lock(text_surface);
+// 						 hw_surface_set_origin(surface, *where);
+// 						 ei_rect_t rectangle = hw_surface_get_rect(surface);
+// 						 hw_surface_lock(surface);
+// 						 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
+// 						 hw_surface_unlock(surface);
+// 						 hw_surface_unlock(text_surface);
+// 						 hw_surface_update_rects(surface, NULL);
+// 						 }
+//
+// void			ei_fill			(ei_surface_t		surface,
+// 						 const ei_color_t*	color,
+// 						 const ei_rect_t*	clipper)
+// //PAS DE GESTION DU CLIPPING POUR L'INSTANT.
+//              {
+//              ei_size_t surface_size = hw_surface_get_size(surface);
+//              if(color == NULL){
+//                uint32_t converted_color = 0;
+//              }
+//              else{
+//                uint32_t converted_color = ei_map_rgba(surface, *color);
+//              }
+//              hw_surface_lock(surface);
+//              uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+//              for (uint32_t i = 0; i < (surface_size.width * surface_size.height); i++){
+//                	*pixel_ptr =  converted_color;
+//                 *pixel_ptr ++;
+//               }
+//               hw_surface_unlock(surface);
+//               hw_surface_update_rects(surface, NULL);
+//              };
 
 int			ei_copy_surface		(ei_surface_t		destination,
 						 const ei_rect_t*	dst_rect,
