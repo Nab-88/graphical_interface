@@ -32,11 +32,18 @@ int ei_main(int argc, char** argv)
 	hw_surface_update_rects(main_window, NULL);
 	ei_linked_point_t *chained_list = malloc(sizeof(ei_linked_point_t));
 	ei_linked_point_t *next_point = malloc(sizeof(ei_linked_point_t));
-	next_point->next = NULL;
-	next_point->point = ei_point(500,20);
-	chained_list->next = next_point;
-	chained_list->point = ei_point(1,1);
+	ei_linked_point_t *next_next_point = malloc(sizeof(ei_linked_point_t));
+	next_next_point -> next = chained_list;
+	next_next_point -> point = ei_point(100,300);
+	next_point -> next = next_next_point;
+	next_point -> point = ei_point(300,350);
+	chained_list -> next = next_point;
+	chained_list -> point = ei_point(200,1);
 	ei_color_t *color = malloc(sizeof(ei_color_t));
+	color -> red = 255;
+	color -> blue = 0;
+	color -> green = 0;
+	color -> alpha = 0;
 	ei_draw_polyline(main_window, chained_list, *color, NULL);
 	// Wait for a key press.
 	event.type = ei_ev_none;
