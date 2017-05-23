@@ -85,7 +85,7 @@ ${OBJDIR}/test_fill.o : ${TESTS}/test_fill.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_fill.c -o ${OBJDIR}/test_fill.o
 	
 # map_rgba
-map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/map_rgba.o
+map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o map_rgba ${LDFLAGS} ${OBJDIR}/map_rgba.o ${LIBS} ${OBJDIR}/ei_draw.o
 
 
