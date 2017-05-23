@@ -38,15 +38,15 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
     ig = 3 - ig;
     ib = 3 - ib;
     ia = 3 - ia;
-    uint32_t bleu = atoi(color -> blue);
-    uint32_t rouge = atoi(color -> red);
-    uint32_t vert = atoi(color -> green);
-    uint32_t alpha = atoi(color -> alpha);
-    couleur = couleur && (bleu << ib);
-    couleur = couleur && (rouge << ir);
-    couleur = couleur && (vert << ig);
+    uint32_t bleu = color -> blue;
+    uint32_t rouge = color -> red;
+    uint32_t vert = color -> green;
+    uint32_t alpha = color -> alpha;
+    couleur = couleur || (bleu << ib);
+    couleur = couleur || (rouge << ir);
+    couleur = couleur || (vert << ig);
     if (ia > 3){
-        couleur = couleur && (alpha << ia);
+        couleur = couleur || (alpha << ia);
     }
     return couleur;
 }
