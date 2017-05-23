@@ -34,9 +34,9 @@ int ei_main(int argc, char** argv)
 	ei_linked_point_t *next_point = malloc(sizeof(ei_linked_point_t));
 	ei_linked_point_t *next_next_point = malloc(sizeof(ei_linked_point_t));
 	next_next_point -> next = chained_list;
-	next_next_point -> point = ei_point(100,300);
+	next_next_point -> point = ei_point(300,100);
 	next_point -> next = next_next_point;
-	next_point -> point = ei_point(300,350);
+	next_point -> point = ei_point(350,300);
 	chained_list -> next = next_point;
 	chained_list -> point = ei_point(200,1);
 	ei_color_t *color = malloc(sizeof(ei_color_t));
