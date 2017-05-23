@@ -79,6 +79,13 @@ ${OBJDIR}/init_scanline.o : ${TESTS}/init_scanline.c
 
 minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS} ${OBJDIR}/ei_draw.o
+	
+#test_text
+test_text : ${OBJDIR}/test_text.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o test_text ${LDFLAGS} ${OBJDIR}/test_text.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/test_text.o : ${TESTS}/test_text.c
+		${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_text.c -o ${OBJDIR}/test_text.o
 
 ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o

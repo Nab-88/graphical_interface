@@ -7,7 +7,7 @@
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_types.h"
-#include "ei_TC.h"
+// #include "ei_TC.h"
 
 /**
  * \brief	Converts the three red, green and blue component of a color in a 32 bits integer
@@ -70,7 +70,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
          hw_surface_lock(surface);
-				 uint32_t color_rgba = ei_map_rgba(surface, &color);
+         uint32_t color_rgba = ei_map_rgba(surface, &color);
          const ei_linked_point_t *reference = first_point;
          if (first_point) {
            ei_point_t point_current = first_point->point;
@@ -138,6 +138,39 @@ void			ei_draw_polyline	(ei_surface_t			surface,
            hw_surface_update_rects(surface, NULL);
          }
 }
+
+/**
+ * \brief	Finds skyline min and skyline max.
+ *
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ * @return                  int* returns skyline min and max
+ */
+int *init_scanline(ei_linked_point_t* first_point){
+    ei_linked_point_t* current;
+    current = first_point;
+    int* tab = malloc(sizeof(int)*2);
+    ei_point_t point = current -> point;
+    int min = point.y;
+    int max = point.y;
+    current = first_point -> next;
+    while (current != NULL){
+        point = current -> point;
+        if (min > point.y) {
+            min = point.y;
+        }
+        if (max < point.y) {
+            max = point.y;
+        }
+        current = current -> next;
+    }
+    tab[0] = min;
+    tab[1] = max;
+    return tab;
+}
+
+
+
 
 
 /**
@@ -260,23 +293,34 @@ void			ei_draw_polygon		(ei_surface_t			surface,
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
 
-//void			ei_draw_text		(ei_surface_t		surface,
-//					 const ei_point_t*	where,
-//					 const char*		text,
-//					 const ei_font_t	font,
-//					 const ei_color_t*	color,
-//					 const ei_rect_t*	clipper)
-//					 {
-//					 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
-//					 hw_surface_lock(text_surface);
-//					 hw_surface_set_origin(surface, *where);
-//					 ei_rect_t rectangle = hw_surface_get_rect(surface);
-//					 hw_surface_lock(surface);
-//					 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
-//					 hw_surface_unlock(surface);
-//					 hw_surface_unlock(text_surface);
-//					 hw_surface_update_rects(surface, NULL);
-//					 }
+void			ei_draw_text		(ei_surface_t		surface,
+					 const ei_point_t*	where,
+					 const char*		text,
+					 const ei_font_t	font,
+					 const ei_color_t*	color,
+					 const ei_rect_t*	clipper)
+					 {
+           ei_size_t surface_size = hw_surface_get_size(surface);
+					 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
+					 ei_size_t text_surface_size = hw_surface_get_size(text_surface);
+           uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+           pixel_ptr += (where -> x) + surface_size.width * (where -> y);
+           uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
+           if(pixel_ptr + text_surface_size.width <= surface_size.width)
+           {             
+             hw_surface_lock(surface);
+             for (size_t j = 0; j < text_surface_size.height; j++) {
+               pixel_ptr += j * surface_size.width - text_surface_size.width;
+               for (uint32_t i = 0; i < text_surface_size.width; i++) {
+                 *pixel_ptr = *text_ptr;
+                 text_ptr ++;
+                 pixel_ptr ++;
+               }
+             }
+  					 hw_surface_unlock(surface);
+  					 hw_surface_update_rects(surface, NULL);
+           }
+         }
 
 
 void			ei_fill			(ei_surface_t		surface,

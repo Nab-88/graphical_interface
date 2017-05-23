@@ -7,6 +7,15 @@
  *
  *
  */
+/**
+ * \brief	Finds skyline min and skyline max.
+ *
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ * @return                  int* returns skyline min and max
+ */
+
+int *init_scanline(ei_linked_point_t* first_point);
 
 #ifndef EI_TC_H
 #define EI_TC_H
