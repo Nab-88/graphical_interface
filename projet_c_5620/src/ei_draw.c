@@ -151,6 +151,7 @@ void			ei_fill			(ei_surface_t		surface,
 
              {
              ei_size_t surface_size = hw_surface_get_size(surface);
+             uint32_t converted_color;
              if(color == NULL){
                 converted_color = 0;
              }
