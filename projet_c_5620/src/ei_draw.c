@@ -7,7 +7,7 @@
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_types.h"
-#include "ei_TC.h"
+// #include "ei_TC.h"
 
 /**
  * \brief	Converts the three red, green and blue component of a color in a 32 bits integer
@@ -190,21 +190,24 @@ void			ei_draw_text		(ei_surface_t		surface,
            ei_size_t surface_size = hw_surface_get_size(surface);
 					 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
 					 ei_size_t text_surface_size = hw_surface_get_size(text_surface);
-
-           uint32_t* pixel_ptr = (where -> x) + surface_size.width * (where -> y);
+           uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+           pixel_ptr += (where -> x) + surface_size.width * (where -> y);
            uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
-          hw_surface_lock(surface);
-           for (size_t j = 0; j < text_surface_size.height; j++) {
-             pixel_ptr += j * surface_size.width - text_surface_size.width;
-             for (uint32_t i = 0; i < text_surface_size.width; i++) {
-               *pixel_ptr = *text_ptr;
-               text_ptr ++;
-               pixel_ptr ++;
+           if(pixel_ptr + text_surface_size.width <= surface_size.width)
+           {             
+             hw_surface_lock(surface);
+             for (size_t j = 0; j < text_surface_size.height; j++) {
+               pixel_ptr += j * surface_size.width - text_surface_size.width;
+               for (uint32_t i = 0; i < text_surface_size.width; i++) {
+                 *pixel_ptr = *text_ptr;
+                 text_ptr ++;
+                 pixel_ptr ++;
+               }
              }
+  					 hw_surface_unlock(surface);
+  					 hw_surface_update_rects(surface, NULL);
            }
-					 hw_surface_unlock(surface);
-					 hw_surface_update_rects(surface, NULL);
-					 }
+         }
 
 
 void			ei_fill			(ei_surface_t		surface,
