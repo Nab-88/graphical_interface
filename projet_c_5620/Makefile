@@ -66,6 +66,7 @@ all : ${TARGETS}
 minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS} ${OBJDIR}/ei_draw.o
 
+# ei_draw
 
 ${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${LIBEIOBJS}/ei_draw.c -o ${OBJDIR}/ei_draw.o
@@ -78,9 +79,6 @@ test_fill : ${OBJDIR}/test_fill.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o test_fill ${LDFLAGS} ${OBJDIR}/test_fill.o ${LIBS} ${OBJDIR}/ei_draw.o
 
 
-${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${LIBEIOBJS}/ei_draw.c -o ${OBJDIR}/ei_draw.o
-
 ${OBJDIR}/test_fill.o : ${TESTS}/test_fill.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_fill.c -o ${OBJDIR}/test_fill.o
 	
@@ -89,16 +87,13 @@ map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o map_rgba ${LDFLAGS} ${OBJDIR}/map_rgba.o ${LIBS} ${OBJDIR}/ei_draw.o
 
 
-${OBJDIR}/ei_draw.o : ${LIBEIOBJS}/ei_draw.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${LIBEIOBJS}/ei_draw.c -o ${OBJDIR}/ei_draw.o
-
 ${OBJDIR}/map_rgba.o : ${TESTS}/map_rgba.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/map_rgba.c -o ${OBJDIR}/map_rgba.o
 
 # lines
 
-lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o lines ${OBJDIR}/lines.o ${LIBEI} ${LIBS}
+lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${LIBEI} ${OBJDIR}/ei_draw.o
+	${LINK} -o lines ${OBJDIR}/lines.o ${LIBEI} ${OBJDIR}/ei_draw.o ${LIBS} 
 
 ${OBJDIR}/lines.o : ${TESTS}/lines.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/lines.c -o ${OBJDIR}/lines.o
