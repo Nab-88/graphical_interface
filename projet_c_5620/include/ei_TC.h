@@ -1,22 +1,3 @@
-/**
- * @file	ei_TC.h
- *
- * @brief 	Struct used for the ei_draw_polygon function
- *
- *  Created by Boussant-Roux Luc on 23.05.17.
- *
- *
- */
-/**
- * \brief	Finds skyline min and skyline max.
- *
- * @param	first_point 	The head of a linked list of the points of the line. It is either
- *				NULL (i.e. draws nothing), or has more than 2 points.
- * @return                  int* returns skyline min and max
- */
-
-int *init_scanline(ei_linked_point_t* first_point);
-
 #ifndef EI_TC_H
 #define EI_TC_H
 
@@ -51,3 +32,42 @@ typedef struct {
 } ei_TCA_t;
 
 #endif
+
+/**
+ * @file	ei_TC.h
+ *
+ * @brief 	Struct used for the ei_draw_polygon function
+ *
+ *  Created by Boussant-Roux Luc on 23.05.17.
+ *
+ *
+ */
+/**
+ * \brief	Finds skyline min and skyline max.
+ *
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ * @return                  int* returns skyline min and max
+ */
+
+int *init_scanline(ei_linked_point_t* first_point);
+
+/**
+ * \brief	Draws a filled polygon.
+ *
+ * @param	surface 	Where to draw the polygon. The surface must be *locked* by
+ *				\ref hw_surface_lock.
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ * @param	color		The color used to draw the polygon, alpha channel is managed.
+ * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
+ */
+void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline);
+
+/**
+ * \brief	Initialize the table of sides
+ *
+ * @param	first_point 	The head of a linked list of the points of the line. It is either
+ *				NULL (i.e. draws nothing), or has more than 2 points.
+ */
+ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max);

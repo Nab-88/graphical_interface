@@ -218,6 +218,20 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
 }
 
 /**
+ * \brief	Moves TC(y) to TCA
+ *
+ * @param	TCA 	Where to put the TCA
+ *				\ref hw_surface_lock.
+ * @param	TC  list
+ * @param	scanline  current scanline
+ */
+void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline){
+    TCA -> head = (TC -> tab)[scanline];
+    (TC -> tab)[scanline] = NULL;
+
+}
+
+/**
  * \brief	Draws a filled polygon.
  *
  * @param	surface 	Where to draw the polygon. The surface must be *locked* by
