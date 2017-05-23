@@ -128,23 +128,23 @@ void			ei_draw_polygon		(ei_surface_t			surface,
  * @param	color		The text color. Can't be NULL. The alpha parameter is not used.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-void			ei_draw_text		(ei_surface_t		surface,
-						 const ei_point_t*	where,
-						 const char*		text,
-						 const ei_font_t	font,
-						 const ei_color_t*	color,
-						 const ei_rect_t*	clipper)
-						 {
-						 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
-						 hw_surface_lock(text_surface);
-						 hw_surface_set_origin(surface, *where);
-						 ei_rect_t rectangle = hw_surface_get_rect(surface);
-						 hw_surface_lock(surface);
-						 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
-						 hw_surface_unlock(surface);
-						 hw_surface_unlock(text_surface);
-						 hw_surface_update_rects(surface, NULL);
-						 }
+// void			ei_draw_text		(ei_surface_t		surface,
+// 						 const ei_point_t*	where,
+// 						 const char*		text,
+// 						 const ei_font_t	font,
+// 						 const ei_color_t*	color,
+// 						 const ei_rect_t*	clipper)
+// 						 {
+// 						 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
+// 						 hw_surface_lock(text_surface);
+// 						 hw_surface_set_origin(surface, *where);
+// 						 ei_rect_t rectangle = hw_surface_get_rect(surface);
+// 						 hw_surface_lock(surface);
+// 						 int copy_return = ei_copy_surface(surface, rectangle, text_surface, NULL, false);
+// 						 hw_surface_unlock(surface);
+// 						 hw_surface_unlock(text_surface);
+// 						 hw_surface_update_rects(surface, NULL);
+// 						 }
 
 void			ei_fill			(ei_surface_t		surface,
 						 const ei_color_t*	color,
@@ -153,23 +153,23 @@ void			ei_fill			(ei_surface_t		surface,
              {
              ei_size_t surface_size = hw_surface_get_size(surface);
              if(color == NULL){
-               uint32_t converted_color = 0;
+                converted_color = 0;
              }
              else{
-               uint32_t converted_color = ei_map_rgba(surface, *color);
+               converted_color = ei_map_rgba(surface, color);
              }
              hw_surface_lock(surface);
              uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
              for (uint32_t i = 0; i < (surface_size.width * surface_size.height); i++){
                	*pixel_ptr =  converted_color;
-                *pixel_ptr ++;
+                pixel_ptr ++;
               }
               hw_surface_unlock(surface);
               hw_surface_update_rects(surface, NULL);
              };
 
-int			ei_copy_surface		(ei_surface_t		destination,
-						 const ei_rect_t*	dst_rect,
-						 const ei_surface_t	source,
-						 const ei_rect_t*	src_rect,
-						 const ei_bool_t	alpha);
+// int			ei_copy_surface		(ei_surface_t		destination,
+// 						 const ei_rect_t*	dst_rect,
+// 						 const ei_surface_t	source,
+// 						 const ei_rect_t*	src_rect,
+// 						 const ei_bool_t	alpha);
