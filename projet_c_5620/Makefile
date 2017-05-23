@@ -74,7 +74,7 @@ ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
 
 # map_rgba
-map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/map_rgba.o
+map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o map_rgba ${LDFLAGS} ${OBJDIR}/map_rgba.o ${LIBS} ${OBJDIR}/ei_draw.o
 
 
