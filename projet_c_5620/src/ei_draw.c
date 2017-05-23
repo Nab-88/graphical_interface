@@ -184,7 +184,7 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
   ei_TC_t *TC = malloc(sizeof(ei_TC_t));
   if (first_point) {
     TC->tab = malloc(sizeof(ei_side_t)* (y_max-y_min));
-    ei_linked_point_t* current_point = first_point;
+    ei_linked_point_t* current_point = (ei_linked_point_t*) first_point;
     while (current_point -> next) {
         ei_linked_point_t* next_point = current_point -> next;
         int x1 = (current_point -> point).x;
@@ -207,7 +207,7 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
               side -> x_y = x2;
             }
             side -> slope = (x2 - x1) / (y2 - y1);
-            side -> next = TC->tab[scanline - y_min];
+            side -> next = (struct ei_side_t*) TC->tab[scanline - y_min];
             TC->tab[scanline - y_min] = side;
         }
         current_point = next_point;
@@ -231,7 +231,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
 						 const ei_linked_point_t*	first_point,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
-        int* tab = init_scanline(first_point);
+        int* tab = init_scanline((ei_linked_point_t*)first_point);
         ei_TC_t *TC = init_TC(first_point, tab[0], tab[1]);
         // ei_TCA_t* TCA = NULL;
         // while (TC != NULL && TCA != NULL) {
