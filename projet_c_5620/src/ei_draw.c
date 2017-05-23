@@ -244,6 +244,18 @@ void delete_side(ei_TCA_t *TCA, int y) {
     }
   }
 }
+/*
+ * \brief	Moves TC(y) to TCA
+ *
+ * @param	TCA 	Where to put the TCA
+ *				\ref hw_surface_lock.
+ * @param	TC  list
+ * @param	scanline  current scanline
+ */
+void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline){
+    TCA -> head = (TC -> tab)[scanline];
+    (TC -> tab)[scanline] = NULL;
+}
 
 /**
  * \brief	Draws a filled polygon.
