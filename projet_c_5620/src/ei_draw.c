@@ -7,7 +7,7 @@
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_types.h"
-
+#include "ei_TC.h"
 
 /**
  * \brief	Converts the three red, green and blue component of a color in a 32 bits integer
@@ -150,10 +150,21 @@ void			ei_draw_polyline	(ei_surface_t			surface,
  * @param	color		The color used to draw the polygon, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-void			ei_draw_polygon		(ei_surface_t			surface,
-						 const ei_linked_point_t*	first_point,
-						 const ei_color_t		color,
-						 const ei_rect_t*		clipper);
+// void			ei_draw_polygon		(ei_surface_t			surface,
+// 						 const ei_linked_point_t*	first_point,
+// 						 const ei_color_t		color,
+// 						 const ei_rect_t*		clipper);
+//         ei_TC_t* TC =  init_TC();
+//         ei_TCA_t* TCA = NULL;
+//         int y = init_scanline();
+//         while (TC != NULL && TCA != NULL) {
+//           move_side();
+//           delete_side();
+//           order_TCA();
+//           draw_scanline();
+//           y++;
+//           update_intersect();
+//         }
 
 /**
  * \brief	Draws text by calling \ref hw_text_create_surface.
