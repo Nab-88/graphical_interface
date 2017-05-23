@@ -32,13 +32,6 @@ typedef struct {
    struct ei_side_t *next; ///< The pointer to the next side, NULL if there is none
 } ei_side_t;
 
-/**
-* @brief	The implementation of a list of sides
-*/
-typedef struct {
-  int scanline_number; ///< The number of the scanline where we are at
-  ei_side_t* first_side; ///< The pointer to the first side referenced, NULL if there are none
-} ei_list_side_t;
 
 /********** Tables. **********/
 
@@ -46,7 +39,7 @@ typedef struct {
 * @brief	The implementation of Table of sides (TC)
 */
 typedef struct {
-  ei_list_side_t* *tab;
+  ei_side_t* *tab;
 } ei_TC_t;
 
 /**

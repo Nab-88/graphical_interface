@@ -7,7 +7,7 @@
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_types.h"
-// #include "ei_TC.h"
+#include "ei_TC.h"
 
 /**
  * \brief	Converts the three red, green and blue component of a color in a 32 bits integer
@@ -146,7 +146,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
  *				NULL (i.e. draws nothing), or has more than 2 points.
  * @return                  int* returns skyline min and max
  */
-int *init_scanline(ei_linked_point_t* first_point){
+int* init_scanline(ei_linked_point_t* first_point){
     ei_linked_point_t* current;
     current = first_point;
     int* tab = malloc(sizeof(int)*2);
@@ -180,19 +180,12 @@ int *init_scanline(ei_linked_point_t* first_point){
  *				NULL (i.e. draws nothing), or has more than 2 points.
  */
 
-ei_TC_t init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
-  ei_TC_t TC;
+ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
+  ei_TC_t *TC = malloc(sizeof(ei_TC_t));
   if (first_point) {
-    TC.tab = malloc(sizeof(ei_list_side_t)* (y_max-y_min));
-    int y = y_min;
-    for (int i = 0; i <= y_max-y_min; i++) {
-      printf("bonojur\n");
-      TC.tab[i]->scanline_number = y;
-      y++;
-    }
+    TC->tab = malloc(sizeof(ei_side_t)* (y_max-y_min));
     ei_linked_point_t* current_point = first_point;
-    const ei_linked_point_t* reference = first_point;
-    while (current_point -> next != reference) {
+    while (current_point -> next) {
         ei_linked_point_t* next_point = current_point -> next;
         int x1 = (current_point -> point).x;
         int y1 = (current_point -> point).y;
@@ -201,7 +194,7 @@ ei_TC_t init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
         if (y1 != y2) {
             // Add this side because not horizontal
             int scanline = 0;
-            if (y1 > y2) {
+            if (y1 < y2) {
               scanline = y1;
             } else {
               scanline = y2;
@@ -214,34 +207,10 @@ ei_TC_t init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
               side -> x_y = x2;
             }
             side -> slope = (x2 - x1) / (y2 - y1);
-            side -> next = (TC.tab[scanline - y_min]) -> first_side;
-            TC.tab[scanline - y_min] -> first_side = side;
+            side -> next = TC->tab[scanline - y_min];
+            TC->tab[scanline - y_min] = side;
         }
         current_point = next_point;
-    }
-    ei_linked_point_t* next_point = current_point -> next;
-    int x1 = (current_point -> point).x;
-    int y1 = (current_point -> point).y;
-    int x2 = (next_point -> point).x;
-    int y2 = (next_point -> point).y;
-    if (y1 != y2) {
-        // Add this side because not horizontal
-        int scanline = 0;
-        if (y1 > y2) {
-          scanline = y1;
-        } else {
-          scanline = y2;
-        }
-        ei_side_t *side = malloc(sizeof(ei_side_t));
-        side -> y_max = scanline;
-        if (scanline == y2) {
-          side -> x_y = x1;
-        } else {
-          side -> x_y = x2;
-        }
-        side -> slope = (x2 - x1) / (y2 - y1);
-        side -> next = (TC.tab[scanline - y_min]) -> first_side;
-        TC.tab[scanline - y_min] -> first_side = side;
     }
     return TC;
   }
@@ -262,11 +231,8 @@ void			ei_draw_polygon		(ei_surface_t			surface,
 						 const ei_linked_point_t*	first_point,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
-        // int y = init_scanline();
-        ei_TC_t TC = init_TC(first_point, 1, 300);
-        for (int i = 0; i < 300; i++) {
-          printf("%u : %s\n", TC.tab[i]->scanline_number, TC.tab[i]->first_side);
-        }
+        int* tab = init_scanline(first_point);
+        ei_TC_t *TC = init_TC(first_point, tab[0], tab[1]);
         // ei_TCA_t* TCA = NULL;
         // while (TC != NULL && TCA != NULL) {
         //   move_side();
@@ -307,7 +273,7 @@ void			ei_draw_text		(ei_surface_t		surface,
            pixel_ptr += (where -> x) + surface_size.width * (where -> y);
            uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
            if(pixel_ptr + text_surface_size.width <= surface_size.width)
-           {             
+           {
              hw_surface_lock(surface);
              for (size_t j = 0; j < text_surface_size.height; j++) {
                pixel_ptr += j * surface_size.width - text_surface_size.width;
