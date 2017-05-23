@@ -59,6 +59,12 @@ all : ${TARGETS}
 
 ########## Test-programs
 
+# init_skyline
+init_scanline : ${OBJDIR}/init_scanline.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o init_scanline ${LDFLAGS} ${OBJDIR}/init_scanline.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/init_scanline.o : ${TESTS}/init_scanline.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/init_scanline.c -o ${OBJDIR}/init_scanline.o
 
 
 # minimal
@@ -73,13 +79,13 @@ test_text : ${OBJDIR}/test_text.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 ${OBJDIR}/test_text.o : ${TESTS}/test_text.c
 		${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_text.c -o ${OBJDIR}/test_text.o
 
+${OBJDIR}/minimal.o : ${TESTS}/minimal.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
+
 # ei_draw
 
 ${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw.c -o ${OBJDIR}/ei_draw.o
-
-${OBJDIR}/minimal.o : ${TESTS}/minimal.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
 
 #test_fill
 test_fill : ${OBJDIR}/test_fill.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
