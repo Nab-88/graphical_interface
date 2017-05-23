@@ -1,12 +1,13 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_types.h"
-
+#include "ei_TC.h"
 
 /**
  * \brief	Converts the three red, green and blue component of a color in a 32 bits integer
@@ -34,15 +35,11 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
     uint32_t couleur = 0;
     hw_surface_get_channel_indices(surface, &ir, &ig, &ib, &ia);
     // We must recalculate ir, ig, ib, ia
-    ir = 3 - ir;
-    ig = 3 - ig;
-    ib = 3 - ib;
-    ia = 3 - ia;
     couleur = couleur | ((color -> blue) << ib*8);
     couleur = couleur | ((color -> red) << ir*8);
     couleur = couleur | ((color -> green) << ig*8);
-    if (ia > 3){
-        couleur = couleur | ((color -> alpha) << ia);
+    if (ia < 0){
+        couleur = couleur | ((color -> alpha) << ia*8);
     }
     return couleur;
 }
@@ -72,27 +69,74 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 						 const ei_linked_point_t*	first_point,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
-				 hw_surface_lock(surface);
+         hw_surface_lock(surface);
 				 uint32_t color_rgba = ei_map_rgba(surface, &color);
-				 ei_point_t point_current = first_point->point; // Verifier que le premier point est non nul
-				 int x_coord = point_current.x;
-				 int y_coord = point_current.y;
-				 draw_pixel(surface, x_coord, y_coord, color_rgba);
-				 ei_point_t end_point = first_point->next->point; // Verifier que le deuxieme point est non nul
-				 int delta_x = end_point.x - x_coord;
-				 int delta_y = end_point.y - y_coord;
-				 int error = 0;
-				 while (x_coord != end_point.x && y_coord != end_point.y) {
-						 x_coord++;
-						 error += delta_y;
-						 if (2 * error > delta_x) {
-						 		y_coord++;
-								error -= delta_x;
-						 }
-						 draw_pixel(surface, x_coord, y_coord, color_rgba);
-				 }
-				 hw_surface_unlock(surface);
-				 hw_surface_update_rects(surface, NULL);
+         const ei_linked_point_t *reference = first_point;
+         if (first_point) {
+           ei_point_t point_current = first_point->point;
+           int x_coord = point_current.x;
+           int y_coord = point_current.y;
+           draw_pixel(surface, x_coord, y_coord, color_rgba);
+           while (first_point -> next) {
+             ei_point_t end_point = first_point -> next -> point;
+             int delta_x = end_point.x - x_coord;
+             int delta_y = end_point.y - y_coord;
+             if (delta_y == 0 && delta_x == 0) {
+               break;
+             }
+             int variable_x = 1;
+             int variable_y = 1;
+             if (delta_x < 0) {
+                variable_x = -1;
+                delta_x = - delta_x;
+             }
+             if (delta_y < 0) {
+                variable_y = -1;
+                delta_y = - delta_y;
+             }
+             if (delta_x == 0) {
+               for (int i = 0; i < delta_y; i++) {
+                 draw_pixel(surface, x_coord, y_coord, color_rgba);
+                 y_coord += variable_y;
+               }
+             }
+             if (delta_y == 0) {
+               for (int i = 0; i < delta_x; i++) {
+                 draw_pixel(surface, x_coord, y_coord, color_rgba);
+                 x_coord += variable_x;
+               }
+             }
+             if (abs(delta_x) < abs(delta_y)) {
+                 int error = 0;
+                 while (x_coord != end_point.x && y_coord != end_point.y) {
+                   y_coord += variable_y;
+                   error += delta_x;
+                   if (2 * error > delta_y) {
+                     x_coord += variable_x;
+                     error -= delta_y;
+                   }
+                   draw_pixel(surface, x_coord, y_coord, color_rgba);
+                 }
+             } else {
+               int error = 0;
+               while (x_coord != end_point.x && y_coord != end_point.y) {
+                 x_coord += variable_x;
+                 error += delta_y;
+                 if (2 * error > delta_x) {
+                   y_coord += variable_y;
+                   error -= delta_x;
+                 }
+                 draw_pixel(surface, x_coord, y_coord, color_rgba);
+               }
+             }
+             first_point = first_point->next;
+             if (first_point == reference) {
+               break;
+             }
+           }
+           hw_surface_unlock(surface);
+           hw_surface_update_rects(surface, NULL);
+         }
 }
 
 
@@ -106,10 +150,21 @@ void			ei_draw_polyline	(ei_surface_t			surface,
  * @param	color		The color used to draw the polygon, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-void			ei_draw_polygon		(ei_surface_t			surface,
-						 const ei_linked_point_t*	first_point,
-						 const ei_color_t		color,
-						 const ei_rect_t*		clipper);
+// void			ei_draw_polygon		(ei_surface_t			surface,
+// 						 const ei_linked_point_t*	first_point,
+// 						 const ei_color_t		color,
+// 						 const ei_rect_t*		clipper);
+//         ei_TC_t* TC =  init_TC();
+//         ei_TCA_t* TCA = NULL;
+//         int y = init_scanline();
+//         while (TC != NULL && TCA != NULL) {
+//           move_side();
+//           delete_side();
+//           order_TCA();
+//           draw_scanline();
+//           y++;
+//           update_intersect();
+//         }
 
 /**
  * \brief	Draws text by calling \ref hw_text_create_surface.
