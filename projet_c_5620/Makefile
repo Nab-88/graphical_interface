@@ -67,7 +67,7 @@ ${OBJDIR}/test_polygon.o : ${TESTS}/test_polygon.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_polygon.c -o ${OBJDIR}/test_polygon.o
 
 
-# init_skyline
+# init_scanline
 init_scanline : ${OBJDIR}/init_scanline.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o init_scanline ${LDFLAGS} ${OBJDIR}/init_scanline.o ${LIBS} ${OBJDIR}/ei_draw.o
 
@@ -79,7 +79,7 @@ ${OBJDIR}/init_scanline.o : ${TESTS}/init_scanline.c
 
 minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS} ${OBJDIR}/ei_draw.o
-	
+
 #test_text
 test_text : ${OBJDIR}/test_text.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o test_text ${LDFLAGS} ${OBJDIR}/test_text.o ${LIBS} ${OBJDIR}/ei_draw.o
