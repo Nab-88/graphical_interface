@@ -9,7 +9,9 @@
 typedef struct {
 	 int y_max; ///< The maximum ordinate where the scanline will meet the side
    int x_y; ///< The abscissa where te scanline intersects the side
-   float slope; ///< The slope of the side
+   int dx; ///< Delta x of bresenham
+	 int dy; ///< Delta y of bresenham
+	 int error;
    struct ei_side_t *next; ///< The pointer to the next side, NULL if there is none
 } ei_side_t;
 

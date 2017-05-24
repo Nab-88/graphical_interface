@@ -197,25 +197,27 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
         if (y1 != y2) {
             // Add this side because not horizontal
             int scanline = 0;
+            ei_side_t *side = malloc(sizeof(ei_side_t));
             if (y1 < y2) {
               scanline = y1;
+              side -> y_max = y2;
             } else {
               scanline = y2;
+              side -> y_max = y1;
             }
-            ei_side_t *side = malloc(sizeof(ei_side_t));
-            side -> y_max = scanline;
             if (scanline == y2) {
               side -> x_y = x1;
             } else {
               side -> x_y = x2;
             }
-            side -> slope = (x2 - x1) / (y2 - y1);
+            side -> dx = (x2 - x1);
+            side -> dy = (y2 - y1);
+            side -> error = 0;
             side -> next = (struct ei_side_t*) TC->tab[scanline - y_min];
             TC->tab[scanline - y_min] = side;
         }
         current_point = next_point;
     }
-    return TC;
   }
   return TC;
 }
@@ -228,7 +230,7 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
  */
 void delete_side(ei_TCA_t *TCA, int y) {
   if (TCA -> head != NULL) {
-    ei_side_t *current_side = TCA -> head -> next;
+    ei_side_t *current_side = (ei_side_t*) TCA -> head -> next;
     ei_side_t *ancien = TCA -> head;
     while (current_side != NULL) {
       if (current_side -> y_max == y) {
@@ -251,8 +253,46 @@ void delete_side(ei_TCA_t *TCA, int y) {
  * @param	scanline  current scanline
  */
 void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline){
-    TCA -> head = (TC -> tab)[scanline];
+  if ((TC -> tab)[scanline] != NULL) {
+    if (TCA -> head != NULL) {
+      ei_side_t *current_side = TCA -> head;
+      while (current_side -> next != NULL) {
+        current_side = current_side -> next;
+      }
+      current_side -> next = (TC -> tab)[scanline];
+    } else {
+      TCA -> head = (TC -> tab)[scanline];
+    }
     (TC -> tab)[scanline] = NULL;
+  }
+}
+
+/**
+ * \brief	Updates the intersects
+ *
+ * @param	 The table of active sides (TCA)
+**/
+
+void update_intersect(ei_TCA_t* TCA) {
+  // Boucler sur tout les cotés mettre à jour le x_y
+  ei_side_t *current_side = (ei_side_t*) TCA -> head;
+  while (current_side != NULL) {
+      int dx = current_side -> dx;
+      int dy = current_side -> dy;
+      int x_y = current_side -> x_y;
+      int variable_x = 1;
+      if (dx < 0) {
+        variable_x = -1;
+        dx = - dx;
+      }
+      int error = current_side -> error;
+      if (2 * error > dy) {
+        x_y += variable_x;
+        error -= dy;
+      }
+      current_side -> x_y = x_y;
+      current_side = (ei_side_t*) current_side -> next;
+  }
 }
 
 /**
@@ -273,13 +313,18 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         ei_TC_t *TC = init_TC(first_point, tab[0], tab[1]);
         int y = tab[0];
         ei_TCA_t* TCA = malloc(sizeof(ei_TCA_t));
+        TCA -> head = NULL;
         while (y <= tab[1]) {
-          move_side(TCA, TC, y- tab[0]);
-          delete_side(TCA, y - tab[0]);
+          move_side(TCA, TC, y - tab[0]);
+          delete_side(TCA, y);
         //   order_TCA();
         //   draw_scanline();
+        if (TCA -> head != NULL) {
+          printf("%i bonjour %i\n",TCA -> head -> y_max, TCA -> head -> x_y);
+          /* code */
+        }
           y++;
-          // update_intersect();
+          update_intersect(TCA);
         }
         // free_all();
 }

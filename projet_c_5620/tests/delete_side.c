@@ -51,7 +51,7 @@ void test_octogone(ei_surface_t surface, ei_rect_t* clipper)
   ei_TCA_t* TCA = malloc(sizeof(ei_TCA_t));
   move_side(TCA, TC, 0);
 	delete_side(TCA, 90);
-  if ((TCA -> head) == NULL){
+  if ((TCA -> head) != NULL){
      printf("Delete fonctionne \n");
   } else {
      printf("Delete ne fonctionne pas \n");
