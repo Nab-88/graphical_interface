@@ -58,6 +58,13 @@ all : ${TARGETS}
 
 
 ########## Test-programs
+#test delete_side
+delete_side : ${OBJDIR}/delete_side.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o delete_side ${LDFLAGS} ${OBJDIR}/delete_side.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/delete_side.o : ${TESTS}/delete_side.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/delete_side.c -o ${OBJDIR}/delete_side.o
+
 #test move_TCA
 move_TCA : ${OBJDIR}/move_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o move_TCA ${LDFLAGS} ${OBJDIR}/move_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o

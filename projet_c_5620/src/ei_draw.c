@@ -227,20 +227,18 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
  * @param y  The abscissa where we are
  */
 void delete_side(ei_TCA_t *TCA, int y) {
-  if (TCA -> head) {
-    ei_side_t *current_side = TCA -> head;
+  if (TCA -> head != NULL) {
+    ei_side_t *current_side = TCA -> head -> next;
     ei_side_t *ancien = TCA -> head;
-    if (current_side -> y_max == y) {
-      TCA -> head = (ei_side_t*) current_side->next;
-    }
-    ancien = current_side;
-    current_side = (ei_side_t*) current_side -> next;
-    while (current_side) {
+    while (current_side != NULL) {
       if (current_side -> y_max == y) {
         ancien -> next = current_side -> next;
       }
       ancien = current_side;
       current_side = (ei_side_t*) current_side -> next;
+    }
+    if (TCA -> head -> y_max == y) {
+      TCA -> head = (ei_side_t*) TCA -> head ->next;
     }
   }
 }
@@ -278,16 +276,10 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         while (y <= tab[1]) {
           move_side(TCA, TC, y- tab[0]);
           delete_side(TCA, y - tab[0]);
-          if (TCA -> head) {
-            ei_side_t *next = TCA -> head -> next;
-            printf("%f, %f\n", TCA -> head -> slope, next -> slope);
-            printf("%u\n", y);
-            printf("%u, %u\n", TCA -> head -> x_y, next -> x_y);
-          }
         //   order_TCA();
         //   draw_scanline();
           y++;
-        //   update_intersect();
+          // update_intersect();
         }
         // free_all();
 }
