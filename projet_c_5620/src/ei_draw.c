@@ -253,7 +253,8 @@ void delete_side(ei_TCA_t *TCA, int y) {
  * @param	scanline  current scanline
  */
 void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline){
-    TCA -> head = (TC -> tab)[scanline];
+    ei_side_t *side = ((TC -> tab)[scanline]);
+    TCA -> head = side;
     (TC -> tab)[scanline] = NULL;
 }
 
@@ -275,12 +276,18 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         ei_TC_t *TC = init_TC(first_point, tab[0], tab[1]);
         int y = tab[0];
         ei_TCA_t* TCA = malloc(sizeof(ei_TCA_t));
-        while (TC != NULL && TCA != NULL) {
-          // move_side();
-          delete_side(TCA, y);
+        while (y <= tab[1]) {
+          move_side(TCA, TC, y- tab[0]);
+          delete_side(TCA, y - tab[0]);
+          if (TCA -> head) {
+            ei_side_t *next = TCA -> head -> next;
+            printf("%f, %f\n", TCA -> head -> slope, next -> slope);
+            printf("%u\n", y);
+            printf("%u, %u\n", TCA -> head -> x_y, next -> x_y);
+          }
         //   order_TCA();
         //   draw_scanline();
-        //   y++;
+          y++;
         //   update_intersect();
         }
         // free_all();
