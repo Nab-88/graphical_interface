@@ -257,9 +257,9 @@ void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline){
     if (TCA -> head != NULL) {
       ei_side_t *current_side = TCA -> head;
       while (current_side -> next != NULL) {
-        current_side = current_side -> next;
+        current_side = (ei_side_t*) current_side -> next;
       }
-      current_side -> next = (TC -> tab)[scanline];
+      current_side -> next = (struct ei_side_t*)(TC -> tab)[scanline];
     } else {
       TCA -> head = (TC -> tab)[scanline];
     }
@@ -301,6 +301,36 @@ void update_intersect(ei_TCA_t* TCA) {
 }
 
 /**
+ * \brief	Draws a scanline
+ *
+ * @param	surface 	Where to draw the polygon. The surface must be *locked* by
+ *				\ref hw_surface_lock.
+ * @param	table of active sides
+ * @param	color		The color used to draw the polygon, alpha channel is managed.
+ */
+void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int y) {
+    uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+    ei_size_t surface_size = hw_surface_get_size(surface);
+    pixel_ptr += y * surface_size.width;
+    ei_side_t *current = TCA -> head;
+    ei_side_t *next = (ei_side_t*) TCA -> head -> next;
+    pixel_ptr += current -> x_y;
+    bool write = true;
+    while (next != NULL) {
+      if (write == true) {
+        for (int i = current-> x_y; i < next -> x_y; i++) {
+          *pixel_ptr++ = color_rgba;
+        }
+        write = false;
+      } else {
+        pixel_ptr += next -> x_y - current -> x_y;
+        write = true;
+      }
+      current = next;
+      next = (ei_side_t*) next -> next;
+    }
+}
+/**
  * \brief	Draws a filled polygon.
  *
  * @param	surface 	Where to draw the polygon. The surface must be *locked* by
@@ -314,22 +344,26 @@ void			ei_draw_polygon		(ei_surface_t			surface,
 						 const ei_linked_point_t*	first_point,
 						 const ei_color_t		color,
 						 const ei_rect_t*		clipper) {
+        hw_surface_lock(surface);
+        uint32_t color_rgba = ei_map_rgba(surface, &color);
         int* tab = init_scanline((ei_linked_point_t*)first_point);
         ei_TC_t *TC = init_TC(first_point, tab[0], tab[1]);
         int y = tab[0];
         ei_TCA_t* TCA = malloc(sizeof(ei_TCA_t));
         TCA -> head = NULL;
-        while (y <= tab[1]) {
+        while (y < tab[1]) {
           move_side(TCA, TC, y - tab[0]);
           delete_side(TCA, y);
         //   order_TCA();
-        //   draw_scanline();
+          draw_scanline(surface, TCA, color_rgba, y);
         if (TCA -> head != NULL) {
           printf("%i bonjour %i\n",TCA -> head -> y_max, TCA -> head -> x_y);
         }
           y++;
           update_intersect(TCA);
         }
+        hw_surface_unlock(surface);
+        hw_surface_update_rects(surface, NULL);
         // free_all();
 }
 
