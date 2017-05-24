@@ -71,7 +71,7 @@ ${OBJDIR}/init_scanline.o : ${TESTS}/init_scanline.c
 
 minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS} ${OBJDIR}/ei_draw.o
-	
+
 #test_text
 test_text : ${OBJDIR}/test_text.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o test_text ${LDFLAGS} ${OBJDIR}/test_text.o ${LIBS} ${OBJDIR}/ei_draw.o
@@ -86,6 +86,14 @@ ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 
 ${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw.c -o ${OBJDIR}/ei_draw.o
+
+#test_copy
+test_copy : ${OBJDIR}/test_copy.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o test_copy ${LDFLAGS} ${OBJDIR}/test_copy.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+
+${OBJDIR}/test_copy.o : ${TESTS}/test_copy.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_copy.c -o ${OBJDIR}/test_copy.o
 
 #test_fill
 test_fill : ${OBJDIR}/test_fill.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o

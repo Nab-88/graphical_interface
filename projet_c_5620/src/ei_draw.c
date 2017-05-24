@@ -38,7 +38,7 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
     couleur = couleur | ((color -> blue) << ib*8);
     couleur = couleur | ((color -> red) << ir*8);
     couleur = couleur | ((color -> green) << ig*8);
-    if (ia < 0){
+    if (ia >= 0){
         couleur = couleur | ((color -> alpha) << ia*8);
     }
     return couleur;
@@ -212,6 +212,11 @@ int *init_scanline(ei_linked_point_t* first_point){
  * @param	color		The text color. Can't be NULL. The alpha parameter is not used.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
+ int			ei_copy_surface		(ei_surface_t		destination,
+ 						 const ei_rect_t*	dst_rect,
+ 						 const ei_surface_t	source,
+ 						 const ei_rect_t*	src_rect,
+ 						 const ei_bool_t	alpha);
 
 void			ei_draw_text		(ei_surface_t		surface,
 					 const ei_point_t*	where,
@@ -220,26 +225,21 @@ void			ei_draw_text		(ei_surface_t		surface,
 					 const ei_color_t*	color,
 					 const ei_rect_t*	clipper)
 					 {
+           hw_surface_lock(surface);
            ei_size_t surface_size = hw_surface_get_size(surface);
 					 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
 					 ei_size_t text_surface_size = hw_surface_get_size(text_surface);
-           uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
-           pixel_ptr += (where -> x) + surface_size.width * (where -> y);
-           uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
-           if(pixel_ptr + text_surface_size.width <= surface_size.width)
-           {             
-             hw_surface_lock(surface);
-             for (size_t j = 0; j < text_surface_size.height; j++) {
-               pixel_ptr += j * surface_size.width - text_surface_size.width;
-               for (uint32_t i = 0; i < text_surface_size.width; i++) {
-                 *pixel_ptr = *text_ptr;
-                 text_ptr ++;
-                 pixel_ptr ++;
-               }
-             }
-  					 hw_surface_unlock(surface);
-  					 hw_surface_update_rects(surface, NULL);
-           }
+           ei_rect_t* rect_source;
+           rect_source = malloc(sizeof(ei_rect_t));
+           *rect_source = hw_surface_get_rect(text_surface);
+           ei_rect_t* rect_dest;
+           rect_dest = malloc(sizeof(ei_rect_t));
+           rect_dest -> size = (text_surface_size);
+           rect_dest -> top_left =  *where;
+           int copy = ei_copy_surface(surface, rect_dest ,text_surface,rect_source ,EI_TRUE);
+  				 hw_surface_unlock(surface);
+  				 hw_surface_update_rects(surface, NULL);
+          //  }
          }
 
 
@@ -247,29 +247,146 @@ void			ei_fill			(ei_surface_t		surface,
 						 const ei_color_t*	color,
 						 const ei_rect_t*	clipper)
 // PAS DE GESTION DU CLIPPING POUR L'INSTANT.
+                {
+                uint32_t converted_color;
+                if(color == NULL){
+                   converted_color = 0;
+                }
+                else{
+                  converted_color = ei_map_rgba(surface, color);
+                }
+                hw_surface_lock(surface);
+                ei_size_t surface_size = hw_surface_get_size(surface);
+                uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+               if (clipper == NULL) {
+                 for (uint32_t i = 0; i < (surface_size.width * surface_size.height); i++){
+                   	*pixel_ptr =  converted_color;
+                    pixel_ptr ++;
+                  }
+                  hw_surface_unlock(surface);
+                  hw_surface_update_rects(surface, NULL);
+               }
+             else {
+               pixel_ptr += (clipper -> top_left.x) + surface_size.width * (clipper -> top_left.y);
+               for (uint32_t j = 0; j < clipper -> size.height; j++) {
+                 for (uint32_t i = 0; i < clipper -> size.width; i++) {
+                    *pixel_ptr =  converted_color;
+                    pixel_ptr ++;
+                  }
+                  pixel_ptr += surface_size.width - clipper-> size.width;
 
-             {
-             ei_size_t surface_size = hw_surface_get_size(surface);
-             uint32_t converted_color;
-             if(color == NULL){
-                converted_color = 0;
+                }
+                hw_surface_unlock(surface);
+                hw_surface_update_rects(surface, NULL);
              }
-             else{
-               converted_color = ei_map_rgba(surface, color);
-             }
-             hw_surface_lock(surface);
-             uint32_t* pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
-             for (uint32_t i = 0; i < (surface_size.width * surface_size.height); i++){
-               	*pixel_ptr =  converted_color;
-                pixel_ptr ++;
-              }
-              hw_surface_unlock(surface);
-              hw_surface_update_rects(surface, NULL);
-             };
-
-
+           }
+void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf,
+  ei_surface_t dest_surf){
+  int d_ir;
+  int d_ig;
+  int d_ib;
+  int d_ia;
+  int s_ir;
+  int s_ig;
+  int s_ib;
+  int s_ia;
+  hw_surface_get_channel_indices(dest_surf, &d_ir, &d_ig, &d_ib, &d_ia);
+  hw_surface_get_channel_indices(src_surf, &s_ir, &s_ig, &s_ib, &s_ia);
+  unsigned char pa;
+  if (s_ia == -1){
+    pa = 255;
+  }
+  else{
+    pa = (*src_pixel <<((3-s_ia)*8)) >> (24);
+  }
+  unsigned char pr = (unsigned char)((*src_pixel <<((3-s_ir)*8)) >> 24);
+  unsigned char pg = (unsigned char)((*src_pixel <<((3-s_ig)*8)) >> 24);
+  unsigned char pb = (unsigned char)((*src_pixel <<((3-s_ib)*8)) >> 24);
+  unsigned char sr = (unsigned char)((*dest_pixel <<((3-d_ir)*8)) >> 24);
+  unsigned char sg = (unsigned char)((*dest_pixel <<((3-d_ig)*8)) >> 24);
+  unsigned char sb = (unsigned char)((*dest_pixel <<((3-d_ib)*8)) >> 24);
+  sr = (pa * pr + (255 - pa) * sr) / 255;
+  sg = (pa * pg + (255 - pa) * sg) / 255;
+  sb = (pa * pb + (255 - pa) * sb) / 255;
+  ei_color_t* color = NULL;
+  color = malloc(sizeof(ei_color_t));
+  color -> red = sr;
+  color -> green = sg;
+  color -> blue = sb;
+  color -> alpha = pa;
+  uint32_t converted_color = ei_map_rgba(dest_surf, color);
+  *dest_pixel = converted_color;
+}
 int			ei_copy_surface		(ei_surface_t		destination,
 						 const ei_rect_t*	dst_rect,
 						 const ei_surface_t	source,
 						 const ei_rect_t*	src_rect,
-						 const ei_bool_t	alpha);
+						 const ei_bool_t	alpha)
+             {
+//=======ATTENTION PENSER A RAJOUTER LE CAS RECT = NULL ALORS ON PREND TOUTE LA SURFACE .. Moi J'AI PAS FAIT CA.
+           ei_size_t dest_surf_size = hw_surface_get_size(destination);
+					 ei_size_t src_surf_size = hw_surface_get_size(source);
+           //if there are no rect specified and both surface have the same size
+           if((dst_rect == NULL || src_rect == NULL)){
+             if ((dest_surf_size.width == src_surf_size.width)
+           && (dest_surf_size.height == src_surf_size.height)) {
+             hw_surface_lock(destination);
+             hw_surface_lock(source);
+             uint32_t* dest_ptr = (uint32_t*)hw_surface_get_buffer(destination);
+             uint32_t* src_ptr = (uint32_t*)hw_surface_get_buffer(source);
+             for (uint32_t j = 0; j < src_surf_size.height * dest_surf_size.width; j++) {
+               if (alpha == EI_TRUE) {
+                  copy_pixel(dest_ptr, src_ptr, source, destination);
+               }
+               else{
+                 *dest_ptr = *src_ptr;
+               }
+                   src_ptr ++;
+                   dest_ptr ++;
+                 }
+             hw_surface_unlock(destination);
+             hw_surface_unlock(source);
+             hw_surface_update_rects(destination, NULL);
+             return 1;
+             }
+            else{
+              return 0;
+            }
+           }
+           else if((dst_rect != NULL || src_rect != NULL)){
+
+             if ((src_rect -> size.width == dst_rect -> size.width) && (src_rect -> size.height == src_rect -> size.height)) {
+               hw_surface_lock(source);
+               hw_surface_lock(destination);
+               uint32_t* dest_ptr = (uint32_t*)hw_surface_get_buffer(destination);
+               uint32_t* src_ptr = (uint32_t*)hw_surface_get_buffer(source);
+               dest_ptr += (dst_rect -> top_left.x) + dest_surf_size.width * (dst_rect -> top_left.y);
+               src_ptr += (src_rect -> top_left.x) + src_surf_size.width * (src_rect -> top_left.y);
+               for (uint32_t j = 0; j < src_rect -> size.height; j++) {
+                 for (uint32_t i = 0; i < src_rect -> size.width; i++) {
+                   if (alpha == EI_TRUE) {
+                      copy_pixel(dest_ptr, src_ptr, source, destination);
+                   }
+                   else{
+                     *dest_ptr = *src_ptr;
+                   }
+                       src_ptr ++;
+                       dest_ptr ++;
+                     }
+                     dest_ptr += dest_surf_size.width - src_rect -> size.width;
+                     src_ptr += src_surf_size.width - src_rect -> size.width;
+                 }
+
+
+
+             hw_surface_unlock(destination);
+             hw_surface_unlock(source);
+             hw_surface_update_rects(destination, NULL);
+             return 1;
+           }
+           else{
+               return 0;
+             }
+           }
+           return 0;
+         }
