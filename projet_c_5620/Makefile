@@ -52,12 +52,19 @@ endif
 # Main target of the makefile. To build specific targets, call "make <target_name>"
 
 TARGETS		=	${LIBEI} \
-			minimal lines frame button hello_world puzzle two048
+			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba frame button hello_world puzzle two048
 all : ${TARGETS}
 
 
 
 ########## Test-programs
+#test move_TCA
+move_TCA : ${OBJDIR}/move_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o move_TCA ${LDFLAGS} ${OBJDIR}/move_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/move_TCA.o : ${TESTS}/move_TCA.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/move_TCA.c -o ${OBJDIR}/move_TCA.o
+
 
 # test_polygon
 test_polygon : ${OBJDIR}/test_polygon.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
