@@ -330,6 +330,36 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
       next = (ei_side_t*) next -> next;
     }
 }
+
+
+ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
+   ei_TCA_t* TCA2 = malloc(sizeof(ei_TCA_t));
+   TCA2 -> head = NULL;
+   while (TCA -> head != NULL) {
+    ei_side_t *head = TCA -> head;
+    ei_side_t *current = TCA -> head;
+    ei_side_t *ancient = TCA -> head;
+    ei_side_t *maxi = TCA -> head;
+    while (current != NULL) {
+      if (maxi -> x_y < current -> x_y) {
+        maxi = current;
+      }
+      ancient = current;
+      current = current -> next;
+    }
+    // Enleve mini de TCA
+    if (maxi = TCA -> head) {
+      TCA -> head = TCA -> head -> next;
+    } else {
+      ancient -> next = current -> next;
+    }
+    // ajout mini au debut de TCA2
+    maxi -> next = TCA2 -> head;
+    TCA2 -> head = maxi;
+  }
+  return TCA2;
+}
+
 /**
  * \brief	Draws a filled polygon.
  *
@@ -354,11 +384,11 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         while (y < tab[1]) {
           move_side(TCA, TC, y - tab[0]);
           delete_side(TCA, y);
-        //   order_TCA();
+          TCA = order_TCA(TCA);
           draw_scanline(surface, TCA, color_rgba, y);
-        if (TCA -> head != NULL) {
-          printf("%i bonjour %i\n",TCA -> head -> y_max, TCA -> head -> x_y);
-        }
+          if (TCA -> head != NULL) {
+            printf("%i bonjour %i\n",y, TCA -> head -> x_y);
+          }
           y++;
           update_intersect(TCA);
         }
