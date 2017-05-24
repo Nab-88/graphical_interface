@@ -72,12 +72,12 @@ void			ei_draw_polyline	(ei_surface_t			surface,
          hw_surface_lock(surface);
          uint32_t color_rgba = ei_map_rgba(surface, &color);
          const ei_linked_point_t *reference = first_point;
-         if (first_point) {
+         if (first_point != NULL) {
            ei_point_t point_current = first_point->point;
            int x_coord = point_current.x;
            int y_coord = point_current.y;
            draw_pixel(surface, x_coord, y_coord, color_rgba);
-           while (first_point -> next) {
+           while ((first_point -> next) != NULL) {
              ei_point_t end_point = first_point -> next -> point;
              int delta_x = end_point.x - x_coord;
              int delta_y = end_point.y - y_coord;
