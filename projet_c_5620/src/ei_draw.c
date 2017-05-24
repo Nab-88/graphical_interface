@@ -253,8 +253,7 @@ void delete_side(ei_TCA_t *TCA, int y) {
  * @param	scanline  current scanline
  */
 void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline){
-    ei_side_t *side = ((TC -> tab)[scanline]);
-    TCA -> head = side;
+    TCA -> head = (TC -> tab)[scanline];
     (TC -> tab)[scanline] = NULL;
 }
 
