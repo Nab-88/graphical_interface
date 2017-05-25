@@ -6,7 +6,7 @@
 /**
  * @brief	A side that is represented by 4 parameters
  */
-typedef struct {
+typedef struct ei_side_t {
 	 int y_max; ///< The maximum ordinate where the scanline will meet the side
    int x_y; ///< The abscissa where te scanline intersects the side
    int dx; ///< Delta x of bresenham
