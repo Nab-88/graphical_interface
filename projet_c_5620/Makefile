@@ -59,6 +59,13 @@ all : ${TARGETS}
 
 ########## Test-programs
 #Move_TCA
+acote : ${OBJDIR}/acote.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o acote ${LDFLAGS} ${OBJDIR}/acote.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/acote.o : ${TESTS}/acote.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/acote.c -o ${OBJDIR}/acote.o
+
+#Move_TCA
 order_TCA : ${OBJDIR}/order_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o order_TCA ${LDFLAGS} ${OBJDIR}/order_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o
 
