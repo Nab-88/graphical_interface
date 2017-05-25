@@ -336,25 +336,26 @@ ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
    ei_TCA_t* TCA2 = malloc(sizeof(ei_TCA_t));
    TCA2 -> head = NULL;
    while (TCA -> head != NULL) {
-    ei_side_t *head = TCA -> head;
+     ei_side_t *before = TCA -> head;
     ei_side_t *current = TCA -> head;
     ei_side_t *ancient = TCA -> head;
     ei_side_t *maxi = TCA -> head;
     while (current != NULL) {
       if (maxi -> x_y < current -> x_y) {
+        before = ancient;
         maxi = current;
       }
       ancient = current;
-      current = current -> next;
+      current = (ei_side_t*) current -> next;
     }
-    // Enleve mini de TCA
-    if (maxi = TCA -> head) {
-      TCA -> head = TCA -> head -> next;
+    // Enleve maxi de TCA
+    if (maxi == TCA -> head) {
+      TCA -> head = (ei_side_t*) TCA -> head -> next;
     } else {
-      ancient -> next = current -> next;
+      before -> next = maxi -> next;
     }
-    // ajout mini au debut de TCA2
-    maxi -> next = TCA2 -> head;
+    // ajout maxi au debut de TCA2
+    maxi -> next = (struct ei_side_t*) TCA2 -> head;
     TCA2 -> head = maxi;
   }
   return TCA2;
