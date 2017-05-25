@@ -233,8 +233,10 @@ void delete_side(ei_TCA_t *TCA, int y) {
     while (current_side != NULL) {
       if (current_side -> y_max == y) {
         ancien -> next = current_side -> next;
+        free(current_side);
+      } else {
+        ancien = current_side;
       }
-      ancien = current_side;
       current_side = (ei_side_t*) current_side -> next;
     }
     if (TCA -> head -> y_max == y) {
@@ -376,6 +378,8 @@ ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
     maxi -> next = (struct ei_side_t*) TCA2 -> head;
     TCA2 -> head = maxi;
   }
+  TCA -> head = NULL;
+  free(TCA);
   return TCA2;
 }
 
@@ -385,29 +389,19 @@ ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
  * @param	TCA 	Table of active sides
  * @param	TC 	Table of sides
  */
-void free_all(ei_TC_t **TC, ei_TCA_t **TCA) {
-  free((*TC)->tab);
-  ei_side_t* current;
-  ei_side_t* ancient = (ei_side_t*) (*TCA) -> head;
-  while (current != NULL) {
-    current = (ei_side_t*) ancient -> next;
-    free(ancient);
-    ancient = current;
-  }
-  free(ancient);
-}
-
-void free_all_bis(ei_TC_t **TC, ei_TCA_t **TCA, int* tab) {
+void free_all(ei_TC_t *TC, ei_TCA_t *TCA, int* tab) {
   free(tab);
-  free((*TC)->tab);
+  free(TC->tab);
   ei_side_t* current;
-  ei_side_t* ancient = (ei_side_t*) (*TCA) -> head;
+  ei_side_t* ancient = (ei_side_t*) TCA -> head;
   while (current != NULL) {
     current = (ei_side_t*) ancient -> next;
     free(ancient);
     ancient = current;
   }
   free(ancient);
+  free(TC);
+  free(TCA);
 }
 
 
@@ -443,7 +437,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         }
         hw_surface_unlock(surface);
         hw_surface_update_rects(surface, NULL);
-        free_all(&TC, &TCA);
+        free_all(TC, TCA, tab);
 }
 
 /**
@@ -525,6 +519,8 @@ void			ei_draw_text		(ei_surface_t		surface,
           }
           hw_surface_unlock(surface);
           hw_surface_update_rects(surface, NULL);
+          free(rect_source);
+          free(rect_dest);
          }
 
 
@@ -601,6 +597,7 @@ void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf
   color -> alpha = pa;
   uint32_t converted_color = ei_map_rgba(dest_surf, color);
   *dest_pixel = converted_color;
+  free(color);
 }
 int			ei_copy_surface		(ei_surface_t		destination,
 						 const ei_rect_t*	dst_rect,
@@ -632,10 +629,7 @@ int			ei_copy_surface		(ei_surface_t		destination,
              hw_surface_unlock(destination);
              hw_surface_unlock(source);
              hw_surface_update_rects(destination, NULL);
-             return 1;
-             }
-            else{
-              return 0;
+                return 0;
             }
            }
            else if((dst_rect != NULL || src_rect != NULL)){
