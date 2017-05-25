@@ -185,7 +185,7 @@ int* init_scanline(ei_linked_point_t* first_point){
 
 ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
   ei_TC_t *TC = malloc(sizeof(ei_TC_t));
-  if (first_point != NULL) {
+  if (first_point) {
     TC->tab = malloc(sizeof(ei_side_t)* (y_max-y_min));
     ei_linked_point_t* current_point = (ei_linked_point_t*) first_point;
     while (current_point -> next) {
@@ -280,6 +280,9 @@ void update_intersect(ei_TCA_t* TCA) {
     int dx = current_side -> dx;
     int dy = current_side -> dy;
     int x_y;
+    if (abs(dx/dy) > 1){
+      x_y = current_side -> x_y + (dx/dy);
+    } else {
       x_y = current_side -> x_y;
       int variable_x = 1;
       if (dx < 0) {
@@ -291,9 +294,9 @@ void update_intersect(ei_TCA_t* TCA) {
         x_y += variable_x;
         error -= dy;
       }
-      current_side -> x_y = x_y;
-      current_side = (ei_side_t*) current_side -> next;
-    
+    }
+    current_side -> x_y = x_y;
+    current_side = (ei_side_t*) current_side -> next;
   }
 }
 
@@ -385,7 +388,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
           TCA = order_TCA(TCA);
           draw_scanline(surface, TCA, color_rgba, y);
           if (TCA -> head != NULL) {
-            printf("Scanline number %i : abscisse x, %i\n",y, TCA -> head -> x_y);
+            printf("%i bonjour %i\n",y, TCA -> head -> x_y);
           }
           y++;
           update_intersect(TCA);
@@ -565,6 +568,7 @@ int			ei_copy_surface		(ei_surface_t		destination,
                    else{
                      *dest_ptr = *src_ptr;
                    }
+                      src_ptr ++;
                       dest_ptr ++;
                      }
                      dest_ptr += dest_surf_size.width - src_rect -> size.width;
@@ -591,8 +595,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
            hw_surface_lock(source);
            hw_surface_lock(destination);
            ei_size_t dest_surf_size = hw_surface_get_size(destination);
-          ei_size_t src_surf_size = hw_surface_get_size(source);
-
+					 ei_size_t src_surf_size = hw_surface_get_size(source);
            if ((dst_rect == NULL && src_rect == NULL)) {
              ei_rect_t* dst_rect;
              dst_rect = malloc(sizeof(ei_rect_t));
@@ -624,6 +627,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
                  else{
                    *dest_ptr = *src_ptr;
                  }
+                    src_ptr ++;
                     dest_ptr ++;
                    }
                    dest_ptr += dest_surf_size.width - src_rect -> size.width;
