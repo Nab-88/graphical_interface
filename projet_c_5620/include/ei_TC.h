@@ -6,7 +6,7 @@
 /**
  * @brief	A side that is represented by 4 parameters
  */
-typedef struct {
+typedef struct ei_side_t {
 	 int y_max; ///< The maximum ordinate where the scanline will meet the side
    int x_y; ///< The abscissa where te scanline intersects the side
    int dx; ///< Delta x of bresenham
@@ -97,3 +97,23 @@ void delete_side(ei_TCA_t *TCA, int y);
 **/
 
 void update_intersect(ei_TCA_t* TCA);
+
+void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf,  ei_surface_t dest_surf);
+
+/**
+ * \brief	Draws a scanline
+ *
+ * @param	surface 	Where to draw the polygon. The surface must be *locked* by
+ *				\ref hw_surface_lock.
+ * @param	table of active sides
+ * @param	color		The color used to draw the polygon, alpha channel is managed.
+ */
+void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int y);
+
+/**
+ * \brief	A function to free them all
+ *
+ * @param	TCA 	Table of active sides
+ * @param	TC 	Table of sides
+ */
+void free_all(ei_TC_t *TC, ei_TCA_t *TCA, int* tab);
