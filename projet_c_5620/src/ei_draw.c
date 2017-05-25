@@ -347,7 +347,7 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
 /**
  * \brief	Orders TCA according to x_y
  *
- * @param	TCA         TCA that needs to be ordered 	
+ * @param	TCA         TCA that needs to be ordered
  * @return  TCA2	    TCA ordered
  */
 ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
@@ -713,3 +713,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
              return 0;
            }
          }
+
+ei_linked_point_t ei_arc(ei_point_t centre, uint32_t rayon, uint32_t angle_debut, uint32_t angle_fin){
+
+}
