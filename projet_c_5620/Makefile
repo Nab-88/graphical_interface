@@ -58,6 +58,13 @@ all : ${TARGETS}
 
 
 ########## Test-programs
+#Move_TCA
+order_TCA : ${OBJDIR}/order_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o order_TCA ${LDFLAGS} ${OBJDIR}/order_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/order_TCA.o : ${TESTS}/order_TCA.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/order_TCA.c -o ${OBJDIR}/order_TCA.o
+
 #test delete_side
 delete_side : ${OBJDIR}/delete_side.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o delete_side ${LDFLAGS} ${OBJDIR}/delete_side.o ${LIBS} ${OBJDIR}/ei_draw.o

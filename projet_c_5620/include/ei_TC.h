@@ -73,3 +73,27 @@ void move_side(ei_TCA_t* TCA, ei_TC_t* TC, int scanline);
  *				NULL (i.e. draws nothing), or has more than 2 points.
  */
 ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max);
+
+/**
+ * \brief	Orders TCA according to x_y
+ *
+ * @param	TCA         TCA that needs to be ordered 	
+ * @return  TCA2	    TCA ordered
+ */
+ei_TCA_t* order_TCA(ei_TCA_t *TCA);
+
+/**
+ * \brief	Removes from TCA all the sides with y_max = y
+ *
+ * @param	TCA 	The active list of sides
+ * @param y  The abscissa where we are
+ */
+void delete_side(ei_TCA_t *TCA, int y);
+
+/**
+ * \brief	Updates the intersects
+ *
+ * @param	 The table of active sides (TCA)
+**/
+
+void update_intersect(ei_TCA_t* TCA);
