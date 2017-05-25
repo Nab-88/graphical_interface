@@ -422,6 +422,7 @@ void			ei_draw_text		(ei_surface_t		surface,
 					 const ei_color_t*	color,
 					 const ei_rect_t*	clipper)
 					 {
+            //PAS DE GESTION DU CLIPPING POUR L'INSTANT
            hw_surface_lock(surface);
            ei_size_t surface_size = hw_surface_get_size(surface);
 					 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
@@ -442,7 +443,6 @@ void			ei_draw_text		(ei_surface_t		surface,
 void			ei_fill			(ei_surface_t		surface,
 						 const ei_color_t*	color,
 						 const ei_rect_t*	clipper)
-// PAS DE GESTION DU CLIPPING POUR L'INSTANT.
                 {
                 uint32_t converted_color;
                 if(color == NULL){
@@ -522,8 +522,8 @@ int			ei_copy_surface		(ei_surface_t		destination,
 //=======ATTENTION PENSER A RAJOUTER LE CAS RECT = NULL ALORS ON PREND TOUTE LA SURFACE .. Moi J'AI PAS FAIT CA.
            ei_size_t dest_surf_size = hw_surface_get_size(destination);
 					 ei_size_t src_surf_size = hw_surface_get_size(source);
-           //if there are no rect specified and both surface have the same size
-           if((dst_rect == NULL || src_rect == NULL)){
+           //if there is no rect specified and both surface have the same size
+           if((dst_rect == NULL && src_rect == NULL)){
              if ((dest_surf_size.width == src_surf_size.width)
            && (dest_surf_size.height == src_surf_size.height)) {
              hw_surface_lock(destination);
@@ -566,15 +566,11 @@ int			ei_copy_surface		(ei_surface_t		destination,
                    else{
                      *dest_ptr = *src_ptr;
                    }
-                       src_ptr ++;
-                       dest_ptr ++;
+                      dest_ptr ++;
                      }
                      dest_ptr += dest_surf_size.width - src_rect -> size.width;
                      src_ptr += src_surf_size.width - src_rect -> size.width;
                  }
-
-
-
              hw_surface_unlock(destination);
              hw_surface_unlock(source);
              hw_surface_update_rects(destination, NULL);
@@ -585,4 +581,58 @@ int			ei_copy_surface		(ei_surface_t		destination,
              }
            }
            return 0;
+}
+
+int			ei_copy_surface_optim		(ei_surface_t		destination,
+						 const ei_rect_t*	dst_rect,
+						 const ei_surface_t	source,
+						 const ei_rect_t*	src_rect,
+						 const ei_bool_t	alpha)
+            {
+           hw_surface_lock(source);
+           hw_surface_lock(destination);
+           if ((dst_rect == NULL && src_rect == NULL)) {
+             ei_rect_t* dst_rect;
+             dst_rect = malloc(sizeof(ei_rect_t));
+             *dst_rect = hw_surface_get_rect(destination);
+             ei_rect_t* src_rect;
+             src_rect = malloc(sizeof(ei_rect_t));
+             *src_rect = hw_surface_get_rect(source);
+           }
+           else if ((dst_rect != NULL && src_rect == NULL)) {
+             ei_rect_t* dst_rect;
+             dst_rect = malloc(sizeof(ei_rect_t));
+             *dst_rect = hw_surface_get_rect(destination);
+           }
+           else if ((dst_rect == NULL && src_rect != NULL)) {
+             ei_rect_t* src_rect;
+             src_rect = malloc(sizeof(ei_rect_t));
+             *src_rect = hw_surface_get_rect(source);
+           }
+           if ((src_rect -> size.width == dst_rect -> size.width) && (src_rect -> size.height == src_rect -> size.height)) {
+             uint32_t* dest_ptr = (uint32_t*)hw_surface_get_buffer(destination);
+             uint32_t* src_ptr = (uint32_t*)hw_surface_get_buffer(source);
+             dest_ptr += (dst_rect -> top_left.x) + dest_surf_size.width * (dst_rect -> top_left.y);
+             src_ptr += (src_rect -> top_left.x) + src_surf_size.width * (src_rect -> top_left.y);
+             for (uint32_t j = 0; j < src_rect -> size.height; j++) {
+               for (uint32_t i = 0; i < src_rect -> size.width; i++) {
+                 if (alpha == EI_TRUE) {
+                    copy_pixel(dest_ptr, src_ptr, source, destination);
+                 }
+                 else{
+                   *dest_ptr = *src_ptr;
+                 }
+                    dest_ptr ++;
+                   }
+                   dest_ptr += dest_surf_size.width - src_rect -> size.width;
+                   src_ptr += src_surf_size.width - src_rect -> size.width;
+               }
+           hw_surface_unlock(destination);
+           hw_surface_unlock(source);
+           hw_surface_update_rects(destination, NULL); //Penser a rajouter remplacer NULL par une liste de rect à mettre à jour pour optimiser ei_linked_rect_t
+           return 1;
+         }
+         else{
+             return 0;
+           }
          }
