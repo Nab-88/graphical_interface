@@ -329,6 +329,12 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
 }
 
 
+/**
+ * \brief	Orders TCA according to x_y
+ *
+ * @param	TCA         TCA that needs to be ordered 	
+ * @return  TCA2	    TCA ordered
+ */
 ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
    ei_TCA_t* TCA2 = malloc(sizeof(ei_TCA_t));
    TCA2 -> head = NULL;
