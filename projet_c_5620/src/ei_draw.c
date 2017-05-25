@@ -349,7 +349,7 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
 /**
  * \brief	Orders TCA according to x_y
  *
- * @param	TCA         TCA that needs to be ordered 	
+ * @param	TCA         TCA that needs to be ordered
  * @return  TCA2	    TCA ordered
  */
 ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
@@ -704,22 +704,25 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
             for (uint32_t i = 0; i < src_rect -> size.width; i++) {
                 if (alpha == EI_TRUE) {
                     copy_pixel(dest_ptr, src_ptr, source, destination);
-                }
-                else{
-                    *dest_ptr = *src_ptr;
-                }
-                src_ptr ++;
-                dest_ptr ++;
-            }
-            dest_ptr += dest_surf_size.width - src_rect -> size.width;
-            src_ptr += src_surf_size.width - src_rect -> size.width;
-        }
-        hw_surface_unlock(destination);
-        hw_surface_unlock(source);
-        hw_surface_update_rects(destination, NULL); //Penser a rajouter remplacer NULL par une liste de rect à mettre à jour pour optimiser ei_linked_rect_t
-        return 1;
-    }
-    else{
-        return 0;
-    }
+                 }
+                 else{
+                   *dest_ptr = *src_ptr;
+                 }
+                    src_ptr ++;
+                    dest_ptr ++;
+                   }
+                   dest_ptr += dest_surf_size.width - src_rect -> size.width;
+                   src_ptr += src_surf_size.width - src_rect -> size.width;
+               }
+           hw_surface_unlock(destination);
+           hw_surface_unlock(source);
+           hw_surface_update_rects(destination, NULL); //Penser a rajouter remplacer NULL par une liste de rect à mettre à jour pour optimiser ei_linked_rect_t
+           return 1;
+         }
+         else{
+             return 0;
+           }
+         }
+
+ei_linked_point_t ei_arc(ei_point_t centre, uint32_t rayon, uint32_t angle_debut, uint32_t angle_fin){
 }
