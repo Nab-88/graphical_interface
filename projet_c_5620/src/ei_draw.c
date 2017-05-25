@@ -185,7 +185,7 @@ int* init_scanline(ei_linked_point_t* first_point){
 
 ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
   ei_TC_t *TC = malloc(sizeof(ei_TC_t));
-  if (first_point != NULL) {
+  if (first_point) {
     TC->tab = malloc(sizeof(ei_side_t)* (y_max-y_min));
     ei_linked_point_t* current_point = (ei_linked_point_t*) first_point;
     while (current_point -> next) {
@@ -309,7 +309,6 @@ void update_intersect(ei_TCA_t* TCA) {
     current_side -> x_y = x_y;
     current_side -> error = error;
     current_side = (ei_side_t*) current_side -> next;
-
   }
 }
 
@@ -418,6 +417,12 @@ void			ei_draw_polygon		(ei_surface_t			surface,
           delete_side(TCA, y);
           TCA = order_TCA(TCA);
           draw_scanline(surface, TCA, color_rgba, y);
+<<<<<<< HEAD
+=======
+          if (TCA -> head != NULL) {
+            printf("%i bonjour %i\n",y, TCA -> head -> x_y);
+          }
+>>>>>>> cdd8da8a60c742b897d112fe31d958599111fa72
           y++;
           update_intersect(TCA);
         }
@@ -596,6 +601,7 @@ int			ei_copy_surface		(ei_surface_t		destination,
                    else{
                      *dest_ptr = *src_ptr;
                    }
+                      src_ptr ++;
                       dest_ptr ++;
                      }
                      dest_ptr += dest_surf_size.width - src_rect -> size.width;
@@ -622,8 +628,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
            hw_surface_lock(source);
            hw_surface_lock(destination);
            ei_size_t dest_surf_size = hw_surface_get_size(destination);
-          ei_size_t src_surf_size = hw_surface_get_size(source);
-
+					 ei_size_t src_surf_size = hw_surface_get_size(source);
            if ((dst_rect == NULL && src_rect == NULL)) {
              ei_rect_t* dst_rect;
              dst_rect = malloc(sizeof(ei_rect_t));
@@ -655,6 +660,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
                  else{
                    *dest_ptr = *src_ptr;
                  }
+                    src_ptr ++;
                     dest_ptr ++;
                    }
                    dest_ptr += dest_surf_size.width - src_rect -> size.width;
