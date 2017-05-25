@@ -417,6 +417,21 @@ void			ei_draw_polygon		(ei_surface_t			surface,
  						 const ei_rect_t*	src_rect,
  						 const ei_bool_t	alpha);
 
+ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect){
+  uint32_t y_px = pixel.y;
+  uint32_t x_px = pixel.x;
+  uint32_t x_min_rect = rect -> top_left.x;
+  uint32_t x_max_rect = x_min_rect + rect -> size.width;
+  uint32_t y_min_rect = rect -> top_left.y;
+  uint32_t y_max_rect = y_min_rect + rect -> size.height;
+  if ((x_px > x_min_rect)&&(x_px < x_max_rect)&&(y_px > y_min_rect)&&(y_px < y_max_rect)) {
+    return EI_TRUE;
+  }
+  else{
+    return EI_FALSE;
+  }
+}
+
 void			ei_draw_text		(ei_surface_t		surface,
 					 const ei_point_t*	where,
 					 const char*		text,
@@ -424,21 +439,44 @@ void			ei_draw_text		(ei_surface_t		surface,
 					 const ei_color_t*	color,
 					 const ei_rect_t*	clipper)
 					 {
-            //PAS DE GESTION DU CLIPPING POUR L'INSTANT
-           hw_surface_lock(surface);
-           ei_size_t surface_size = hw_surface_get_size(surface);
-					 ei_surface_t text_surface = hw_text_create_surface(text, font, color);
-					 ei_size_t text_surface_size = hw_surface_get_size(text_surface);
-           ei_rect_t* rect_source;
-           rect_source = malloc(sizeof(ei_rect_t));
-           *rect_source = hw_surface_get_rect(text_surface);
-           ei_rect_t* rect_dest;
-           rect_dest = malloc(sizeof(ei_rect_t));
-           rect_dest -> size = (text_surface_size);
-           rect_dest -> top_left =  *where;
-           int copy = ei_copy_surface(surface, rect_dest ,text_surface,rect_source ,EI_TRUE);
-  				 hw_surface_unlock(surface);
-  				 hw_surface_update_rects(surface, NULL);
+             hw_surface_lock(surface);
+             ei_size_t surface_size = hw_surface_get_size(surface);
+             ei_surface_t text_surface = hw_text_create_surface(text, font, color);
+             ei_size_t text_surface_size = hw_surface_get_size(text_surface);
+             ei_rect_t* rect_source;
+             rect_source = malloc(sizeof(ei_rect_t));
+             *rect_source = hw_surface_get_rect(text_surface);
+             ei_rect_t* rect_dest;
+             rect_dest = malloc(sizeof(ei_rect_t));
+             rect_dest -> size = (text_surface_size);
+             rect_dest -> top_left =  *where;
+             ei_point_t current_pixel;
+             current_pixel = *where;
+           if (clipper == NULL) {
+               int copy = ei_copy_surface(surface, rect_dest ,text_surface,rect_source ,EI_TRUE);
+          }
+          else{
+            uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
+            uint32_t* dest_ptr = (uint32_t*)hw_surface_get_buffer(surface);
+            dest_ptr += (rect_dest -> top_left.x) + surface_size.width * (rect_dest -> top_left.y);
+            for (uint32_t j = 0; j < rect_source -> size.height; j++) {
+              for (uint32_t i = 0; i < rect_source -> size.width; i++) {
+                if (pixel_is_in_rect(current_pixel, clipper) == EI_TRUE) {
+                  copy_pixel(dest_ptr, text_ptr, text_surface, surface);
+                }
+                text_ptr ++;
+                dest_ptr ++;
+                current_pixel.x += 1;
+              }
+            dest_ptr += surface_size.width - rect_source -> size.width;
+            current_pixel.x = where -> x;
+            current_pixel.y += 1;
+
+            // src_ptr += text_surface_size.width - rect_source -> size.width;
+            }
+          }
+          hw_surface_unlock(surface);
+          hw_surface_update_rects(surface, NULL);
          }
 
 

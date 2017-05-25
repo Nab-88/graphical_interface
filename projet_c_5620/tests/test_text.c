@@ -25,10 +25,23 @@ int ei_main(int argc, char** argv)
 	color2 -> green = 0;
 	color2 -> blue = 255;
 	color2 -> alpha = 100;
+	ei_color_t* color3;
+	color3 = malloc(sizeof(ei_color_t));
+	color3 -> red = 0;
+	color3 -> green = 255;
+	color3 -> blue = 0;
+	color3 -> alpha = 100;
   ei_point_t* where = malloc(sizeof(ei_point_t));
   *where = ei_point(320,240);
 	char* text = "ROMAIN LE FDP <3";
-
+	char* text2 = "COUCOU";
+	ei_point_t point;
+	point.x = 50;
+	point.y = 0;
+	ei_rect_t* ls_rect;
+	ls_rect = malloc(sizeof(ei_rect_t));
+	ls_rect -> size = ei_size(320,480);
+	ls_rect -> top_left = point;
 	hw_init();
 	main_window = hw_create_window(&main_window_size, EI_FALSE);
 	// main_window = hw_surface_create(main_window, &main_window_size, EI_TRUE);
@@ -42,7 +55,9 @@ int ei_main(int argc, char** argv)
 
 
 	ei_fill(main_window, color, NULL);
-  ei_draw_text(main_window, where, text, ei_default_font, color2, NULL);
+	ei_fill(main_window, color3,ls_rect);
+  ei_draw_text(main_window, where, text2, ei_default_font, color2, ls_rect);
+
 	// Free the font created above
 
 
