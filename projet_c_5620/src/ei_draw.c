@@ -417,12 +417,6 @@ void			ei_draw_polygon		(ei_surface_t			surface,
           delete_side(TCA, y);
           TCA = order_TCA(TCA);
           draw_scanline(surface, TCA, color_rgba, y);
-<<<<<<< HEAD
-=======
-          if (TCA -> head != NULL) {
-            printf("%i bonjour %i\n",y, TCA -> head -> x_y);
-          }
->>>>>>> cdd8da8a60c742b897d112fe31d958599111fa72
           y++;
           update_intersect(TCA);
         }
