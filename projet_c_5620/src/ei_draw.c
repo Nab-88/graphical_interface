@@ -280,9 +280,7 @@ void update_intersect(ei_TCA_t* TCA) {
     int dx = current_side -> dx;
     int dy = current_side -> dy;
     int x_y;
-    if (abs(dx/dy) > 1){
-      x_y = current_side -> x_y + (dx/dy);
-    } else {
+    while (y1 != y){
       x_y = current_side -> x_y;
       int variable_x = 1;
       if (dx < 0) {
@@ -294,9 +292,9 @@ void update_intersect(ei_TCA_t* TCA) {
         x_y += variable_x;
         error -= dy;
       }
+      current_side -> x_y = x_y;
+      current_side = (ei_side_t*) current_side -> next;
     }
-    current_side -> x_y = x_y;
-    current_side = (ei_side_t*) current_side -> next;
   }
 }
 
@@ -388,7 +386,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
           TCA = order_TCA(TCA);
           draw_scanline(surface, TCA, color_rgba, y);
           if (TCA -> head != NULL) {
-            printf("%i bonjour %i\n",y, TCA -> head -> x_y);
+            printf("Scanline number %i : abscisse x, %i\n",y, TCA -> head -> x_y);
           }
           y++;
           update_intersect(TCA);
