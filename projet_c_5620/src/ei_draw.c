@@ -280,7 +280,6 @@ void update_intersect(ei_TCA_t* TCA) {
     int dx = current_side -> dx;
     int dy = current_side -> dy;
     int x_y;
-    while (y1 != y){
       x_y = current_side -> x_y;
       int variable_x = 1;
       if (dx < 0) {
@@ -294,7 +293,7 @@ void update_intersect(ei_TCA_t* TCA) {
       }
       current_side -> x_y = x_y;
       current_side = (ei_side_t*) current_side -> next;
-    }
+    
   }
 }
 
@@ -591,6 +590,9 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
             {
            hw_surface_lock(source);
            hw_surface_lock(destination);
+           ei_size_t dest_surf_size = hw_surface_get_size(destination);
+          ei_size_t src_surf_size = hw_surface_get_size(source);
+
            if ((dst_rect == NULL && src_rect == NULL)) {
              ei_rect_t* dst_rect;
              dst_rect = malloc(sizeof(ei_rect_t));
