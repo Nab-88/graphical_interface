@@ -97,3 +97,5 @@ void delete_side(ei_TCA_t *TCA, int y);
 **/
 
 void update_intersect(ei_TCA_t* TCA);
+
+void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf,  ei_surface_t dest_surf);

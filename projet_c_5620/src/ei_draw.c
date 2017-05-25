@@ -388,14 +388,29 @@ ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
 void free_all(ei_TC_t **TC, ei_TCA_t **TCA) {
   free((*TC)->tab);
   ei_side_t* current;
-  ei_side_t* ancient = (*TCA) -> head;
+  ei_side_t* ancient = (ei_side_t*) (*TCA) -> head;
   while (current != NULL) {
-    current = ancient -> next;
+    current = (ei_side_t*) ancient -> next;
     free(ancient);
     ancient = current;
   }
   free(ancient);
 }
+
+void free_all_bis(ei_TC_t **TC, ei_TCA_t **TCA, int* tab) {
+  free(tab);
+  free((*TC)->tab);
+  ei_side_t* current;
+  ei_side_t* ancient = (ei_side_t*) (*TCA) -> head;
+  while (current != NULL) {
+    current = (ei_side_t*) ancient -> next;
+    free(ancient);
+    ancient = current;
+  }
+  free(ancient);
+}
+
+
 
 /**
  * \brief	Draws a filled polygon.
@@ -486,7 +501,7 @@ void			ei_draw_text		(ei_surface_t		surface,
              ei_point_t current_pixel;
              current_pixel = *where;
            if (clipper == NULL) {
-               int copy = ei_copy_surface(surface, rect_dest ,text_surface,rect_source ,EI_TRUE);
+               ei_copy_surface(surface, rect_dest ,text_surface,rect_source ,EI_TRUE);
           }
           else{
             uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
@@ -549,6 +564,7 @@ void			ei_fill			(ei_surface_t		surface,
                 hw_surface_update_rects(surface, NULL);
              }
            }
+
 void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf,
   ei_surface_t dest_surf){
   int d_ir;
