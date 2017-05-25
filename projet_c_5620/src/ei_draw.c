@@ -201,17 +201,15 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
             if (y1 < y2) {
               scanline = y1;
               side -> y_max = y2;
+              side -> x_y = x1;
+              side -> dx = (x2 - x1);
             } else {
               scanline = y2;
               side -> y_max = y1;
-            }
-            if (scanline == y2) {
-              side -> x_y = x1;
-            } else {
               side -> x_y = x2;
+              side -> dx = (x1 - x2);
             }
-            side -> dx = (x2 - x1);
-            side -> dy = (y2 - y1);
+            side -> dy = abs(y2 - y1);
             side -> error = 0;
             side -> next = (struct ei_side_t*) TC->tab[scanline - y_min];
             TC->tab[scanline - y_min] = side;
@@ -277,25 +275,39 @@ void update_intersect(ei_TCA_t* TCA) {
   // Boucler sur tout les cotés mettre à jour le x_y
   ei_side_t *current_side = (ei_side_t*) TCA -> head;
   while (current_side != NULL) {
+    // On met a jour x_y sur tout les coté en utilisant bresenham
+    int y = 0;
+    int y1 = 1;
     int dx = current_side -> dx;
     int dy = current_side -> dy;
-    int x_y;
-    if (abs(dx/dy) > 1){
-      x_y = current_side -> x_y + (dx/dy);
-    } else {
-      x_y = current_side -> x_y;
-      int variable_x = 1;
-      if (dx < 0) {
-        variable_x = -1;
-        dx = - dx;
+    int x_y = current_side -> x_y;
+    int error = current_side -> error;
+    int variable_x = 1;
+    if (dx != 0) {
+          if (dx < 0) {
+            variable_x = -1;
+            dx = - dx;
+          }
+          if (dx < dy) {
+            error += dx;
+            if (2 * error > dy) {
+              x_y += variable_x;
+              error -= dy;
+            }
+          } else {
+          while (y1 != y) {
+            // On applique bresenham
+            x_y += variable_x;
+            error += dy;
+            if (2 * error > dx) {
+              y += 1;
+              error -= dx;
+            }
+          }
+        }
       }
-      int error = current_side -> error;
-      if (2 * error > dy) {
-        x_y += variable_x;
-        error -= dy;
-      }
-    }
     current_side -> x_y = x_y;
+    current_side -> error = error;
     current_side = (ei_side_t*) current_side -> next;
   }
 }
@@ -368,6 +380,24 @@ ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
 }
 
 /**
+ * \brief	A function to free them all
+ *
+ * @param	TCA 	Table of active sides
+ * @param	TC 	Table of sides
+ */
+void free_all(ei_TC_t **TC, ei_TCA_t **TCA) {
+  free((*TC)->tab);
+  ei_side_t* current;
+  ei_side_t* ancient = (*TCA) -> head;
+  while (current != NULL) {
+    current = ancient -> next;
+    free(ancient);
+    ancient = current;
+  }
+  free(ancient);
+}
+
+/**
  * \brief	Draws a filled polygon.
  *
  * @param	surface 	Where to draw the polygon. The surface must be *locked* by
@@ -393,15 +423,12 @@ void			ei_draw_polygon		(ei_surface_t			surface,
           delete_side(TCA, y);
           TCA = order_TCA(TCA);
           draw_scanline(surface, TCA, color_rgba, y);
-          if (TCA -> head != NULL) {
-            printf("%i bonjour %i\n",y, TCA -> head -> x_y);
-          }
           y++;
           update_intersect(TCA);
         }
         hw_surface_unlock(surface);
         hw_surface_update_rects(surface, NULL);
-        // free_all();
+        free_all(&TC, &TCA);
 }
 
 /**
