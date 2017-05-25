@@ -185,7 +185,7 @@ int* init_scanline(ei_linked_point_t* first_point){
 
 ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
   ei_TC_t *TC = malloc(sizeof(ei_TC_t));
-  if (first_point) {
+  if (first_point != NULL) {
     TC->tab = malloc(sizeof(ei_side_t)* (y_max-y_min));
     ei_linked_point_t* current_point = (ei_linked_point_t*) first_point;
     while (current_point -> next) {
