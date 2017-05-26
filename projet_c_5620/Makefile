@@ -52,20 +52,27 @@ endif
 # Main target of the makefile. To build specific targets, call "make <target_name>"
 
 TARGETS		=	${LIBEI} \
-			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba frame button hello_world puzzle two048
+			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba frame button hello_world puzzle two048 arc_draw
 all : ${TARGETS}
 
 
 
 ########## Test-programs
-#Move_TCA
+#arc_draw
+arc_draw : ${OBJDIR}/arc_draw.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o arc_draw ${LDFLAGS} ${OBJDIR}/arc_draw.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/arc_draw.o : ${TESTS}/arc_draw.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/arc_draw.c -o ${OBJDIR}/arc_draw.o
+
+#acote
 acote : ${OBJDIR}/acote.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o acote ${LDFLAGS} ${OBJDIR}/acote.o ${LIBS} ${OBJDIR}/ei_draw.o
 
 ${OBJDIR}/acote.o : ${TESTS}/acote.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/acote.c -o ${OBJDIR}/acote.o
 
-#Move_TCA
+#order_TCA
 order_TCA : ${OBJDIR}/order_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o order_TCA ${LDFLAGS} ${OBJDIR}/order_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o
 

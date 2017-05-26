@@ -724,5 +724,40 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
            }
          }
 
-ei_linked_point_t ei_arc(ei_point_t centre, uint32_t rayon, uint32_t angle_debut, uint32_t angle_fin){
+/**
+* \brief	The fonction gives the list of points that need to be drawn to draw an arc
+*
+* @param	centre	The center point of the circle
+* @param	rayon	The radius of the circle
+* @param	angle_debut	The angle where the first point is at
+* @param	angle_fin The angle where the last point is at
+*
+* @return			Returns the list of points that make the arc
+*/
+ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, int angle_fin){
+  float pi = 3.14159265;
+  ei_linked_point_t *first = malloc(sizeof(ei_linked_point_t));
+  first -> point = centre;
+  first -> next = NULL;
+  int x, y ,m;
+  x = 0;
+  y = rayon;
+  m = 5 - 4*rayon;
+  ei_linked_point_t *ancient = first;
+  while (x <= y) {
+    ei_linked_point_t *current = malloc(sizeof(ei_linked_point_t));
+    current -> point = (ei_point_t) {x + centre.x, y + centre.y};
+    current -> next = ancient;
+    if (m > 0) {
+      y --;
+      m -= 8*y;
+    }
+    x ++;
+    m += 8*x + 4;
+    ancient = current;
+  }
+  ei_linked_point_t *last = malloc(sizeof(ei_linked_point_t));
+  last -> point = centre;
+  last -> next = ancient;
+  return last;
 }
