@@ -58,7 +58,14 @@ all : ${TARGETS}
 
 
 ########## Test-programs
-#Move_TCA
+#clipping_polygon
+clipping_polygon : ${OBJDIR}/clipping_polygon.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o clipping_polygon ${LDFLAGS} ${OBJDIR}/clipping_polygon.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/clipping_polygon.o : ${TESTS}/clipping_polygon.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/clipping_polygon.c -o ${OBJDIR}/clipping_polygon.o
+
+#acote
 acote : ${OBJDIR}/acote.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o acote ${LDFLAGS} ${OBJDIR}/acote.o ${LIBS} ${OBJDIR}/ei_draw.o
 

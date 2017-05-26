@@ -108,7 +108,7 @@ void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf
  * @param	table of active sides
  * @param	color		The color used to draw the polygon, alpha channel is managed.
  */
-void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int y);
+void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int y, const ei_rect_t* clipper);
 
 /**
  * \brief	A function to free them all
@@ -117,3 +117,12 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
  * @param	TC 	Table of sides
  */
 void free_all(ei_TC_t *TC, ei_TCA_t *TCA, int* tab);
+
+/**
+ * \brief	Tells whether a pixel is in the rectangle or not
+ *
+ * @param	pixel  the said pixel	
+ * @param	rect	the rectangle which delimits the border	
+ * @return  true or false	
+ */
+ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect);
