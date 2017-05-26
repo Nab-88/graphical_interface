@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include "ei_types.h"
 #include "hw_interface.h"
-#include "ei_types.h"
+#include "ei_draw.h"
 #include "ei_TC.h"
 
 /**
@@ -58,11 +58,14 @@ uint32_t		ei_map_rgba		(ei_surface_t surface, const ei_color_t* color){
  * @param	color		The color used to draw the line, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-void draw_pixel(ei_surface_t surface, int x_coord, int y_coord, uint32_t color_rgba) { // A changer pour optimiser
+void draw_pixel(ei_surface_t surface, int x_coord, int y_coord, uint32_t color_rgba, const ei_rect_t* clipper) { // A changer pour optimiser
     uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
     ei_size_t surface_size = hw_surface_get_size(surface);
     pixel_ptr += x_coord + y_coord * surface_size.width;
-    *pixel_ptr = color_rgba;
+    ei_point_t pixel = {x_coord, y_coord};
+    if ((clipper == NULL) || (pixel_is_in_rect(pixel, clipper) == EI_TRUE)){
+        *pixel_ptr = color_rgba;
+    }
 }
 
 void			ei_draw_polyline	(ei_surface_t			surface,
@@ -76,7 +79,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
         ei_point_t point_current = first_point->point;
         int x_coord = point_current.x;
         int y_coord = point_current.y;
-        draw_pixel(surface, x_coord, y_coord, color_rgba);
+        draw_pixel(surface, x_coord, y_coord, color_rgba, clipper);
         while ((first_point -> next) != NULL) {
             ei_point_t end_point = first_point -> next -> point;
             int delta_x = end_point.x - x_coord;
@@ -96,13 +99,13 @@ void			ei_draw_polyline	(ei_surface_t			surface,
             }
             if (delta_x == 0) {
                 for (int i = 0; i < delta_y; i++) {
-                    draw_pixel(surface, x_coord, y_coord, color_rgba);
+                    draw_pixel(surface, x_coord, y_coord, color_rgba, clipper);
                     y_coord += variable_y;
                 }
             }
             if (delta_y == 0) {
                 for (int i = 0; i < delta_x; i++) {
-                    draw_pixel(surface, x_coord, y_coord, color_rgba);
+                    draw_pixel(surface, x_coord, y_coord, color_rgba, clipper);
                     x_coord += variable_x;
                 }
             }
@@ -115,7 +118,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
                         x_coord += variable_x;
                         error -= delta_y;
                     }
-                    draw_pixel(surface, x_coord, y_coord, color_rgba);
+                    draw_pixel(surface, x_coord, y_coord, color_rgba, clipper);
                 }
             } else {
                 int error = 0;
@@ -126,7 +129,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
                         y_coord += variable_y;
                         error -= delta_x;
                     }
-                    draw_pixel(surface, x_coord, y_coord, color_rgba);
+                    draw_pixel(surface, x_coord, y_coord, color_rgba, clipper);
                 }
             }
             first_point = first_point->next;
@@ -322,7 +325,8 @@ void update_intersect(ei_TCA_t* TCA) {
  * @param	table of active sides
  * @param	color		The color used to draw the polygon, alpha channel is managed.
  */
-void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int y) {
+void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int y,
+        const ei_rect_t* clipper) {
     uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
     ei_size_t surface_size = hw_surface_get_size(surface);
     pixel_ptr += y * surface_size.width;
@@ -333,7 +337,14 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
     while (next != NULL) {
         if (write == true) {
             for (int i = current-> x_y; i < next -> x_y; i++) {
-                *pixel_ptr++ = color_rgba;
+                ei_point_t pixel;
+                pixel.x = i;
+                pixel.y = y;
+                if ((clipper == NULL) || (pixel_is_in_rect(pixel, clipper) == EI_TRUE)){
+                        //*pixel_ptr++ = color_rgba;
+                        *pixel_ptr = color_rgba;
+                        }
+                pixel_ptr ++;
             }
             write = false;
         } else {
@@ -431,7 +442,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         move_side(TCA, TC, y - tab[0]);
         delete_side(TCA, y);
         TCA = order_TCA(TCA);
-        draw_scanline(surface, TCA, color_rgba, y);
+        draw_scanline(surface, TCA, color_rgba, y, clipper);
         y++;
         update_intersect(TCA);
     }
@@ -440,25 +451,14 @@ void			ei_draw_polygon		(ei_surface_t			surface,
     free_all(TC, TCA, tab);
 }
 
-/**
- * \brief	Draws text by calling \ref hw_text_create_surface.
- *
- * @param	surface 	Where to draw the text. The surface must be *locked* by
- *				\ref hw_surface_lock.
- * @param	where		Coordinates, in the surface, where to anchor the top-left corner of
- *				the rendered text.
- * @param	text		The string of the text. Can't be NULL.
- * @param	font		The font used to render the text. If NULL, the \ref ei_default_font
- *				is used.
- * @param	color		The text color. Can't be NULL. The alpha parameter is not used.
- * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
- */
-int			ei_copy_surface		(ei_surface_t		destination,
-        const ei_rect_t*	dst_rect,
-        const ei_surface_t	source,
-        const ei_rect_t*	src_rect,
-        const ei_bool_t	alpha);
 
+/**
+ * \brief	Tells whether a pixel is in the rectangle or not
+ *
+ * @param	pixel  the said pixel
+ * @param	rect	the rectangle which delimits the border
+ * @return  true or false
+ */
 ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect){
     uint32_t y_px = pixel.y;
     uint32_t x_px = pixel.x;
@@ -724,6 +724,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
            }
          }
 
+
 /**
 * \brief	The fonction gives the list of points that need to be drawn to draw an arc
 *
@@ -735,7 +736,7 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
 * @return			Returns the list of points that make the arc
 */
 ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, int angle_fin){
-  float pi = 3.14159265;
+  // float pi = 3.14159265;
   ei_linked_point_t *first = malloc(sizeof(ei_linked_point_t));
   first -> point = centre;
   first -> next = NULL;
