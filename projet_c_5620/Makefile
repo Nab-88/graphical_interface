@@ -58,6 +58,26 @@ all : ${TARGETS}
 
 
 ########## Test-programs
+# ei_placer
+
+${OBJDIR}/ei_placer.o : ${SRC}/ei_placer.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_placer.c -o ${OBJDIR}/ei_placer.o
+
+# ei_widget
+
+${OBJDIR}/ei_widget.o : ${SRC}/ei_widget.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget.c -o ${OBJDIR}/ei_widget.o
+
+# ei_event
+
+${OBJDIR}/ei_event.o : ${SRC}/ei_event.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_event.c -o ${OBJDIR}/ei_event.o
+
+# ei_application
+
+${OBJDIR}/ei_application.o : ${SRC}/ei_application.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_application.c -o ${OBJDIR}/ei_application.o
+
 #arc_draw
 arc_draw : ${OBJDIR}/arc_draw.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
 	${LINK} -o arc_draw ${LDFLAGS} ${OBJDIR}/arc_draw.o ${LIBS} ${OBJDIR}/ei_draw.o
@@ -171,8 +191,8 @@ ${OBJDIR}/lines.o : ${TESTS}/lines.c
 
 # frame
 
-frame : ${OBJDIR}/frame.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o frame ${LDFLAGS} ${OBJDIR}/frame.o ${LIBEI} ${LIBS}
+frame : ${OBJDIR}/frame.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI}
+	${LINK} -o frame ${LDFLAGS} ${OBJDIR}/frame.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${LIBS}
 
 ${OBJDIR}/frame.o : ${TESTS}/frame.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/frame.c -o ${OBJDIR}/frame.o

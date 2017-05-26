@@ -18,10 +18,10 @@
  * @param	user_param	The user parameters that was provided by the caller when registering
  *				this callback.
  */
-typedef void		(*ei_callback_t)	(ei_widget_t*		widget,
-						 struct ei_event_t*	event,
-						 void*			user_param){
-}
+//typedef void		(*ei_callback_t)	(ei_widget_t*		widget,
+//						 struct ei_event_t*	event,
+//						 void*			user_param){
+//}
 
 
 

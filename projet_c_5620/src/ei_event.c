@@ -37,8 +37,8 @@ ei_widget_t* ei_event_get_active_widget(){
  * @return			EI_TRUE if the function handled the event,
  *				EI_FALSE otherwise, in this case the event is dismissed.
  */
-typedef ei_bool_t		(*ei_default_handle_func_t)(struct ei_event_t* event){
-}
+//typedef ei_bool_t		(*ei_default_handle_func_t)(struct ei_event_t* event){
+//}
 
 /**
  * Sets the function that must be called when an event has been received but no processed

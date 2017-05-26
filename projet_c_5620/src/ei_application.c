@@ -33,10 +33,8 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     hw_init();
 
     //Create the main window
-	main_window = hw_create_window(main_window_size, fullscreen);
+	ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
 
-    //Draws background
-    ei_fill(main_window, NULL, NULL);
 }
 
 /**
@@ -44,7 +42,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
  *		(ie. calls \ref hw_quit).
  */
 void ei_app_free(){
-    hw_exit();
+    hw_quit();
 
 }
 
