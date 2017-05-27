@@ -8,19 +8,11 @@
  */
 
 #include "ei_all_widgets.h"
-
-/**
- * @brief	A function that is called in response to a user event. For example, the function that
- *		a programmer wants called when the user has pressed on a graphical button.
- *
- * @param	widget		The widget for which the event was generated.
- * @param	event		The event containing all its parameters (type, etc.)
- * @param	user_param	The user parameters that was provided by the caller when registering
- *				this callback.
+#include <stdlib.h>
+#include <string.h>
+/*Declaration of the library of class of widgets
  */
-
-
-
+ei_widgetclass_t LIB;
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -112,6 +104,8 @@ void			ei_frame_configure		(ei_widget_t*		widget,
 							 ei_surface_t*		img,
 							 ei_rect_t**		img_rect,
 							 ei_anchor_t*		img_anchor){
+    ei_frame_t* frame = (ei_frame_t*) widget;
+    frame -> color = color;
 }
 
 
@@ -188,7 +182,17 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
  *		once before widgets of the class "frame" can be created and configured with
  *		\ref ei_frame_configure.
  */
-void			ei_frame_register_class 	(ei_widgetclass_t* widgetclass){
+void			ei_frame_register_class 	(){
+    ei_widgetclass_t* frame = calloc(1, sizeof(ei_widgetclass_t));
+    frame -> drawfunc = &ei_frame_drawfunc_t;
+    frame -> handlefunc = &ei_frame_handlefunc_t;
+    frame -> geomnotifyfunc = &ei_frame_geomnotifyfunc_t;
+    frame -> releasefunc = &ei_frame_releasefunc_t;
+    frame -> allocfunc = &ei_frame_allocfunc_t;
+    frame -> setdefaultsfunc = &ei_frame_setdefaultsfunc_t;
+    strncpy(frame -> name, "frame", 20);
+    ei_widgetclass_register(frame);
+
 }
 
 /**
@@ -198,7 +202,8 @@ void			ei_frame_register_class 	(ei_widgetclass_t* widgetclass){
  *
  * @return		A block of memory with all bytes set to 0.
  */
-void	ei_frame_allocfunc_t		(){
+void*	ei_frame_allocfunc_t		(){
+    return calloc(1, sizeof(ei_frame_t));
 }
 
 /**
@@ -211,6 +216,7 @@ void	ei_frame_allocfunc_t		(){
  */
 
 void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
+    free(widget);
 }
 
 /**
@@ -226,6 +232,8 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
 							 ei_surface_t		surface,
 							 ei_surface_t		pick_surface,
 							 ei_rect_t*		clipper){
+    ei_frame_t* frame = (ei_frame_t*) widget;
+    ei_fill(surface, frame -> color, clipper);
 }
 
 
@@ -268,3 +276,17 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
 }
 
+
+/**
+ * @brief	Registers a class to the program so that widgets of this class can be created.
+ *		This must be done only once per widged class in the application.
+ *
+ * @param	widgetclass	The structure describing the class.
+ */
+void			ei_widgetclass_register		(ei_widgetclass_t* widgetclass){
+    ei_widgetclass_t current = LIB;
+    while (current.next != NULL){
+        current = *(current.next);
+    }
+    current.next = widgetclass;
+}
