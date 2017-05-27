@@ -8,6 +8,7 @@
 #include "hw_interface.h"
 #include "ei_draw.h"
 #include "ei_application.h"
+#include "ei_all_widgets.h"
 
 
 /**
@@ -34,6 +35,14 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
 
     //Create the main window
 	ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
+    ei_frame_register_class();
+    ei_widgetclass_name_t name;
+    strncpy(name, "frame", 20);
+    ei_widgetclass_t *class = ei_widgetclass_from_name(name);
+    ei_widget_t *widget = (*(class -> allocfunc))();
+    widget -> wclass = class;
+    ROOT = *widget;
+    SURFACE_ROOT = main_window;
 
 }
 
@@ -52,7 +61,17 @@ void ei_app_free(){
  *		\ref ei_app_quit_request is called.
  */
 void ei_app_run(){
+    ei_widget_t* widget = &ROOT;
+    draw_widgets(widget);
     getchar();
+}
+
+void draw_widgets(ei_widget_t* widget){
+    while (widget != NULL){
+        (*(widget -> wclass) ->  drawfunc)(widget, SURFACE_ROOT, NULL, NULL);
+        draw_widgets(widget -> children_head);
+        widget = widget -> next_sibling;
+    }
 }
 
 /**
@@ -81,5 +100,8 @@ void ei_app_quit_request(){
  * @return 			The root widget.
  */
 ei_widget_t* ei_app_root_widget(){
+    return &ROOT;
+
 
 }
+

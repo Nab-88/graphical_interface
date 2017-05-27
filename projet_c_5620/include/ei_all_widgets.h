@@ -101,4 +101,11 @@ void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event);
+
+/*Declaration of the library of class of widgets
+ */
+ei_widgetclass_t LIB;
+ei_widget_t ROOT;
+ei_surface_t SURFACE_ROOT;
+
 #endif

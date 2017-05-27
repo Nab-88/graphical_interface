@@ -10,9 +10,6 @@
 #include "ei_all_widgets.h"
 #include <stdlib.h>
 #include <string.h>
-/*Declaration of the library of class of widgets
- */
-ei_widgetclass_t LIB;
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -27,8 +24,29 @@ ei_widgetclass_t LIB;
  */
 ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
 							 ei_widget_t*		parent){
+    ei_widgetclass_t *class = ei_widgetclass_from_name(class_name);
+    ei_widget_t *widget = (*(class -> allocfunc))();
+    widget -> parent = parent;
+    return widget;
+
 }
 
+
+/**
+ * @brief	Returns the structure describing a class, from its name.
+ *
+ * @param	name		The name of the class of widget.
+ *
+ * @return			The structure describing the class.
+ */
+ei_widgetclass_t*	ei_widgetclass_from_name	(ei_widgetclass_name_t name){
+    ei_widgetclass_t *current = &LIB;
+    while (strncmp(current -> name, name, strlen(name))) {
+        current = current -> next;
+    }
+    return current;
+
+}
 /**
  * @brief	Destroys a widget. Removes it from screen if it is managed by a geometry manager.
  *		Destroys all its descendants.
@@ -230,7 +248,7 @@ void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
  */
 void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
 							 ei_surface_t		surface,
-							 ei_surface_t		pick_surface,
+                             ei_surface_t		pick_surface,
 							 ei_rect_t*		clipper){
     ei_frame_t* frame = (ei_frame_t*) widget;
     ei_fill(surface, frame -> color, clipper);
@@ -284,9 +302,9 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
  * @param	widgetclass	The structure describing the class.
  */
 void			ei_widgetclass_register		(ei_widgetclass_t* widgetclass){
-    ei_widgetclass_t current = LIB;
-    while (current.next != NULL){
-        current = *(current.next);
+    ei_widgetclass_t* current = &LIB;
+    while (current -> next != NULL){
+        current = current -> next;
     }
-    current.next = widgetclass;
+    current -> next = widgetclass;
 }
