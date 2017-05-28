@@ -127,18 +127,4 @@ int			ei_copy_surface		(ei_surface_t		destination,
 						 const ei_rect_t*	src_rect,
 						 const ei_bool_t	alpha);
 
- /**
-  * \brief	The fonction gives the list of points that need to be drawn to draw an arc
-  *
-  * @param	centre	The center point of the circle
-  * @param	rayon	The radius of the circle
-  * @param	angle_debut	The angle where the first point is at
-  * @param	angle_fin The angle where the last point is at
-  *
-  * @return			Returns the list of points that make the arc
-  */
-ei_linked_point_t *ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, int angle_fin);
-
-
-
 #endif

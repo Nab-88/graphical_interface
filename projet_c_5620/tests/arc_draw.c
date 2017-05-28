@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "ei_draw.h"
+#include "ei_arc.h"
 #include "ei_types.h"
 #include "ei_main.h"
 #include "ei_event.h"
@@ -9,7 +10,7 @@
 int ei_main(int argc, char** argv)
 {
 	ei_surface_t			main_window		= NULL;
-	ei_size_t			main_window_size	= ei_size(640, 480);
+	ei_size_t			main_window_size	= ei_size(600, 600);
 	ei_event_t			event;
 	uint32_t			white			= 0xffffffff;
 	uint32_t*			pixel_ptr;
@@ -30,10 +31,10 @@ int ei_main(int argc, char** argv)
 
 	hw_surface_unlock(main_window);
 	hw_surface_update_rects(main_window, NULL);
-	ei_point_t centre = {200, 200};
+	ei_point_t centre = {300, 300};
 	ei_color_t color = {255, 0, 0, 0};
-	ei_linked_point_t *pts = ei_arc(centre, 100, 0, 45);
-	ei_draw_polygon(main_window, pts, color, NULL);
+	ei_linked_point_t *pts = ei_arc(centre, 100, 150, 200);
+	ei_draw_polyline(main_window, pts, color, NULL);
 
 	// Wait for a key press.
 	event.type = ei_ev_none;

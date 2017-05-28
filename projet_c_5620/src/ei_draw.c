@@ -8,6 +8,7 @@
 #include "hw_interface.h"
 #include "ei_draw.h"
 #include "ei_TC.h"
+#include "ei_arc.h"
 
 /**
  * \brief	Converts the three red, green and blue component of a color in a 32 bits integer
@@ -84,9 +85,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
             ei_point_t end_point = first_point -> next -> point;
             int delta_x = end_point.x - x_coord;
             int delta_y = end_point.y - y_coord;
-            if (delta_y == 0 && delta_x == 0) {
-                break;
-            }
+            if (delta_y != 0 || delta_x != 0){
             int variable_x = 1;
             int variable_y = 1;
             if (delta_x < 0) {
@@ -132,7 +131,9 @@ void			ei_draw_polyline	(ei_surface_t			surface,
                     draw_pixel(surface, x_coord, y_coord, color_rgba, clipper);
                 }
             }
+          }
             first_point = first_point->next;
+
             if (first_point == reference) {
                 break;
             }
@@ -736,18 +737,164 @@ int			ei_copy_surface_optim		(ei_surface_t		destination,
 * @return			Returns the list of points that make the arc
 */
 ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, int angle_fin){
-  // float pi = 3.14159265;
-  ei_linked_point_t *first = malloc(sizeof(ei_linked_point_t));
-  first -> point = centre;
-  first -> next = NULL;
+  float pi = 3.14159265;
+  // Il faut rajouter plein de assert
+  // L'angle 0 correspond au zero du cercle unitaire
+  // les angles doivent etre entre 0 et 360
+  // l'arc de cercle ne doit pas passer par l'angle 0 ou 360 (il peut finir en ces points)
+  ei_linked_point_t* circle = malloc(sizeof(ei_linked_point_t));
+  if (angle_debut == angle_fin) {
+    circle -> next = NULL;
+    circle -> point = (ei_point_t) {(int) (centre.x + rayon*cos(angle_debut*pi/180)),(int) (centre.y + rayon*sin(angle_debut*pi/180))};
+    return circle;
+  }
+  if (angle_debut > angle_fin) {
+    int variable = angle_debut;
+    angle_debut = angle_fin;
+    angle_fin = variable;
+  }
+  circle = ei_circle_normal(centre, rayon);
+  ei_linked_point_t *current = circle;
+  // Il faut free tous les points qu'on utilise pas
+  ei_point_t point_reference = {centre.x + rayon, centre.y};
+  float distance = (int)sqrt(pow((current->point.x - point_reference.x),2) + pow((current->point.y - point_reference.y),2));
+  int angle = 360/pi*asin(distance/(2*rayon));
+  if (current->point.y < point_reference.y) {
+    angle = 360 -angle;
+  }
+  while (angle < angle_debut) {
+    current = current -> next;
+    distance = (int) sqrt(pow((current->point.x - point_reference.x),2) + pow((current->point.y - point_reference.y),2));
+    angle = 360/pi*asin(distance/(2*rayon));
+    if (current->point.y < point_reference.y) {
+      angle = 360 -angle;
+    }
+  }
+  ei_linked_point_t* debut = current;
+  while (angle < angle_fin) {
+    current = current -> next;
+    distance = (int) sqrt(pow((current->point.x - point_reference.x),2) + pow((current->point.y - point_reference.y),2));
+    angle = 360/pi*asin(distance/(2*rayon));
+    if (current->point.y < point_reference.y) {
+      angle = 360 -angle;
+    }
+  }
+  current -> next = NULL;
+  if (angle_debut > angle_fin) {
+    debut = ei_linked_inverse(debut);
+  }
+  // Il faut free tous les autres points après
+  return debut;
+}
+
+/**
+* \brief	The fonction returns the opposite list of points
+*
+* @param	first	The first point of the chained list
+*
+* @return			Returns opposite the list of points
+*/
+ei_linked_point_t* ei_linked_inverse(ei_linked_point_t* first) {
+  ei_linked_point_t* ancient = first;
+  ei_linked_point_t* current = first -> next;
+  ei_linked_point_t* next;
+  ancient -> next = NULL;
+  while (current != NULL) {
+    next = current -> next;
+    current -> next = ancient;
+    ancient = current;
+    current = next;
+  }
+  return ancient;
+}
+
+/**
+* \brief	The fonction gives the list of points that need to be drawn to draw a complete circle
+*
+* @param	centre	The center point of the circle
+* @param	rayon	The radius of the circle
+*
+* @return			Returns the list of points that make the whole circle
+*/
+ei_linked_point_t* ei_circle_normal(ei_point_t centre, uint32_t rayon){
+  ei_linked_point_t *last = malloc(sizeof(ei_linked_point_t));
+  ei_bool_t normal = EI_FALSE;
+  ei_bool_t inverse = EI_TRUE;
+  last -> next = NULL;
+  last -> point = (ei_point_t) {centre.x, centre.y + rayon};
+  ei_linked_point_t* first = ei_complete_octant(last, centre, rayon, 0,1,-1,0, normal);
+  first = ei_complete_octant(first, centre, rayon, 1,0,0,-1, inverse);
+  first = ei_complete_octant(first->next, centre, rayon, -1,0,0,-1, normal);
+  first = ei_complete_octant(first, centre, rayon, 0,-1,-1,0, inverse);
+  first = ei_complete_octant(first->next, centre, rayon, 0,-1,1,0, normal);
+  first = ei_complete_octant(first, centre, rayon, -1,0,0,1, inverse);
+  first = ei_complete_octant(first ->next, centre, rayon, 1,0,0,1, normal);
+  first = ei_complete_octant(first, centre, rayon, 0,1,1,0, inverse);
+  return first;
+}
+
+/**
+* \brief	Prints the list of points that has been put in parameter
+*
+* @param	first the first point of the chained list
+*/
+void print_linked_point(ei_linked_point_t* first) {
+  printf("[");
+  while (first != NULL) {
+    printf("(%i,%i)", first -> point.x, first -> point.y);
+    first = first -> next;
+  }
+  printf("]\n");
+}
+
+/**
+* \brief	The fonction gives the list of points that need to be drawn to draw a complete octant
+*
+* @param	centre	The center point of the circle
+* @param	rayon	The radius of the circle
+* @param	variable1_x This permits to choose the octant that we draw
+* @param	variable1_y This permits to choose the octant that we draw
+* @param	variable2_x This permits to choose the octant that we draw
+* @param	variable2_y This permits to choose the octant that we draw
+* @param	inverse This permits to choose the order of the list that we return
+*
+* @return			Returns the list of points that make the octant
+*/
+ei_linked_point_t* ei_complete_octant(ei_linked_point_t* first, ei_point_t centre, uint32_t rayon, int variable1_x, int variable1_y, int variable2_x, int variable2_y, ei_bool_t inverse) {
   int x, y ,m;
   x = 0;
   y = rayon;
   m = 5 - 4*rayon;
+  if (inverse == EI_TRUE) {
+    ei_linked_point_t *current = malloc(sizeof(ei_linked_point_t));
+    current -> point = (ei_point_t) {(x*variable1_x + y*variable1_y) + centre.x, (x*variable2_x + y*variable2_y) + centre.y};
+    ei_linked_point_t *reference = current;
+    if (m > 0) {
+      y --;
+      m -= 8*y;
+    }
+    x ++;
+    m += 8*x + 4;
+    ei_linked_point_t* next = current;
+    while (x <= y) {
+      ei_linked_point_t *current = malloc(sizeof(ei_linked_point_t));
+      current -> point = (ei_point_t) {(x*variable1_x + y*variable1_y) + centre.x, (x*variable2_x + y*variable2_y) + centre.y};
+      next -> next = current;
+      if (m > 0) {
+        y --;
+        m -= 8*y;
+      }
+      x ++;
+      m += 8*x + 4;
+      next = current;
+    }
+    next -> next = first;
+    return reference;
+  } else {
   ei_linked_point_t *ancient = first;
   while (x <= y) {
     ei_linked_point_t *current = malloc(sizeof(ei_linked_point_t));
-    current -> point = (ei_point_t) {x + centre.x, y + centre.y};
+    current -> point = (ei_point_t) {(x*variable1_x + y*variable1_y) + centre.x, (x*variable2_x + y*variable2_y) + centre.y};
     current -> next = ancient;
     if (m > 0) {
       y --;
@@ -757,8 +904,6 @@ ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, in
     m += 8*x + 4;
     ancient = current;
   }
-  ei_linked_point_t *last = malloc(sizeof(ei_linked_point_t));
-  last -> point = centre;
-  last -> next = ancient;
-  return last;
+  return ancient;
+}
 }
