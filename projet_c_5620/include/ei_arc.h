@@ -72,10 +72,26 @@ ei_linked_point_t* ei_linked_inverse(ei_linked_point_t* first);
 *
 * @param	rectangle the rectangle which contains the frame
 * @param  rayon the radius of the rounded part of the frame
+* @param  choice if 0: all of the frame; if 1: only the top part; if 2: only the bottom part
 *
 * @return			Returns the list of points that represents a rounded frame
 */
-ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon);
+ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int choice);
 
+/**
+* \brief The function draws a button
+*
+* @param  surface the surface where we draw the button
+* @param	rectangle the rectangle which contains the button
+* @param  rayon the radius of the rounded part of the frame
+* @param  color_bg the color of the background of the button
+* @param  color_fg the color of the text in the button
+* @param  text the text inside the rectangle
+* @param  effect if true button is pressed if false button is not pressed
+* @param  font font with which we write the button
+* @param  clipper the rectangle where we write the image
+*
+*/
+void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_bool_t effect, ei_font_t font, ei_rect_t* clipper);
 
 #endif

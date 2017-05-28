@@ -189,10 +189,10 @@ int* init_scanline(ei_linked_point_t* first_point){
 
 ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
     ei_TC_t *TC = calloc(1, sizeof(ei_TC_t));
-    if (first_point) {
+    if (first_point != NULL) {
         TC->tab = calloc(1, sizeof(ei_side_t *) * (y_max-y_min));
         ei_linked_point_t* current_point = (ei_linked_point_t *) first_point;
-        while (current_point -> next) {
+        while (current_point -> next != NULL) {
             ei_linked_point_t* next_point = current_point -> next;
             int x1 = (current_point -> point).x;
             int y1 = (current_point -> point).y;
@@ -219,6 +219,31 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max) {
                 TC->tab[scanline - y_min] = side;
             }
             current_point = next_point;
+        }
+        ei_linked_point_t* next_point = (ei_linked_point_t*) first_point;
+        int x1 = (current_point -> point).x;
+        int y1 = (current_point -> point).y;
+        int x2 = (next_point -> point).x;
+        int y2 = (next_point -> point).y;
+        if (y1 != y2) {
+            // Add this side because not horizontal
+            int scanline = 0;
+            ei_side_t *side = calloc(1, sizeof(ei_side_t));
+            if (y1 < y2) {
+                scanline = y1;
+                side -> y_max = y2;
+                side -> x_y = x1;
+                side -> dx = (x2 - x1);
+            } else {
+                scanline = y2;
+                side -> y_max = y1;
+                side -> x_y = x2;
+                side -> dx = (x1 - x2);
+            }
+            side -> dy = abs(y2 - y1);
+            side -> error = 0;
+            side -> next = (struct ei_side_t*) TC->tab[scanline - y_min];
+            TC->tab[scanline - y_min] = side;
         }
     }
     return TC;
@@ -915,29 +940,145 @@ ei_linked_point_t* ei_complete_octant(ei_linked_point_t* first, ei_point_t centr
 }
 }
 
-
-ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon){
+/**
+* \brief	The fonction returns a list of points that represents a rounded frame
+*
+* @param	rectangle the rectangle which contains the frame
+* @param  rayon the radius of the rounded part of the frame
+* @param  choice if 0: all of the frame; if 1: only the top part; if 2: only the bottom part
+*
+* @return			Returns the list of points that represents a rounded frame
+*/
+ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int choice){
   // verifier que rayon est pas trop petit ni trop grand ...
   ei_point_t centre = {rectangle.top_left.x + rayon, rectangle.top_left.y + rayon};
-  ei_linked_point_t* first = ei_arc(centre, rayon, 180, 270);
-  centre.x = centre.x + rectangle.size.width - (2*rayon);
-  ei_linked_point_t* second = ei_arc(centre, rayon, 270, 359);
-  centre.y = centre.y + rectangle.size.height - (2*rayon);
-  ei_linked_point_t* third = ei_arc(centre, rayon, 0, 90);
-  centre.x = centre.x - rectangle.size.width + (2*rayon);
-  ei_linked_point_t* fourth = ei_arc(centre, rayon, 90, 180);
-  ei_linked_point_t* current = fourth;
-  while (current -> next != NULL) {
-    current = current -> next;
+  int h = rectangle.size.height / 2;
+  ei_point_t point_gauche = {rectangle.top_left.x + h, rectangle.top_left.y + h};
+  ei_point_t point_droit = {rectangle.top_left.x + rectangle.size.width - h, rectangle.top_left.y + h};
+  ei_linked_point_t* centre_gauche = malloc(sizeof(ei_linked_point_t));
+  ei_linked_point_t* centre_droit = malloc(sizeof(ei_linked_point_t));
+  centre_gauche -> point = point_gauche;
+  centre_droit -> point = point_droit;
+  if (choice == 1) {
+    //rectangle haut
+    ei_linked_point_t* first = ei_arc(centre, rayon, 180, 270);
+    centre.x = centre.x + rectangle.size.width - (2*rayon);
+    ei_linked_point_t* second = ei_arc(centre, rayon, 270, 315);
+    centre.y = centre.y + rectangle.size.height - (2*rayon);
+    centre.x = centre.x - rectangle.size.width + (2*rayon);
+    ei_linked_point_t* fourth = ei_arc(centre, rayon, 135, 180);
+    ei_linked_point_t* current = fourth;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current-> next = first;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current -> next = second;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current -> next = centre_droit;
+    centre_droit -> next = centre_gauche;
+    return fourth;
+  } else if (choice == 2) {
+    //rectangle bas
+    centre.x = centre.x + rectangle.size.width - (2*rayon);
+    ei_linked_point_t* first = ei_arc(centre, rayon, 315, 359);
+    centre.y = centre.y + rectangle.size.height - (2*rayon);
+    ei_linked_point_t* second = ei_arc(centre, rayon, 0, 90);
+    centre.x = centre.x - rectangle.size.width + (2*rayon);
+    ei_linked_point_t* fourth = ei_arc(centre, rayon, 90, 135);
+    ei_linked_point_t* current = first;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current-> next = second;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current -> next = fourth;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current -> next = centre_gauche;
+    centre_gauche -> next = centre_droit;
+    return first;
+  } else {
+    // rectangle totale
+    ei_linked_point_t* first = ei_arc(centre, rayon, 180, 270);
+    centre.x = centre.x + rectangle.size.width - (2*rayon);
+    ei_linked_point_t* second = ei_arc(centre, rayon, 270, 359);
+    centre.y = centre.y + rectangle.size.height - (2*rayon);
+    ei_linked_point_t* third = ei_arc(centre, rayon, 0, 90);
+    centre.x = centre.x - rectangle.size.width + (2*rayon);
+    ei_linked_point_t* fourth = ei_arc(centre, rayon, 90, 180);
+    ei_linked_point_t* current = fourth;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current-> next = first;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current -> next = second;
+    while (current -> next != NULL) {
+      current = current -> next;
+    }
+    current -> next = third;
+    return fourth;
   }
-  current-> next = first;
-  while (current -> next != NULL) {
-    current = current -> next;
+}
+
+/**
+* \brief The function draws a button
+*
+* @param  surface the surface where we draw the button
+* @param	rectangle the rectangle which contains the button
+* @param  rayon the radius of the rounded part of the frame
+* @param  color_bg the color of the background of the button
+* @param  color_fg the color of the text in the button
+* @param  text the text inside the rectangle
+* @param  effect if true button is pressed if false button is not pressed
+* @param  font font with which we write the button
+* @param  clipper the rectangle where we write the image
+*
+*/
+void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_bool_t effect, ei_font_t font, ei_rect_t* clipper) {
+  hw_surface_lock(surface);
+  ei_linked_point_t* frame = ei_rounded_frame(rectangle, rayon, 1);
+  if (effect == EI_TRUE) {
+    color_bg.blue -= 20;
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    color_bg.blue += 40;
+    frame = ei_rounded_frame(rectangle, rayon, 2);
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    color_bg.blue -= 20;
+    rectangle.size.width -= 20;
+    rectangle.size.height -= 20;
+    rectangle.top_left.x += 10;
+    rectangle.top_left.y += 10;
+    frame = ei_rounded_frame(rectangle, rayon, 0);
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    ei_point_t where = {rectangle.top_left.x + 20,rectangle.top_left.y +(rectangle.size.height / 2)  - 20};
+    ei_draw_text(surface, &where, text, font, &color_fg, clipper);
+  } else {
+    color_bg.blue += 20;
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    color_bg.blue -= 40;
+    frame = ei_rounded_frame(rectangle, rayon, 2);
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    color_bg.blue += 20;
+    rectangle.size.width -= 20;
+    rectangle.size.height -= 20;
+    rectangle.top_left.x += 10;
+    rectangle.top_left.y += 10;
+    frame = ei_rounded_frame(rectangle, rayon, 0);
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    ei_point_t where = {rectangle.top_left.x + 30,rectangle.top_left.y +(rectangle.size.height / 2)};
+    ei_draw_text(surface, &where, text, font, &color_fg, clipper);
   }
-  current -> next = second;
-  while (current -> next != NULL) {
-    current = current -> next;
-  }
-  current -> next = third;
-  return fourth;
+  hw_surface_unlock(surface);
+  hw_surface_update_rects(surface, NULL);
 }
