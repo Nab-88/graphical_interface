@@ -907,3 +907,40 @@ ei_linked_point_t* ei_complete_octant(ei_linked_point_t* first, ei_point_t centr
   return ancient;
 }
 }
+
+
+ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon){
+  ei_linked_point_t* first = malloc(sizeof(ei_linked_point_t));
+  first -> point = rectangle.top_left;
+  first -> next = NULL;
+  for (uint32_t i = 0; i < rectangle.size.width; i++) {
+    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
+    first -> next = second;
+    second -> point = (ei_point_t){1 + first -> point.x, first -> point.y};
+    second -> next = NULL;
+    first = second;
+  for (uint32_t i = 0; i < rectangle.size.height; i++) {
+    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
+    first -> next = second;
+    second -> point = (ei_point_t){first -> point.x, first -> point.y + 1};
+    second -> next = NULL;
+    first = second;
+  for (uint32_t i = 0; i < rectangle.size.width; i++) {
+    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
+    first -> next = second;
+    second -> point = (ei_point_t){first -> point.x - 1, first -> point.y};
+    second -> next = NULL;
+    first = second;
+  for (uint32_t i = 0; i < rectangle.size.height; i++) {
+    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
+    first -> next = second;
+    second -> point = (ei_point_t){first -> point.x, first -> point.y - 1};
+    second -> next = NULL;
+    first = second;
+
+  }
+
+    }
+  }
+}
+}

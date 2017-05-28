@@ -20,7 +20,7 @@ typedef struct ei_frame_t {
     ei_widget_t widget;
 
     ei_size_t* requested_size;
-    const ei_color_t color;
+    const ei_color_t* color;
     int* border_width;
     ei_relief_t* relief;
     char **text;
@@ -39,7 +39,7 @@ typedef struct ei_frame_t {
  *
  * @return		A block of memory with all bytes set to 0.
  */
-void	ei_frame_allocfunc_t		();
+void*	ei_frame_allocfunc_t		();
 
 /**
  * \brief	A function that releases the memory used by a widget before it is destroyed.
@@ -101,4 +101,11 @@ void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event);
+
+/*Declaration of the library of class of widgets
+ */
+ei_widgetclass_t LIB;
+ei_widget_t ROOT;
+ei_surface_t SURFACE_ROOT;
+
 #endif
