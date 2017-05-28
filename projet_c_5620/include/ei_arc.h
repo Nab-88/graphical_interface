@@ -67,6 +67,16 @@ ei_linked_point_t* ei_circle_normal(ei_point_t centre, uint32_t rayon);
 */
 ei_linked_point_t* ei_linked_inverse(ei_linked_point_t* first);
 
+
+
+/**
+* \brief	This function frees a ei_linked_point structure
+*
+* @param	first	The first point of the chained list
+*
+*/
+void free_ei_linked_point(ei_linked_point_t* first);
+
 /**
 * \brief	The fonction returns a list of points that represents a rounded frame
 *
@@ -94,4 +104,5 @@ ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int cho
 */
 void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_bool_t effect, ei_font_t font, ei_rect_t* clipper);
 
+>>>>>>> 5306f72496828ef677abbb5cc69305996732ff62
 #endif

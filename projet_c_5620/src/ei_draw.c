@@ -1082,3 +1082,18 @@ void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, e
   hw_surface_unlock(surface);
   hw_surface_update_rects(surface, NULL);
 }
+/**
+* \brief	This function frees a ei_linked_point structure
+*
+* @param	first	The first point of the chained list
+*
+*/
+void free_ei_linked_point(ei_linked_point_t* first){
+    ei_linked_point_t prec = first;
+    while (current != NULL){
+        ei_linked_point_t* suiv = current -> next;
+        free(current);
+        current = suiv;
+    }
+}
+
