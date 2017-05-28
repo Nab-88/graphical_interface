@@ -31,10 +31,18 @@ int ei_main(int argc, char** argv)
 
 	hw_surface_unlock(main_window);
 	hw_surface_update_rects(main_window, NULL);
-	ei_point_t centre = {300, 300};
+	ei_point_t top_left = {200, 200};
+	ei_size_t size = {300, 200};
 	ei_color_t color = {255, 0, 0, 0};
-	ei_linked_point_t *pts = ei_arc(centre, 20, 180, 90);
-	ei_draw_polyline(main_window, pts, color, NULL);
+	ei_rect_t rectangle = {top_left, size};
+	ei_linked_point_t* pts = ei_rounded_frame(rectangle, 50);
+	ei_draw_polygon(main_window, pts, color, NULL);
+	ei_point_t top_left2 = {250, 250};
+	ei_size_t size2 = {200, 100};
+	ei_color_t color2 = {0, 255, 0, 0};
+	ei_rect_t rectangle2 = {top_left2, size2};
+	pts = ei_rounded_frame(rectangle2, 40);
+	ei_draw_polygon(main_window, pts, color2, NULL);
 
 	// Wait for a key press.
 	event.type = ei_ev_none;

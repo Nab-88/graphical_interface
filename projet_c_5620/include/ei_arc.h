@@ -67,4 +67,15 @@ ei_linked_point_t* ei_circle_normal(ei_point_t centre, uint32_t rayon);
 */
 ei_linked_point_t* ei_linked_inverse(ei_linked_point_t* first);
 
+/**
+* \brief	The fonction returns a list of points that represents a rounded frame
+*
+* @param	rectangle the rectangle which contains the frame
+* @param  rayon the radius of the rounded part of the frame
+*
+* @return			Returns the list of points that represents a rounded frame
+*/
+ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon);
+
+
 #endif

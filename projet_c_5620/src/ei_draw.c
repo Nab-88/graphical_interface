@@ -755,15 +755,17 @@ ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, in
   }
   circle = ei_circle_normal(centre, rayon);
   ei_linked_point_t *current = circle;
-  // Il faut free tous les points qu'on utilise pas
   ei_point_t point_reference = {centre.x + rayon, centre.y};
   float distance = (int)sqrt(pow((current->point.x - point_reference.x),2) + pow((current->point.y - point_reference.y),2));
   int angle = 360/pi*asin(distance/(2*rayon));
   if (current->point.y < point_reference.y) {
     angle = 360 -angle;
   }
+  ei_linked_point_t * ancient = current;
   while (angle < angle_debut) {
+    ancient = current;
     current = current -> next;
+    free(ancient);
     distance = (int) sqrt(pow((current->point.x - point_reference.x),2) + pow((current->point.y - point_reference.y),2));
     angle = 360/pi*asin(distance/(2*rayon));
     if (current->point.y < point_reference.y) {
@@ -779,11 +781,16 @@ ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, in
       angle = 360 -angle;
     }
   }
+  ei_linked_point_t* to_kill = current -> next;
   current -> next = NULL;
+  while (to_kill != NULL) {
+    ancient = to_kill;
+    to_kill = to_kill -> next;
+    free(ancient);
+  }
   if (angle_debut > angle_fin) {
     debut = ei_linked_inverse(debut);
   }
-  // Il faut free tous les autres points après
   return debut;
 }
 
@@ -910,37 +917,27 @@ ei_linked_point_t* ei_complete_octant(ei_linked_point_t* first, ei_point_t centr
 
 
 ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon){
-  ei_linked_point_t* first = malloc(sizeof(ei_linked_point_t));
-  first -> point = rectangle.top_left;
-  first -> next = NULL;
-  for (uint32_t i = 0; i < rectangle.size.width; i++) {
-    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
-    first -> next = second;
-    second -> point = (ei_point_t){1 + first -> point.x, first -> point.y};
-    second -> next = NULL;
-    first = second;
-  for (uint32_t i = 0; i < rectangle.size.height; i++) {
-    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
-    first -> next = second;
-    second -> point = (ei_point_t){first -> point.x, first -> point.y + 1};
-    second -> next = NULL;
-    first = second;
-  for (uint32_t i = 0; i < rectangle.size.width; i++) {
-    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
-    first -> next = second;
-    second -> point = (ei_point_t){first -> point.x - 1, first -> point.y};
-    second -> next = NULL;
-    first = second;
-  for (uint32_t i = 0; i < rectangle.size.height; i++) {
-    ei_linked_point_t* second = malloc(sizeof(ei_linked_point_t));
-    first -> next = second;
-    second -> point = (ei_point_t){first -> point.x, first -> point.y - 1};
-    second -> next = NULL;
-    first = second;
-
+  // verifier que rayon est pas trop petit ni trop grand ...
+  ei_point_t centre = {rectangle.top_left.x + rayon, rectangle.top_left.y + rayon};
+  ei_linked_point_t* first = ei_arc(centre, rayon, 180, 270);
+  centre.x = centre.x + rectangle.size.width - (2*rayon);
+  ei_linked_point_t* second = ei_arc(centre, rayon, 270, 359);
+  centre.y = centre.y + rectangle.size.height - (2*rayon);
+  ei_linked_point_t* third = ei_arc(centre, rayon, 0, 90);
+  centre.x = centre.x - rectangle.size.width + (2*rayon);
+  ei_linked_point_t* fourth = ei_arc(centre, rayon, 90, 180);
+  ei_linked_point_t* current = fourth;
+  while (current -> next != NULL) {
+    current = current -> next;
   }
-
-    }
+  current-> next = first;
+  while (current -> next != NULL) {
+    current = current -> next;
   }
-}
+  current -> next = second;
+  while (current -> next != NULL) {
+    current = current -> next;
+  }
+  current -> next = third;
+  return fourth;
 }
