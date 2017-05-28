@@ -52,7 +52,7 @@ endif
 # Main target of the makefile. To build specific targets, call "make <target_name>"
 
 TARGETS		=	${LIBEI} \
-			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba frame button hello_world puzzle two048 arc_draw
+			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba frame button hello_world puzzle two048 arc_draw round_frame
 all : ${TARGETS}
 
 
@@ -77,6 +77,13 @@ ${OBJDIR}/ei_event.o : ${SRC}/ei_event.c
 
 ${OBJDIR}/ei_application.o : ${SRC}/ei_application.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_application.c -o ${OBJDIR}/ei_application.o
+
+#round_frame
+round_frame : ${OBJDIR}/round_frame.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
+	${LINK} -o round_frame ${LDFLAGS} ${OBJDIR}/round_frame.o ${LIBS} ${OBJDIR}/ei_draw.o
+
+${OBJDIR}/round_frame.o : ${TESTS}/round_frame.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/round_frame.c -o ${OBJDIR}/round_frame.o
 
 #arc_draw
 arc_draw : ${OBJDIR}/arc_draw.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
