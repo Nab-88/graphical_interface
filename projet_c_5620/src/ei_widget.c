@@ -26,7 +26,16 @@ ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
 							 ei_widget_t*		parent){
     ei_widgetclass_t *class = ei_widgetclass_from_name(class_name);
     ei_widget_t *widget = (*(class -> allocfunc))();
+    widget -> wclass = class;
     widget -> parent = parent;
+    if ( (parent -> children_head) == NULL){
+        parent -> children_head = widget;
+        parent -> children_tail = widget;
+    } else {
+        ei_widget_t* child = parent -> children_tail;
+        child -> next_sibling = widget;
+        parent -> children_tail = widget;
+    }
     return widget;
 
 }
@@ -41,7 +50,7 @@ ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
  */
 ei_widgetclass_t*	ei_widgetclass_from_name	(ei_widgetclass_name_t name){
     ei_widgetclass_t *current = &LIB;
-    while (strncmp(current -> name, name, strlen(name))) {
+    while (strncmp(current -> name, name, strlen(name)) != 0) {
         current = current -> next;
     }
     return current;
@@ -234,7 +243,9 @@ void*	ei_frame_allocfunc_t		(){
  */
 
 void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
-    free(widget);
+    ei_frame_t* frame = (ei_frame_t*) widget;
+    free(widget -> wclass);
+    free(frame);
 }
 
 /**

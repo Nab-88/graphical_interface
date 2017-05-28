@@ -102,6 +102,23 @@ void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event);
 
+/*
+ * \brief Frees all widgets from widget.
+ *
+ * \param   widget  the widget from which to free. 
+ */
+
+void free_widgets(ei_widget_t* widget);
+
+
+/**
+ * \brief	Draws all the widgets
+ *
+ * @param   widget  root widget from which it draws the widgets
+ *
+ */
+void draw_widgets(ei_widget_t* widget);
+
 /*Declaration of the library of class of widgets
  */
 ei_widgetclass_t LIB;

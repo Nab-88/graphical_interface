@@ -50,19 +50,34 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
  * \brief	Releases all the resources of the application, and releases the hardware
  *		(ie. calls \ref hw_quit).
  */
+
+
 void ei_app_free(){
+    free_widgets(ei_app_root_widget () -> children_head);
     hw_quit();
 
 }
 
+/*
+ * \brief Frees all widgets from widget.
+ *
+ * \param   widget  the widget from which to free. 
+ */
+
+void free_widgets(ei_widget_t* widget){
+    while (widget != NULL){
+        (*(widget -> wclass) ->  releasefunc)(widget);
+        free_widgets(widget -> children_head);
+        widget = widget -> next_sibling;
+    }
+}
 
 /**
  * \brief	Runs the application: enters the main event loop. Exits when
  *		\ref ei_app_quit_request is called.
  */
 void ei_app_run(){
-    ei_widget_t* widget = &ROOT;
-    draw_widgets(widget);
+    draw_widgets(ei_app_root_widget ());
     getchar();
 }
 
