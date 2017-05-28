@@ -1089,11 +1089,10 @@ void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, e
 *
 */
 void free_ei_linked_point(ei_linked_point_t* first){
-    ei_linked_point_t prec = first;
+    ei_linked_point_t* current = first;
     while (current != NULL){
         ei_linked_point_t* suiv = current -> next;
         free(current);
         current = suiv;
     }
 }
-
