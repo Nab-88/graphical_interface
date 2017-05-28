@@ -67,4 +67,13 @@ ei_linked_point_t* ei_circle_normal(ei_point_t centre, uint32_t rayon);
 */
 ei_linked_point_t* ei_linked_inverse(ei_linked_point_t* first);
 
+
+
+/**
+* \brief	This function frees a ei_linked_point structure
+*
+* @param	first	The first point of the chained list
+*
+*/
+void free_ei_linked_point(ei_linked_point_t* first);
 #endif
