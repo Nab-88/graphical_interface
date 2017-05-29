@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -1045,42 +1046,49 @@ ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int cho
 * @param  clipper the rectangle where we write the image
 *
 */
+
 void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_bool_t effect, ei_font_t font, ei_rect_t* clipper) {
   hw_surface_lock(surface);
   ei_linked_point_t* frame = ei_rounded_frame(rectangle, rayon, 1);
+  ei_surface_t text_surface = hw_text_create_surface(text, font, &color_fg);
+  ei_size_t text_size = hw_surface_get_size(text_surface);
+  assert(text_size.width < rectangle.size.width - 25);
+  assert(text_size.height < rectangle.size.height - 25);
+  assert(rectangle.size.width/2 - 20 >= rayon);
+  assert(rectangle.size.height/2 - 20 >= rayon);
   if (effect == EI_TRUE) {
-    color_bg.blue -= 20;
+    color_bg.blue += 40;
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    color_bg.blue -= 80;
+    frame = ei_rounded_frame(rectangle, rayon, 2);
     ei_draw_polygon(surface, frame, color_bg, clipper);
     color_bg.blue += 40;
-    frame = ei_rounded_frame(rectangle, rayon, 2);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue -= 20;
     rectangle.size.width -= 20;
     rectangle.size.height -= 20;
     rectangle.top_left.x += 10;
     rectangle.top_left.y += 10;
     frame = ei_rounded_frame(rectangle, rayon, 0);
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    ei_point_t where = {rectangle.top_left.x + 20,rectangle.top_left.y +(rectangle.size.height / 2)  - 20};
+    ei_point_t where = {rectangle.top_left.x + (rectangle.size.width/2) - (text_size.width/2),rectangle.top_left.y + (rectangle.size.height / 2)  - (text_size.height/2)};
     ei_draw_text(surface, &where, text, font, &color_fg, clipper);
   } else {
-    color_bg.blue += 20;
-    ei_draw_polygon(surface, frame, color_bg, clipper);
     color_bg.blue -= 40;
+    ei_draw_polygon(surface, frame, color_bg, clipper);
+    color_bg.blue += 80;
     frame = ei_rounded_frame(rectangle, rayon, 2);
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue += 20;
+    color_bg.blue -= 40;
     rectangle.size.width -= 20;
     rectangle.size.height -= 20;
     rectangle.top_left.x += 10;
     rectangle.top_left.y += 10;
     frame = ei_rounded_frame(rectangle, rayon, 0);
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    ei_point_t where = {rectangle.top_left.x + 30,rectangle.top_left.y +(rectangle.size.height / 2)};
+    ei_point_t where = {rectangle.top_left.x + (rectangle.size.width/2) - (text_size.width/2) + 2,rectangle.top_left.y + (rectangle.size.height / 2)  - (text_size.height/2) + 2};
     ei_draw_text(surface, &where, text, font, &color_fg, clipper);
   }
   hw_surface_unlock(surface);
-  hw_surface_update_rects(surface, NULL);
+  hw_surface_update_rects(surface, (const struct ei_linked_rect_t *) clipper);
 }
 /**
 * \brief	This function frees a ei_linked_point structure
