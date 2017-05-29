@@ -127,4 +127,17 @@ void free_all(ei_TC_t *TC, ei_TCA_t *TCA, int* tab);
  */
 ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect);
 
+
+
+/**
+ * \brief	copy the src_rect of dst_rect pixel by pixel using the course formula
+ *
+ * @param	dst_rect the rectangle which delimits the destination of the copy
+ * @param	src_rect the rectangle which delimits the source of the copy
+ * @param	destination the surface destination of the copy
+ * @param	source the surface source of the copu
+ * @param alpha true or false if the copy use the alpha parameters (see ei_copy_surface)
+ */
+void ei_copy2(const ei_rect_t* dst_rect, const ei_rect_t* src_rect, const ei_surface_t destination, const ei_surface_t source, const ei_bool_t alpha);
+
 #endif
