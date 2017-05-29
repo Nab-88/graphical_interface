@@ -11,7 +11,7 @@ typedef struct ei_side_t {
    int x_y; ///< The abscissa where te scanline intersects the side
    int dx; ///< Delta x of bresenham
 	 int dy; ///< Delta y of bresenham
-	 int error;
+	 int error; ///< Error
    struct ei_side_t *next; ///< The pointer to the next side, NULL if there is none
 } ei_side_t;
 
@@ -33,7 +33,7 @@ typedef struct {
 	ei_side_t *head; ///< The pointer to the head of the table of active sides
 } ei_TCA_t;
 
-#endif
+
 
 /**
  * @file	ei_TC.h
@@ -77,7 +77,7 @@ ei_TC_t* init_TC(const ei_linked_point_t* first_point, int y_min, int y_max);
 /**
  * \brief	Orders TCA according to x_y
  *
- * @param	TCA         TCA that needs to be ordered 	
+ * @param	TCA         TCA that needs to be ordered
  * @return  TCA2	    TCA ordered
  */
 ei_TCA_t* order_TCA(ei_TCA_t *TCA);
@@ -121,8 +121,23 @@ void free_all(ei_TC_t *TC, ei_TCA_t *TCA, int* tab);
 /**
  * \brief	Tells whether a pixel is in the rectangle or not
  *
- * @param	pixel  the said pixel	
- * @param	rect	the rectangle which delimits the border	
- * @return  true or false	
+ * @param	pixel  the said pixel
+ * @param	rect	the rectangle which delimits the border
+ * @return  true or false
  */
 ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect);
+
+
+
+/**
+ * \brief	copy the src_rect of dst_rect pixel by pixel using the course formula
+ *
+ * @param	dst_rect the rectangle which delimits the destination of the copy
+ * @param	src_rect the rectangle which delimits the source of the copy
+ * @param	destination the surface destination of the copy
+ * @param	source the surface source of the copu
+ * @param alpha true or false if the copy use the alpha parameters (see ei_copy_surface)
+ */
+void ei_copy2(const ei_rect_t* dst_rect, const ei_rect_t* src_rect, const ei_surface_t destination, const ei_surface_t source, const ei_bool_t alpha);
+
+#endif

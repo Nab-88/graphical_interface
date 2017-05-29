@@ -13,7 +13,9 @@
 #include <stdint.h>
 #include "ei_types.h"
 #include "hw_interface.h"
+#include <assert.h>
 
+#define static_assert _Static_assert
 /**
  * \brief	The fonction gives the list of points that need to be drawn to draw an arc
  *
