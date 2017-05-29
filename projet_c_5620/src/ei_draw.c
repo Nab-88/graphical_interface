@@ -1037,12 +1037,18 @@ void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, e
   assert(rectangle.size.width/2 - 20 >= rayon);
   assert(rectangle.size.height/2 - 20 >= rayon);
   if (effect == EI_TRUE) {
-    color_bg.blue += 40;
+    color_bg.blue += 10;
+    color_bg.red += 10;
+    color_bg.green += 10;
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue -= 80;
+    color_bg.blue -= 20;
+    color_bg.red -= 20;
+    color_bg.green -= 20;
     frame = ei_rounded_frame(rectangle, rayon, 2);
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue += 40;
+    color_bg.blue += 10;
+    color_bg.red += 10;
+    color_bg.green += 10;
     rectangle.size.width -= 20;
     rectangle.size.height -= 20;
     rectangle.top_left.x += 10;
@@ -1052,19 +1058,25 @@ void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, e
     ei_point_t where = {rectangle.top_left.x + (rectangle.size.width/2) - (text_size.width/2),rectangle.top_left.y + (rectangle.size.height / 2)  - (text_size.height/2)};
     ei_draw_text(surface, &where, text, font, &color_fg, clipper);
   } else {
-    color_bg.blue -= 40;
+    color_bg.blue -= 10;
+    color_bg.red -= 10;
+    color_bg.green -= 10;
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue += 80;
+    color_bg.blue += 20;
+    color_bg.red += 20;
+    color_bg.green += 20;
     frame = ei_rounded_frame(rectangle, rayon, 2);
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue -= 40;
+    color_bg.blue -= 10;
+    color_bg.red -= 10;
+    color_bg.green -= 10;
     rectangle.size.width -= 20;
     rectangle.size.height -= 20;
     rectangle.top_left.x += 10;
     rectangle.top_left.y += 10;
     frame = ei_rounded_frame(rectangle, rayon, 0);
     ei_draw_polygon(surface, frame, color_bg, clipper);
-    ei_point_t where = {rectangle.top_left.x + (rectangle.size.width/2) - (text_size.width/2) + 2,rectangle.top_left.y + (rectangle.size.height / 2)  - (text_size.height/2) + 2};
+    ei_point_t where = {rectangle.top_left.x + (rectangle.size.width/2) - (text_size.width/2) + 3,rectangle.top_left.y + (rectangle.size.height / 2)  - (text_size.height/2) + 3};
     ei_draw_text(surface, &where, text, font, &color_fg, clipper);
   }
   hw_surface_unlock(surface);
