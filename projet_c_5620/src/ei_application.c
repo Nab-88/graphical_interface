@@ -39,8 +39,9 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     ei_widgetclass_name_t name;
     strncpy(name, "frame", 20);
     ei_widgetclass_t *class = ei_widgetclass_from_name(name);
-    ei_widget_t *widget = (*(class -> allocfunc))();
+    ei_widget_t *widget = (class -> allocfunc)();
     widget -> wclass = class;
+    widget -> screen_location = hw_surface_get_rect(main_window);
     ROOT = *widget;
     SURFACE_ROOT = main_window;
 
@@ -83,7 +84,7 @@ void ei_app_run(){
 
 void draw_widgets(ei_widget_t* widget){
     while (widget != NULL){
-        (*(widget -> wclass) ->  drawfunc)(widget, SURFACE_ROOT, NULL, NULL);
+        (*(widget -> wclass) ->  drawfunc)(widget, ei_app_root_surface(), NULL, &(widget -> screen_location));
         draw_widgets(widget -> children_head);
         widget = widget -> next_sibling;
     }
@@ -116,7 +117,14 @@ void ei_app_quit_request(){
  */
 ei_widget_t* ei_app_root_widget(){
     return &ROOT;
-
-
 }
 
+/**
+ * \brief	Returns the surface of the root window. Used to create surfaces with similar r, g, b
+ *		channels.
+ *
+ * @return 			The surface of the root window.
+ */
+ei_surface_t ei_app_root_surface(){
+    return SURFACE_ROOT;
+}
