@@ -52,7 +52,7 @@ int ei_main(int argc, char** argv)
 		hw_event_wait_next(&event);
 
 
-  ei_copy_surface(main_window, ls_rect2 ,main_window, ls_rect, EI_FALSE);
+  ei_copy_surface(main_window, ls_rect2, main_window, ls_rect, EI_FALSE);
 
 	event.type = ei_ev_none;
 	while (event.type != ei_ev_keydown)
