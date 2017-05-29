@@ -2,16 +2,17 @@
  *  @file	ei_placer.c
  *  @brief	Manages the positionning and sizing of widgets on the screen.
  *
- *  \author 
+ *  \author
  *  Created by François Bérard on 18.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  *
  */
 
 #include "ei_placer.h"
-
-
-
+#include <stdlib.h>
+#include <stdio.h>
+#include "ei_widget.h"
+#include "ei_all_widgets.h"
 
 /**
  * \brief	Configures the geometry of a widget using the "placer" geometry manager.
@@ -43,19 +44,122 @@
  *				1.0 to the height of the master (defaults to 0.0).
  */
 void			ei_place			(struct ei_widget_t*	widget,
-							 ei_anchor_t*		anchor,
-							 int*			x,
-							 int*			y,
-							 int*			width,
-							 int*			height,
-							 float*			rel_x,
-							 float*			rel_y,
-							 float*			rel_width,
-							 float*			rel_height){
+        ei_anchor_t*		anchor,
+        int*			x,
+        int*			y,
+        int*			width,
+        int*			height,
+        float*			rel_x,
+        float*			rel_y,
+        float*			rel_width,
+        float*			rel_height){
+
+    // if ((widget -> placer_params) != NULL) {
+    //===============================Managing widget size========================
+    ei_rect_t* rect_widget = &(widget -> screen_location);
+    if (height != NULL) {
+        if (rel_height != NULL) {
+            rect_widget -> size.height = (((widget -> parent) -> screen_location).size.height) * (*rel_height) + *height;
+        }
+        else{
+            rect_widget -> size.height = (((widget -> parent) -> screen_location).size.height) * (*rel_height);
+        }
+    }
+    else{
+        if (rel_height != NULL) {
+            rect_widget -> size.height = *height;
+        }
+        else{
+            rect_widget -> size.height = (widget -> requested_size).height;
+        }
+    }
+    if (width != NULL) {
+        if (rel_width != NULL) {
+            rect_widget -> size.width = (((widget -> parent) -> screen_location).size.width) * (*rel_width) + *width;
+        }
+        else{
+            rect_widget -> size.width = (((widget -> parent) -> screen_location).size.width) * (*rel_width);
+        }
+    }
+    else{
+        if (rel_width != NULL) {
+            rect_widget -> size.width = *width;
+        }
+        else{
+            (rect_widget -> size).width = (widget -> requested_size).width;
+        }
+    }
+    //===============================Managing anchor========================
+    ei_point_t point_ancre;
+    int parent_height = ((widget -> parent) -> screen_location).size.height;
+    int parent_width = ((widget -> parent) -> screen_location).size.width;
+    ei_point_t parent_origin = ((widget -> parent) -> screen_location).top_left;
+    if (x != NULL) {
+        if (rel_x == NULL) {
+            point_ancre.x = parent_origin.x + *x;
+        }
+        else{
+            point_ancre.x = parent_origin.x + parent_width * (*rel_x) + *x;
+        }
+    }
+    if (y != NULL) {
+        if (rel_y == NULL) {
+            point_ancre.y = parent_origin.y +*y;
+        }
+        else{
+            point_ancre.y = parent_origin.y + parent_height * (*rel_y) + *y;
+        }
+    }
+    if (anchor == NULL){
+        rect_widget -> top_left = point_ancre;
+    } else {
+
+
+        switch (*anchor) {
+            case ei_anc_none:
+                rect_widget -> top_left = point_ancre;
+                break;
+            case ei_anc_northwest:
+                rect_widget -> top_left = point_ancre;
+                break;
+            case ei_anc_west:
+                rect_widget -> top_left.x = point_ancre.x;
+                rect_widget -> top_left.y = point_ancre.y - 0.5 * (rect_widget -> size.height);
+                break;
+            case ei_anc_southwest:
+                rect_widget -> top_left.x = point_ancre.x;
+                rect_widget -> top_left.y = point_ancre.y - (rect_widget -> size.height);
+                break;
+            case ei_anc_south:
+                rect_widget -> top_left.x = point_ancre.x - 0.5 * (rect_widget -> size.width);
+                rect_widget -> top_left.y = point_ancre.y - (rect_widget -> size.height);
+                break;
+            case ei_anc_southeast:
+                rect_widget -> top_left.x = point_ancre.x - (rect_widget -> size.width);
+                rect_widget -> top_left.y = point_ancre.y - (rect_widget -> size.height);
+                break;
+            case ei_anc_east:
+                rect_widget -> top_left.x = point_ancre.x - (rect_widget -> size.width);
+                rect_widget -> top_left.y = point_ancre.y - 0.5*(rect_widget -> size.height);
+                break;
+            case ei_anc_northeast:
+                rect_widget -> top_left.x = point_ancre.x - (rect_widget -> size.width);
+                rect_widget -> top_left.y = point_ancre.y;
+                break;
+            case ei_anc_north:
+                rect_widget -> top_left.x = point_ancre.x - 0.5 * (rect_widget -> size.width);
+                rect_widget -> top_left.y = point_ancre.y;
+                break;
+            case ei_anc_center:
+                rect_widget -> top_left.x = point_ancre.x - 0.5 * (rect_widget -> size.width);
+                rect_widget -> top_left.y = point_ancre.y - 0.5 * (rect_widget -> size.height);
+                break;
+            default:
+                break;
+        }
+    }
+    // }
 }
-
-
-
 
 /**
  * \brief	Tells the placer to recompute the geometry of a widget.
@@ -78,5 +182,3 @@ void ei_placer_run(struct ei_widget_t* widget){
  */
 void ei_placer_forget(struct ei_widget_t* widget){
 }
-
-
