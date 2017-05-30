@@ -58,6 +58,12 @@ all : ${TARGETS}
 
 
 ########## Test-programs
+#test_ext_class
+test_ext_class : ${OBJDIR}/test_ext_class.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${SRC}/ext_testclass.o
+	${LINK} -o test_ext_class ${LDFLAGS} ${OBJDIR}/test_ext_class.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${SRC}/ext_testclass.o ${LIBEI} ${LIBS}
+
+${OBJDIR}/test_ext_class.o : ${TESTS}/test_ext_class.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_ext_class.c -o ${OBJDIR}/test_ext_class.o
 # ei_placer
 
 ${OBJDIR}/ei_placer.o : ${SRC}/ei_placer.c
