@@ -15,7 +15,6 @@
 #include "hw_interface.h"
 #include <assert.h>
 
-#define static_assert _Static_assert
 /**
  * \brief	The fonction gives the list of points that need to be drawn to draw an arc
  *
@@ -102,8 +101,8 @@ ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int cho
 * @param  effect if true button is pressed if false button is not pressed
 * @param  font font with which we write the button
 * @param  clipper the rectangle where we write the image
-*
+* @param  border_length the length of the border of the button
 */
-void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_bool_t effect, ei_font_t font, ei_rect_t* clipper);
+void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_point_t where, ei_relief_t effect, ei_font_t font, ei_rect_t* clipper, int border_length);
 
 #endif
