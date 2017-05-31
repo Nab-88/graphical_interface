@@ -2,7 +2,7 @@
  * @file	ei_widget.h
  *
  * @brief 	API for widgets management: creation, configuration, hierarchy, redisplay.
- * 
+ *
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  */
@@ -12,7 +12,7 @@
 
 #include "ei_widget.h"
 
-/* 
+/*
  *\brief Definition of a frame which can be used to draw a simple frame with 3D effect or not.
  *
  */
@@ -31,7 +31,7 @@ typedef struct ei_frame_t {
     ei_rect_t** img_rect;
     ei_anchor_t* img_anchor;
 } ei_frame_t;
-    
+
 /**
  * \brief	A function that allocates a block of memory that is big enough to store the
  *		attributes of a widget of a class. After allocation, the function *must*
@@ -85,7 +85,7 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget);
 void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
 							 ei_rect_t		rect);
 /**
- * @brief	A function that is called in response to an event. This function 
+ * @brief	A function that is called in response to an event. This function
  *		is internal to the library. It implements the generic behavior of
  *		a widget (for example a button looks sunken when clicked)
  *
@@ -105,7 +105,7 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 /*
  * \brief Frees all widgets from widget.
  *
- * \param   widget  the widget from which to free. 
+ * \param   widget  the widget from which to free.
  */
 
 void free_widgets(ei_widget_t* widget);
@@ -118,6 +118,18 @@ void free_widgets(ei_widget_t* widget);
  *
  */
 void draw_widgets(ei_widget_t* widget);
+
+
+/**
+ * \brief  The function gives the top_left from which to draw a text or an
+ * image in the rectangle specified
+ *
+ * @param   rectangle  The rectangle where to draw
+ * @param   anchor  The anchor of the rectangle
+ *
+ * @return  The top_left point to start drawing
+ */
+ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor);
 
 /*Declaration of the library of class of widgets
  */

@@ -2,7 +2,7 @@
  * @file	ei_widget.c
  *
  * @brief 	API for widgets management: creation, configuration, hierarchy, redisplay.
- * 
+ *
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  */
@@ -10,6 +10,7 @@
 #include "ei_all_widgets.h"
 #include <stdlib.h>
 #include <string.h>
+#include "ei_arc.h"
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -104,7 +105,7 @@ ei_widget_t*		ei_widget_pick			(ei_point_t*		where){
  *				parameter "text" and "img" should be used (i.e. non-NULL). Defaults
  *				to NULL.
  * @param	text_font	The font used to display the text. Defaults to \ref ei_default_font.
- * @param	text_color	The color used to display the text. Defaults to 
+ * @param	text_color	The color used to display the text. Defaults to
  *				\ref ei_font_default_color.
  * @param	text_anchor	The anchor of the text, i.e. where it is placed whithin the widget
  *				when the size of the widget is bigger than the size of the text.
@@ -278,9 +279,86 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
                              ei_surface_t		pick_surface,
 							 ei_rect_t*		clipper){
     ei_frame_t* frame = (ei_frame_t*) widget;
-    ei_fill(surface, frame -> color, clipper);
+	ei_rect_t rectangle = widget -> screen_location;
+	ei_color_t color = *(frame -> color);
+	int border_width = *(frame -> border_width);
+	ei_relief_t relief = *(frame -> relief);
+	char** text = frame -> text;
+	ei_surface_t* img = frame -> img;
+	ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t));
+	ei_font_t* text_font = calloc(1, sizeof(ei_font_t));
+	ei_color_t* text_color = calloc(1, sizeof(ei_color_t));
+	ei_anchor_t *anchor = calloc(1, sizeof(ei_anchor_t));
+	ei_point_t* where = calloc(1, sizeof(ei_point_t));
+	if (img != NULL) {
+		img_rect = frame -> img_rect;
+		anchor = frame -> img_anchor;
+		where = ei_get_where(rectangle, anchor, border_width);
+	} else if (text != NULL) {
+		text_font = *(frame -> text_font);
+		text_color = frame -> text_color;
+		anchor = frame -> text_anchor;
+		where = ei_get_where(rectangle, anchor, border_width);
+	}
+	ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, **img_rect, *where, clipper);
 }
 
+/**
+ * \brief  The function gives the top_left from which to draw a text or an
+ * image in the rectangle specified
+ *
+ * @param   rectangle  The rectangle where to draw
+ * @param   anchor  The anchor of the rectangle
+ *
+ * @return  The top_left point to start drawing
+ */
+ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor) {
+	ei_point_t* where = calloc(1, sizeof(ei_point_t));
+	ei_point_t point_ancre = {rectangle.top_left.x + rectangle.size.width/2, rectangle.top_left.y + rectangle.size.height/2};
+	switch (*anchor) {
+        case ei_anc_none:
+            where = &point_ancre;
+            break;
+        case ei_anc_northwest:
+            where = &point_ancre;
+            break;
+        case ei_anc_west:
+            where -> x = point_ancre.x;
+            where -> y = point_ancre.y + 0.5 * (rect_widget -> size.height);
+            break;
+        case ei_anc_southwest:
+            where -> x = point_ancre.x;
+            where -> y = point_ancre.y - (rect_widget -> size.height);
+            break;
+        case ei_anc_south:
+            where -> x = point_ancre.x - 0.5 * (rect_widget -> size.width);
+            where -> y = point_ancre.y - (rect_widget -> size.height);
+            break;
+        case ei_anc_southeast:
+            where -> x = point_ancre.x - (rect_widget -> size.width);
+            where -> y = point_ancre.y - (rect_widget -> size.height);
+            break;
+        case ei_anc_east:
+            where -> x = point_ancre.x - (rect_widget -> size.width);
+            where -> y = point_ancre.y - 0.5*(rect_widget -> size.height);
+            break;
+        case ei_anc_northeast:
+            where -> x = point_ancre.x - (rect_widget -> size.width);
+            where -> y = point_ancre.y;
+            break;
+        case ei_anc_north:
+            where -> x = point_ancre.x - 0.5 * (rect_widget -> size.width);
+            where -> y = point_ancre.y;
+            break;
+        case ei_anc_center:
+            where -> x = point_ancre.x - 0.5 * (rect_widget -> size.width);
+            where -> y = point_ancre.y - 0.5 * (rect_widget -> size.height);
+            break;
+        default:
+            break;
+    }
+	return where;
+}
 
 /**
  * \brief	A function that sets the default values for a class.
@@ -303,7 +381,7 @@ void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
 							 ei_rect_t		rect){
 }
 /**
- * @brief	A function that is called in response to an event. This function 
+ * @brief	A function that is called in response to an event. This function
  *		is internal to the library. It implements the generic behavior of
  *		a widget (for example a button looks sunken when clicked)
  *
