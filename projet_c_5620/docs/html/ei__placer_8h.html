@@ -116,7 +116,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:ae7e1c98d8ae1be26ad3ff0c3fde9d8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Configures the geometry of a widget using the "placer" geometry manager. If the widget was already managed by another geometry manager, then it is first removed from the previous geometry manager. If the widget was already managed by the "placer", then this calls simply updates the placer parameters: arguments that are not NULL replace previous values. When the arguments are passed as NULL, the placer uses default values (detailed in the argument descriptions below). If no size is provided (either absolute or relative), then the requested size of the widget is used, i.e. the minimal size required to display its content.  <a href="#ae7e1c98d8ae1be26ad3ff0c3fde9d8e2">More...</a><br/></td></tr>
 <tr class="separator:ae7e1c98d8ae1be26ad3ff0c3fde9d8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6ab9a9a1147224d5c107ff5d950ec6f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ei__placer_8h.html#af6ab9a9a1147224d5c107ff5d950ec6f">ei_placer_run</a> (struct <a class="el" href="structei__widget__t.html">ei_widget_t</a> *widget)</td></tr>
-<tr class="memdesc:af6ab9a9a1147224d5c107ff5d950ec6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to <a class="el" href="ei__placer_8h.html#ae7e1c98d8ae1be26ad3ff0c3fde9d8e2">ei_place</a>. Geometry re-computation is necessary for example when the text label of a widget has changed, and thus the widget "natural" size has changed.  <a href="#af6ab9a9a1147224d5c107ff5d950ec6f">More...</a><br/></td></tr>
+<tr class="memdesc:af6ab9a9a1147224d5c107ff5d950ec6f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to <a class="el" href="ei__placer_8c.html#ae7e1c98d8ae1be26ad3ff0c3fde9d8e2">ei_place</a>. Geometry re-computation is necessary for example when the text label of a widget has changed, and thus the widget "natural" size has changed.  <a href="#af6ab9a9a1147224d5c107ff5d950ec6f">More...</a><br/></td></tr>
 <tr class="separator:af6ab9a9a1147224d5c107ff5d950ec6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a277bbc4cb6e175127219ddcea161c1bc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ei__placer_8h.html#a277bbc4cb6e175127219ddcea161c1bc">ei_placer_forget</a> (struct <a class="el" href="structei__widget__t.html">ei_widget_t</a> *widget)</td></tr>
 <tr class="memdesc:a277bbc4cb6e175127219ddcea161c1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the placer to remove a widget from the screen and forget about it. Note: the widget is not destroyed and still exists in memory.  <a href="#a277bbc4cb6e175127219ddcea161c1bc">More...</a><br/></td></tr>
@@ -233,6 +233,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="ei__placer_8c_source.html#l00045">45</a> of file <a class="el" href="ei__placer_8c_source.html">ei_placer.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="a277bbc4cb6e175127219ddcea161c1bc"></a>
@@ -257,6 +259,8 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="ei__placer_8c_source.html#l00079">79</a> of file <a class="el" href="ei__placer_8c_source.html">ei_placer.c</a>.</p>
+
 </div>
 </div>
 <a class="anchor" id="af6ab9a9a1147224d5c107ff5d950ec6f"></a>
@@ -273,7 +277,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to <a class="el" href="ei__placer_8h.html#ae7e1c98d8ae1be26ad3ff0c3fde9d8e2">ei_place</a>. Geometry re-computation is necessary for example when the text label of a widget has changed, and thus the widget "natural" size has changed. </p>
+<p>Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to <a class="el" href="ei__placer_8c.html#ae7e1c98d8ae1be26ad3ff0c3fde9d8e2">ei_place</a>. Geometry re-computation is necessary for example when the text label of a widget has changed, and thus the widget "natural" size has changed. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">widget</td><td>The widget which geometry must be re-computed. </td></tr>
@@ -281,12 +285,14 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 
+<p>Definition at line <a class="el" href="ei__placer_8c_source.html#l00068">68</a> of file <a class="el" href="ei__placer_8c_source.html">ei_placer.c</a>.</p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon May 22 2017 14:32:33 for Projet C - Interaction Graphique by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon May 29 2017 13:50:25 for Projet C - Interaction Graphique by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.5
 </small></address>

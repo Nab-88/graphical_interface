@@ -65,7 +65,7 @@ void \hyperlink{ei__event_8h_ad088e15c54750f2f6e64439d8e40062f}{ei\-\_\-event\-\
 \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$ \hyperlink{ei__event_8h_ab6d3cea96f42ba1867d976c54fa9801f}{ei\-\_\-event\-\_\-get\-\_\-active\-\_\-widget} ()
 \item 
 void \hyperlink{ei__event_8h_ab6fbe051400528f4a8201550f2817403}{ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func} (\hyperlink{ei__event_8h_a9712d2363bbee2d7c7db39ec4196f58c}{ei\-\_\-default\-\_\-handle\-\_\-func\-\_\-t} func)
-\item 
+\begin{DoxyCompactList}\small\item\em A function that is called in response to an event that has not been processed by any widget. \end{DoxyCompactList}\item 
 \hyperlink{ei__event_8h_a9712d2363bbee2d7c7db39ec4196f58c}{ei\-\_\-default\-\_\-handle\-\_\-func\-\_\-t} \hyperlink{ei__event_8h_a3e71d300e63dcbc36efe343c4e13fb10}{ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func} ()
 \end{DoxyCompactItemize}
 
@@ -200,6 +200,10 @@ Returns the widget currently being manipulated by the user.
 \begin{DoxyReturn}{Returns}
 The widget currenlty being manipulated, or N\-U\-L\-L. 
 \end{DoxyReturn}
+
+
+Definition at line 26 of file ei\-\_\-event.\-c.
+
 \hypertarget{ei__event_8h_a3e71d300e63dcbc36efe343c4e13fb10}{\index{ei\-\_\-event.\-h@{ei\-\_\-event.\-h}!ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func@{ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func}}
 \index{ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func@{ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func}!ei_event.h@{ei\-\_\-event.\-h}}
 \subsubsection[{ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-default\-\_\-handle\-\_\-func\-\_\-t} ei\-\_\-event\-\_\-get\-\_\-default\-\_\-handle\-\_\-func (
@@ -212,6 +216,10 @@ Returns the function that must be called when an event has been received but no 
 \begin{DoxyReturn}{Returns}
 The address of the event handling function. 
 \end{DoxyReturn}
+
+
+Definition at line 58 of file ei\-\_\-event.\-c.
+
 \hypertarget{ei__event_8h_ad088e15c54750f2f6e64439d8e40062f}{\index{ei\-\_\-event.\-h@{ei\-\_\-event.\-h}!ei\-\_\-event\-\_\-set\-\_\-active\-\_\-widget@{ei\-\_\-event\-\_\-set\-\_\-active\-\_\-widget}}
 \index{ei\-\_\-event\-\_\-set\-\_\-active\-\_\-widget@{ei\-\_\-event\-\_\-set\-\_\-active\-\_\-widget}!ei_event.h@{ei\-\_\-event.\-h}}
 \subsubsection[{ei\-\_\-event\-\_\-set\-\_\-active\-\_\-widget}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-event\-\_\-set\-\_\-active\-\_\-widget (
@@ -226,6 +234,10 @@ Sets the widget which is currently being manipulated by the user.
 {\em widget} & The widget to declare as active, or N\-U\-L\-L to declare that a widget is no more being manipulated. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 18 of file ei\-\_\-event.\-c.
+
 \hypertarget{ei__event_8h_ab6fbe051400528f4a8201550f2817403}{\index{ei\-\_\-event.\-h@{ei\-\_\-event.\-h}!ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func@{ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func}}
 \index{ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func@{ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func}!ei_event.h@{ei\-\_\-event.\-h}}
 \subsubsection[{ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-event\-\_\-set\-\_\-default\-\_\-handle\-\_\-func (
@@ -233,13 +245,31 @@ Sets the widget which is currently being manipulated by the user.
 \item[{{\bf ei\-\_\-default\-\_\-handle\-\_\-func\-\_\-t}}]{func}
 \end{DoxyParamCaption}
 )}}\label{ei__event_8h_ab6fbe051400528f4a8201550f2817403}
+
+
+A function that is called in response to an event that has not been processed by any widget. 
+
 Sets the function that must be called when an event has been received but no processed by any widget.
 
+
+\begin{DoxyParams}{Parameters}
+{\em func} & The event handling function.\\
+\hline
+{\em event} & The event containing all its parameters (type, etc.)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+E\-I\-\_\-\-T\-R\-U\-E if the function handled the event, E\-I\-\_\-\-F\-A\-L\-S\-E otherwise, in this case the event is dismissed. Sets the function that must be called when an event has been received but no processed by any widget.
+\end{DoxyReturn}
 
 \begin{DoxyParams}{Parameters}
 {\em func} & The event handling function. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 49 of file ei\-\_\-event.\-c.
+
 \hypertarget{ei__event_8h_a38105870b6bc230973dd8e33e4db28f4}{\index{ei\-\_\-event.\-h@{ei\-\_\-event.\-h}!ei\-\_\-has\-\_\-modifier@{ei\-\_\-has\-\_\-modifier}}
 \index{ei\-\_\-has\-\_\-modifier@{ei\-\_\-has\-\_\-modifier}!ei_event.h@{ei\-\_\-event.\-h}}
 \subsubsection[{ei\-\_\-has\-\_\-modifier}]{\setlength{\rightskip}{0pt plus 5cm}static {\bf ei\-\_\-bool\-\_\-t} ei\-\_\-has\-\_\-modifier (

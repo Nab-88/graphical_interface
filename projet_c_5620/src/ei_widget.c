@@ -2,7 +2,7 @@
  * @file	ei_widget.c
  *
  * @brief 	API for widgets management: creation, configuration, hierarchy, redisplay.
- * 
+ *
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  */
@@ -106,7 +106,7 @@ ei_widget_t*		ei_widget_pick			(ei_point_t*		where){
  *				parameter "text" and "img" should be used (i.e. non-NULL). Defaults
  *				to NULL.
  * @param	text_font	The font used to display the text. Defaults to \ref ei_default_font.
- * @param	text_color	The color used to display the text. Defaults to 
+ * @param	text_color	The color used to display the text. Defaults to
  *				\ref ei_font_default_color.
  * @param	text_anchor	The anchor of the text, i.e. where it is placed whithin the widget
  *				when the size of the widget is bigger than the size of the text.
@@ -134,7 +134,7 @@ void			ei_frame_configure		(ei_widget_t*		widget,
 							 ei_rect_t**		img_rect,
 							 ei_anchor_t*		img_anchor){
     if (requested_size != NULL){
-       widget -> requested_size = *requested_size;
+        widget -> requested_size = requested_size;
     }
     ei_frame_t* frame = (ei_frame_t*) widget;
     if (color != NULL){
@@ -202,6 +202,90 @@ void			ei_button_configure		(ei_widget_t*		widget,
 							 ei_anchor_t*		img_anchor,
 							 ei_callback_t*		callback,
 							 void**			user_param){
+				 ei_button_t* button = (ei_button_t*) widget;
+				 //-------
+				 if (relief == NULL) {
+				 	button -> relief = ei_relief_raised;
+				 }
+				 else{
+					 button -> relief = relief;
+				 }
+				 //------
+				 if (border_width == NULL) {
+					button -> border_width = k_default_button_border_width;
+				 }
+				 else{
+					 button -> border_width = border_width;
+				 }
+				 //-----
+				 if (corner_radius == NULL) {
+				 	button -> corner_radius = k_default_button_corner_radius;
+				 }
+				 else{
+					 button -> corner_radius = corner_radius;
+				 }
+				 //------
+				 if (callback != NULL) {
+				 	button -> callback = callback;
+				 }
+				 //------
+				 if (user_param != NULL){
+					 button -> user_param = user_param;
+				 }
+				 //------
+				 if (img_rect != NULL){
+						 button -> img_rect = img_rect;
+				 }
+				 //------
+				 if (img_anchor != NULL){
+						 button -> img_anchor = img_anchor;
+				 }
+				 else{
+					 	 button -> img_anchor = ei_anc_center;
+				 }
+				 //------
+				 if (img != NULL){
+							button -> img = img;
+					}
+				 //----
+				 if (text_anchor != NULL){
+					 button -> text_anchor = text_anchor;
+				 }
+				 else{
+					 button -> text_anchor = ei_anc_center;
+				 }
+				 //-----
+				 if (text_color != NULL){
+		 			button -> text_color = text_color;
+		 		}
+		 		else{
+		 			button -> text_color = ei_font_default_color;
+		 		}
+				//-------
+				if (text_font != NULL){
+					button -> text_font = text_font;
+				}
+				else{
+					button -> text_font = ei_default_font;
+				}
+				//-----
+				if (text != NULL) {
+					button -> text = text;
+				}
+				//-----
+				if (color != NULL) {
+					button -> color = color;
+				}
+				else{
+					button -> color = ei_default_background_color;
+				}
+				//-----
+				if (requested_size != NULL){
+					 button -> requested_size = requested_size;
+				}
+
+
+
 }
 
 /**
@@ -334,7 +418,7 @@ void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
 							 ei_rect_t		rect){
 }
 /**
- * @brief	A function that is called in response to an event. This function 
+ * @brief	A function that is called in response to an event. This function
  *		is internal to the library. It implements the generic behavior of
  *		a widget (for example a button looks sunken when clicked)
  *
