@@ -1004,6 +1004,7 @@ if (text != NULL) {
 hw_surface_unlock(surface);
 hw_surface_update_rects(surface, (const struct ei_linked_rect_t *) clipper);
 }
+
 /**
 * \brief	This function frees a ei_linked_point structure
 *
@@ -1017,4 +1018,71 @@ void free_ei_linked_point(ei_linked_point_t* first){
         free(current);
         current = suiv;
     }
+}
+
+/**
+* \brief	This function frees a ei_linked_point structure
+*
+* @param	surface the surface where we draw the toplevel
+* @param  rectangle the rectangle which contains the toplevel
+* @param  color the color of the background of the toplevel
+* @param  border_width the length of the border of the toplevel
+* @param  title The title of the window
+* @param  clipper the rectangle where we write the image
+*
+*/
+void ei_draw_toplevel(ei_surface_t surface,
+                ei_rect_t rectangle,
+                ei_color_t* color,
+                int border_width,
+                char** title,
+                ei_rect_t* clipper) {
+  hw_surface_lock(surface);
+  ei_point_t centre = {rectangle.top_left.x + border_width, rectangle.top_left.y + border_width};
+  ei_linked_point_t* first = ei_arc(centre, border_width, 180, 270);
+  centre.x = centre.x + rectangle.size.width - 2*border_width;
+  ei_linked_point_t* second = ei_arc(centre, border_width, 270, 360);
+  ei_point_t corner_southwest = {rectangle.top_left.x, rectangle.top_left.y + rectangle.size.height};
+  ei_point_t corner_southeast = {rectangle.top_left.x + rectangle.size.width, corner_southwest.y};
+  ei_linked_point_t* third = calloc(1, sizeof(ei_linked_point_t));
+  third -> point = corner_southeast;
+  ei_linked_point_t* fourth = calloc(1, sizeof(ei_linked_point_t));
+  fourth -> point = corner_southwest;
+  ei_linked_point_t* current = first;
+  while (current -> next != NULL) {
+    current = current -> next;
+  }
+  current -> next = second;
+  while (current -> next != NULL) {
+    current = current -> next;
+  }
+  current -> next = third;
+  third -> next = fourth;
+  ei_color_t* color2 = calloc(1, sizeof(ei_color_t));
+  fourth -> next = NULL;
+  color2 -> blue = 0;
+  color2 -> red = 255;
+  color2 -> green = 0;
+  color2 -> alpha = 0;
+  ei_draw_polygon(surface, first, *color2, clipper);
+  free_ei_linked_point(first);
+  ei_color_t text_color = {0, 0, 0, 0};
+  ei_surface_t text_surface = hw_text_create_surface(*title, ei_default_font, &text_color);
+  ei_size_t text_size = hw_surface_get_size(text_surface);
+  rectangle.top_left.x += border_width;
+  rectangle.top_left.y += text_size.height + 2*border_width;
+  rectangle.size.width -= 2*border_width;
+  rectangle.size.height -= 3*border_width + text_size.height;
+  first = ei_rounded_frame(rectangle, 0, 0);
+  ei_draw_polygon(surface, first, *color, clipper);
+  free_ei_linked_point(first);
+  color -> blue -= 40;
+  color -> red -= 40;
+  color -> green -= 40;
+  ei_point_t* where = calloc(1, sizeof(ei_point_t));
+  where -> x = rectangle.top_left.x;
+  where -> y = rectangle.top_left.y - text_size.height - border_width;
+  ei_draw_text(surface, where, *title, ei_default_font, &text_color, clipper);
+  hw_surface_unlock(surface);
+  hw_surface_update_rects(surface, (const struct ei_linked_rect_t *) clipper);
 }

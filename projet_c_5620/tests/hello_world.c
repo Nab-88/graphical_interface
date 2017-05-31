@@ -42,25 +42,25 @@ int ei_main(int argc, char** argv)
 {
 	ei_size_t	screen_size		= {800, 600};
 	ei_color_t	root_bgcol		= {0x52, 0x7f, 0xb4, 0xff};
-	ei_widget_t*	button;
-	ei_anchor_t	button_anchor		= ei_anc_southeast;
-	int		button_x		= -20;
-	int		button_y		= -20;
-	float		button_rel_x		= 1.0;
-	float		button_rel_y		= 1.0;
-	float		button_rel_width	= 0.5;
-	ei_color_t	button_color		= {0x88, 0x88, 0x88, 0xff};
-	char*		button_title		= "click";
-	ei_color_t	button_text_color	= {0x00, 0x00, 0x00, 0xff};
-	ei_relief_t	button_relief		= ei_relief_raised;
-	int		button_border_width	= 2;
+	// ei_widget_t*	button;
+	// ei_anchor_t	button_anchor		= ei_anc_southeast;
+	// int		button_x		= -20;
+	// int		button_y		= -20;
+	// float		button_rel_x		= 1.0;
+	// float		button_rel_y		= 1.0;
+	// float		button_rel_width	= 0.5;
+	// ei_color_t	button_color		= {0x88, 0x88, 0x88, 0xff};
+	// char*		button_title		= "click";
+	// ei_color_t	button_text_color	= {0x00, 0x00, 0x00, 0xff};
+	// ei_relief_t	button_relief		= ei_relief_raised;
+	// int		button_border_width	= 2;
 	// ei_callback_t	button_callback 	= button_press;
 
 	ei_widget_t*	window;
 	ei_size_t	window_size		= {320,240};
 	char*		window_title		= "Hello World";
 	ei_color_t	window_color		= {0xA0,0xA0,0xA0, 0xff};
-	int		window_border_width	= 2;
+	int		window_border_width	= 10;
 	ei_bool_t	window_closable		= EI_FALSE;
 	ei_axis_set_t	window_resizable	= ei_axis_none;
 	ei_point_t	window_position		= {30, 10};

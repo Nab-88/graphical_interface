@@ -538,7 +538,13 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 							 ei_surface_t		pick_surface,
 							 ei_rect_t*		clipper) {
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-	 ei_fill(surface, toplevel -> color, clipper);
+	 ei_rect_t rectangle = widget -> screen_location;
+	 ei_color_t* color = toplevel -> color;
+	 int* border_width = toplevel -> border_width;
+	 char** title = toplevel -> title;
+	 ei_bool_t* closable = toplevel -> closable;
+	 ei_axis_set_t* resizable = toplevel -> resizable;
+	 ei_draw_toplevel(surface, rectangle, color, *border_width, title, clipper);
  }
 
 /**
@@ -578,21 +584,25 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
 * @param	widget		A pointer to the widget instance to intialize.
 */
 void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
-		(widget -> requested_size).width = 100;
-		(widget -> requested_size).height = 100;
+		(widget -> requested_size).width = 320;
+		(widget -> requested_size).height = 240;
 		ei_toplevel_t* toplevel = (ei_toplevel_t *) widget;
 		ei_color_t* color = malloc(sizeof(ei_color_t));
 		*color = ei_default_background_color;
 		toplevel -> color = color;
 		int* border_width = calloc(1, sizeof(int));
 		toplevel -> border_width = border_width;
+		char* title = "Toplevel";
+		toplevel -> title = &title;
 		ei_bool_t* closable = malloc(sizeof(ei_bool_t));
-		*closable = EI_FALSE;
+		*closable = EI_TRUE;
 		toplevel -> closable = closable;
 		ei_axis_set_t* resizable = malloc(sizeof(ei_axis_set_t));
-		*resizable = ei_axis_none;
+		*resizable = ei_axis_both;
 		toplevel -> resizable = resizable;
-		ei_size_t* min_size = calloc(1, sizeof(ei_size_t));
+		ei_size_t* min_size = malloc(sizeof(ei_size_t));
+		min_size -> width = 160;
+		min_size -> height = 120;
 		toplevel -> min_size = &min_size;
 }
 

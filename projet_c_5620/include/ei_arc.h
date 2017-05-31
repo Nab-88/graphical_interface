@@ -120,4 +120,22 @@ void ei_draw_button(ei_surface_t surface,
       ei_point_t where,
       ei_rect_t* clipper);
 
+/**
+* \brief	This function frees a ei_linked_point structure
+*
+* @param	surface the surface where we draw the toplevel
+* @param  rectangle the rectangle which contains the toplevel
+* @param  color the color of the background of the toplevel
+* @param  border_width the length of the border of the toplevel
+* @param  title The title of the window
+* @param  clipper the rectangle where we write the image
+*
+*/
+void ei_draw_toplevel(ei_surface_t surface,
+                ei_rect_t rectangle,
+                ei_color_t* color,
+                int border_width,
+                char** title,
+                ei_rect_t* clipper);
+
 #endif
