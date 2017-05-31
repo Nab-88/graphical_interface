@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ei_arc.h"
+#include "ei_application.h"
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -37,6 +38,7 @@ ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
         child -> next_sibling = widget;
         parent -> children_tail = widget;
     }
+    (widget -> wclass -> setdefaultsfunc)(widget);
     return widget;
 
 }
@@ -133,17 +135,30 @@ void			ei_frame_configure		(ei_widget_t*		widget,
 							 ei_rect_t**		img_rect,
 							 ei_anchor_t*		img_anchor){
     if (requested_size != NULL){
-       widget -> requested_size = *requested_size;
+        widget -> requested_size = *requested_size;
     }
     ei_frame_t* frame = (ei_frame_t*) widget;
-    frame -> color = color;
-    frame -> border_width = border_width;
-    frame -> relief = relief;
-    frame -> text = text;
-    frame -> text_font = text_font;
-    frame -> text_color = text_color;
-    frame -> img = img;
-
+    if (color != NULL){
+        frame -> color = color;
+    }
+    if (border_width != NULL){
+        frame -> border_width = border_width;
+    }
+    if (relief != NULL){
+        frame -> relief = relief;
+    }
+    if (text != NULL){
+        frame -> text = text;
+    }
+    if (text_font != NULL){
+        frame -> text_font = text_font;
+    }
+    if (text_color != NULL){
+        frame -> text_color = text_color;
+    }
+    if (img != NULL){
+        frame -> img = img;
+    }
     if (img_rect != NULL){
         frame -> img_rect = img_rect;
     }
@@ -188,6 +203,90 @@ void			ei_button_configure		(ei_widget_t*		widget,
 							 ei_anchor_t*		img_anchor,
 							 ei_callback_t*		callback,
 							 void**			user_param){
+				 ei_button_t* button = (ei_button_t*) widget;
+				 //-------
+				 if (relief == NULL) {
+				 	button -> relief = ei_relief_raised;
+				 }
+				 else{
+					 button -> relief = relief;
+				 }
+				 //------
+				 if (border_width == NULL) {
+					button -> border_width = k_default_button_border_width;
+				 }
+				 else{
+					 button -> border_width = border_width;
+				 }
+				 //-----
+				 if (corner_radius == NULL) {
+				 	button -> corner_radius = k_default_button_corner_radius;
+				 }
+				 else{
+					 button -> corner_radius = corner_radius;
+				 }
+				 //------
+				 if (callback != NULL) {
+				 	button -> callback = callback;
+				 }
+				 //------
+				 if (user_param != NULL){
+					 button -> user_param = user_param;
+				 }
+				 //------
+				 if (img_rect != NULL){
+						 button -> img_rect = img_rect;
+				 }
+				 //------
+				 if (img_anchor != NULL){
+						 button -> img_anchor = img_anchor;
+				 }
+				 else{
+					 	 button -> img_anchor = ei_anc_center;
+				 }
+				 //------
+				 if (img != NULL){
+							button -> img = img;
+					}
+				 //----
+				 if (text_anchor != NULL){
+					 button -> text_anchor = text_anchor;
+				 }
+				 else{
+					 button -> text_anchor = ei_anc_center;
+				 }
+				 //-----
+				 if (text_color != NULL){
+		 			button -> text_color = text_color;
+		 		}
+		 		else{
+		 			//button -> text_color = ei_font_default_color;
+		 		}
+				//-------
+				if (text_font != NULL){
+					button -> text_font = text_font;
+				}
+				else{
+					button -> text_font = ei_default_font;
+				}
+				//-----
+				if (text != NULL) {
+					button -> text = text;
+				}
+				//-----
+				if (color != NULL) {
+					button -> color = color;
+				}
+				else{
+					//button -> color = ei_default_background_color;
+				}
+				//-----
+				if (requested_size != NULL){
+					 button -> requested_size = requested_size;
+				}
+
+
+
 }
 
 /**
@@ -366,6 +465,24 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor) {
  * @param	widget		A pointer to the widget instance to intialize.
  */
 void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
+    (widget -> requested_size).width = 100;
+    (widget -> requested_size).height = 100;
+    ei_frame_t* frame = (ei_frame_t *) widget;
+    ei_color_t* color = malloc(sizeof(ei_color_t));
+    *color = ei_default_background_color;
+    frame -> color = color;
+    frame -> border_width = 0;
+    frame -> relief = ei_relief_none;
+    frame -> text_font = ei_default_font;
+    frame -> text_color = &ei_font_default_color;
+    ei_anchor_t* center_text = malloc(sizeof(ei_anchor_t));
+    *center_text = ei_anc_center;
+    ei_anchor_t* center_img = malloc(sizeof(ei_anchor_t));
+    *center_img = ei_anc_center;
+    frame -> text_anchor = center_text;
+    frame -> img_anchor = center_img;
+
+
 }
 
 /**

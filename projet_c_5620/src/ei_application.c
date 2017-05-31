@@ -43,7 +43,9 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     widget -> wclass = class;
     widget -> screen_location = hw_surface_get_rect(main_window);
     ROOT = *widget;
+    (ROOT.wclass -> setdefaultsfunc)(&ROOT);
     SURFACE_ROOT = main_window;
+    ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 }
 
@@ -84,7 +86,10 @@ void ei_app_run(){
 
 void draw_widgets(ei_widget_t* widget){
     while (widget != NULL){
-        (*(widget -> wclass) ->  drawfunc)(widget, ei_app_root_surface(), NULL, &(widget -> screen_location));
+        if (widget != &ROOT){
+            ei_placer_run(widget);
+        }
+        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), NULL, &(widget -> screen_location));
         draw_widgets(widget -> children_head);
         widget = widget -> next_sibling;
     }
