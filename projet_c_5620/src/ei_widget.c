@@ -134,7 +134,7 @@ void			ei_frame_configure		(ei_widget_t*		widget,
 							 ei_rect_t**		img_rect,
 							 ei_anchor_t*		img_anchor){
     if (requested_size != NULL){
-        widget -> requested_size = requested_size;
+        widget -> requested_size = *requested_size;
     }
     ei_frame_t* frame = (ei_frame_t*) widget;
     if (color != NULL){
@@ -259,7 +259,7 @@ void			ei_button_configure		(ei_widget_t*		widget,
 		 			button -> text_color = text_color;
 		 		}
 		 		else{
-		 			button -> text_color = ei_font_default_color;
+		 			//button -> text_color = ei_font_default_color;
 		 		}
 				//-------
 				if (text_font != NULL){
@@ -277,7 +277,7 @@ void			ei_button_configure		(ei_widget_t*		widget,
 					button -> color = color;
 				}
 				else{
-					button -> color = ei_default_background_color;
+					//button -> color = ei_default_background_color;
 				}
 				//-----
 				if (requested_size != NULL){
@@ -387,6 +387,8 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
  * @param	widget		A pointer to the widget instance to intialize.
  */
 void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
+    (widget -> requested_size).width = 100;
+    (widget -> requested_size).height = 100;
     ei_frame_t* frame = (ei_frame_t *) widget;
     ei_color_t* color = malloc(sizeof(ei_color_t));
     *color = ei_default_background_color;
