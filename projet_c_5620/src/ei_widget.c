@@ -165,6 +165,20 @@ void			ei_frame_configure		(ei_widget_t*		widget,
     if (img_anchor != NULL){
         frame -> img_anchor = img_anchor;
     }
+    if (requested_size != NULL){
+        widget -> requested_size = *requested_size;
+    } else {
+        if (text != NULL){
+            ei_surface_t text_surface = hw_text_create_surface(*(frame -> text), *(frame -> text_font), (frame -> text_color));
+            ei_size_t text_size = hw_surface_get_size(text_surface);
+            (widget -> requested_size).width = text_size.width + *(frame -> border_width)*2 + 5;
+            (widget -> requested_size).height = text_size.height + *(frame -> border_width)*2 + 5;
+        } else if (img != NULL) {
+            ei_size_t size = (**(frame -> img_rect)).size;
+            (widget -> requested_size).width = size.width + *(frame -> border_width)*2 + 5;
+            (widget -> requested_size).height = size.height + *(frame -> border_width)*2 + 5;
+                    }
+}
 }
 
 
@@ -203,10 +217,9 @@ void			ei_button_configure		(ei_widget_t*		widget,
 							 ei_anchor_t*		img_anchor,
 							 ei_callback_t*		callback,
 							 void**			user_param){
-                if (requested_size != NULL){
-                    widget -> requested_size = *requested_size;
-                }
-                     ei_button_t* button = (ei_button_t*) widget;
+
+                ei_button_t* button = (ei_button_t*) widget;
+
 				 if (relief != NULL) {
 					button -> relief = relief;
 				 }
@@ -249,9 +262,21 @@ void			ei_button_configure		(ei_widget_t*		widget,
 				if (requested_size != NULL){
 					 button -> requested_size = requested_size;
 				}
+                if (requested_size != NULL){
+                    widget -> requested_size = *requested_size;
+                } else {
+                    if (text != NULL){
+                        ei_surface_t text_surface = hw_text_create_surface(*(button -> text), *(button -> text_font), (button -> text_color));
+                        ei_size_t text_size = hw_surface_get_size(text_surface);
+                        (widget -> requested_size).width = text_size.width + *(button -> border_width)*2 + 5;
+                        (widget -> requested_size).height = text_size.height + *(button -> border_width)*2 + 5;
+                    } else if (img != NULL) {
+                        ei_size_t size = (**(button -> img_rect)).size;
+                        (widget -> requested_size).width = size.width + *(button -> border_width)*2 + 5;
+                        (widget -> requested_size).height = size.height + *(button -> border_width)*2 + 5;
+                    }
 
-
-
+}
 }
 
 /**
@@ -628,8 +653,6 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
  * @param	widget		A pointer to the widget instance to intialize.
  */
 void	ei_button_setdefaultsfunc_t	(struct ei_widget_t*	widget){
-    (widget -> requested_size).width = 100;
-    (widget -> requested_size).height = 100;
     ei_button_t* button = (ei_button_t *) widget;
     ei_color_t* color = malloc(sizeof(ei_color_t));
     *color = ei_default_background_color;
