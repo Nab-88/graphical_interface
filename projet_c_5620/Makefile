@@ -227,8 +227,8 @@ ${OBJDIR}/button.o : ${TESTS}/button.c
 
 # hello_world
 
-hello_world : ${OBJDIR}/hello_world.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o hello_world ${LDFLAGS} ${OBJDIR}/hello_world.o ${LIBEI} ${LIBS}
+hello_world : ${OBJDIR}/hello_world.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI}
+	${LINK} -o hello_world ${LDFLAGS} ${OBJDIR}/hello_world.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${LIBS}
 
 ${OBJDIR}/hello_world.o : ${TESTS}/hello_world.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/hello_world.c -o ${OBJDIR}/hello_world.o

@@ -318,6 +318,28 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 							 ei_bool_t*		closable,
 							 ei_axis_set_t*		resizable,
 						 	 ei_size_t**		min_size){
+	 if (requested_size != NULL){
+			 widget -> requested_size = *requested_size;
+	 }
+	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	 if (color != NULL){
+			 toplevel -> color = color;
+	 }
+	 if (border_width != NULL){
+			 toplevel -> border_width = border_width;
+	 }
+	 if (title != NULL){
+			 toplevel -> title = title;
+	 }
+	 if (closable != NULL){
+			 toplevel -> closable = closable;
+	 }
+	 if (resizable != NULL){
+			 toplevel -> resizable = resizable;
+	 }
+	 if (min_size != NULL){
+			 toplevel -> min_size = min_size;
+	 }
 }
 
 /**
@@ -335,7 +357,23 @@ void			ei_frame_register_class 	(){
     frame -> setdefaultsfunc = &ei_frame_setdefaultsfunc_t;
     strncpy(frame -> name, "frame", 20);
     ei_widgetclass_register(frame);
+}
 
+/**
+ * \brief	Registers the "frame" widget class in the program. This must be called only
+ *		once before widgets of the class "toplevel" can be created and configured with
+ *		\ref ei_toplevel_configure.
+ */
+void			ei_toplevel_register_class 	(){
+    ei_widgetclass_t* toplevel = calloc(1, sizeof(ei_widgetclass_t));
+    toplevel -> drawfunc = &ei_toplevel_drawfunc_t;
+    toplevel -> handlefunc = &ei_toplevel_handlefunc_t;
+    toplevel -> geomnotifyfunc = &ei_toplevel_geomnotifyfunc_t;
+    toplevel -> releasefunc = &ei_toplevel_releasefunc_t;
+    toplevel -> allocfunc = &ei_toplevel_allocfunc_t;
+    toplevel -> setdefaultsfunc = &ei_toplevel_setdefaultsfunc_t;
+    strncpy(toplevel -> name, "toplevel", 20);
+    ei_widgetclass_register(toplevel);
 }
 
 /**
@@ -347,6 +385,17 @@ void			ei_frame_register_class 	(){
  */
 void*	ei_frame_allocfunc_t		(){
     return calloc(1, sizeof(ei_frame_t));
+}
+
+/**
+ * \brief	A function that allocates a block of memory that is big enough to store the
+ *		attributes of a widget of a class. After allocation, the function *must*
+ *		initialize the memory to 0.
+ *
+ * @return		A block of memory with all bytes set to 0.
+ */
+void*	ei_toplevel_allocfunc_t		(){
+		return calloc(1, sizeof(ei_toplevel_t));
 }
 
 /**
@@ -362,6 +411,21 @@ void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
     ei_frame_t* frame = (ei_frame_t*) widget;
     free(widget -> wclass);
     free(frame);
+}
+
+/**
+ * \brief	A function that releases the memory used by a widget before it is destroyed.
+ *		The \ref ei_widget_t structure itself, passed as parameter, must *not* by freed by
+ *		these functions. Can be set to NULL in \ref ei_widgetclass_t if no memory is used by
+ *		a class of widget.
+ *
+ * @param	widget		The widget which resources are to be freed.
+ */
+
+void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
+    ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+    free(widget -> wclass);
+    free(toplevel);
 }
 
 /**
@@ -461,6 +525,23 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
 }
 
 /**
+ * \brief	A function that draws widgets of a class.
+ *
+ * @param	widget		A pointer to the widget instance to draw.
+ * @param	surface		Where to draw the widget. The actual location of the widget in the
+ *				surface is stored in its "screen_location" field.
+ * @param	clipper		If not NULL, the drawing is restricted within this rectangle
+ *				(expressed in the surface reference frame).
+ */
+void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
+							 ei_surface_t		surface,
+							 ei_surface_t		pick_surface,
+							 ei_rect_t*		clipper) {
+	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	 ei_fill(surface, toplevel -> color, clipper);
+ }
+
+/**
  * \brief	A function that sets the default values for a class.
  *
  * @param	widget		A pointer to the widget instance to intialize.
@@ -489,8 +570,30 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     *center_img = ei_anc_center;
     frame -> text_anchor = center_text;
     frame -> img_anchor = center_img;
+}
 
-
+/**
+* \brief	A function that sets the default values for a class.
+*
+* @param	widget		A pointer to the widget instance to intialize.
+*/
+void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
+		(widget -> requested_size).width = 100;
+		(widget -> requested_size).height = 100;
+		ei_toplevel_t* toplevel = (ei_toplevel_t *) widget;
+		ei_color_t* color = malloc(sizeof(ei_color_t));
+		*color = ei_default_background_color;
+		toplevel -> color = color;
+		int* border_width = calloc(1, sizeof(int));
+		toplevel -> border_width = border_width;
+		ei_bool_t* closable = malloc(sizeof(ei_bool_t));
+		*closable = EI_FALSE;
+		toplevel -> closable = closable;
+		ei_axis_set_t* resizable = malloc(sizeof(ei_axis_set_t));
+		*resizable = ei_axis_none;
+		toplevel -> resizable = resizable;
+		ei_size_t* min_size = calloc(1, sizeof(ei_size_t));
+		toplevel -> min_size = &min_size;
 }
 
 /**
@@ -505,6 +608,20 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
 void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
 							 ei_rect_t		rect){
 }
+
+/**
+ * \brief 	A function that is called to notify the widget that its geometry has been modified
+ *		by its geometry manager. Can set to NULL in \ref ei_widgetclass_t.
+ *
+ * @param	widget		The widget instance to notify of a geometry change.
+ * @param	rect		The new rectangular screen location of the widget
+ *				(i.e. = widget->screen_location).
+ */
+
+void	ei_toplevel_geomnotifyfunc_t	(struct ei_widget_t*	widget,
+							 ei_rect_t		rect){
+}
+
 /**
  * @brief	A function that is called in response to an event. This function
  *		is internal to the library. It implements the generic behavior of
@@ -524,6 +641,24 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
 }
 
+/**
+ * @brief	A function that is called in response to an event. This function
+ *		is internal to the library. It implements the generic behavior of
+ *		a widget (for example a button looks sunken when clicked)
+ *
+ * @param	widget		The widget for which the event was generated.
+ * @param	event		The event containing all its parameters (type, etc.)
+ *
+ * @return			A boolean telling if the event was consumed by the callback or not.
+ *				If TRUE, the library does not try to call other callbacks for this
+ *				event. If FALSE, the library will call the next callback registered
+ *				for this event, if any.
+ *				Note: The callback may execute many operations and still return
+ *				FALSE, or return TRUE without having done anything.
+ */
+ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
+						 struct ei_event_t*	event){
+}
 
 /**
  * @brief	Registers a class to the program so that widgets of this class can be created.
