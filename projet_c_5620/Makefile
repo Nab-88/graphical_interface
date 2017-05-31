@@ -219,8 +219,8 @@ ${OBJDIR}/frame.o : ${TESTS}/frame.c
 
 # button
 
-button : ${OBJDIR}/button.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o button ${LDFLAGS} ${OBJDIR}/button.o ${LIBEI} ${LIBS}
+button : ${OBJDIR}/button.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI}
+	${LINK} -o button ${LDFLAGS} ${OBJDIR}/button.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${LIBS}
 
 ${OBJDIR}/button.o : ${TESTS}/button.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/button.c -o ${OBJDIR}/button.o

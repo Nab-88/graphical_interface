@@ -36,6 +36,8 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     //Create the main window
 	ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
     ei_frame_register_class();
+    ei_button_register_class();
+    ei_toplevel_register_class();
     ei_widgetclass_name_t name;
     strncpy(name, "frame", 20);
     ei_widgetclass_t *class = ei_widgetclass_from_name(name);
