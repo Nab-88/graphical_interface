@@ -202,4 +202,5 @@ point_ancre.y = parent_origin.y + parent_height * (rel_y) + y;
  * @param	widget		The widget to remove from screen.
  */
 void ei_placer_forget(struct ei_widget_t* widget){
+  free(widget -> placer_params);
 }
