@@ -942,7 +942,7 @@ void ei_draw_button(ei_surface_t surface,
       ei_font_t text_font,
       ei_color_t* text_color,
       ei_surface_t* img,
-      ei_rect_t img_rect,
+      ei_rect_t* img_rect,
       ei_point_t where,
       ei_rect_t* clipper) {
   hw_surface_lock(surface);
@@ -997,8 +997,8 @@ if (text != NULL) {
     ei_draw_text(surface, &where, *text, text_font, text_color, clipper);
 } else if (img != NULL) {
     // on utilise copy
-    ei_rect_t rect = {where, img_rect.size};
-    ei_copy_surface(surface, &rect, *img, &img_rect, hw_surface_has_alpha(surface));
+    ei_rect_t rect = {where, img_rect->size};
+    ei_copy_surface(surface, &rect, *img, img_rect, hw_surface_has_alpha(surface));
 
 }
 hw_surface_unlock(surface);

@@ -116,7 +116,7 @@ void ei_draw_button(ei_surface_t surface,
       ei_font_t text_font,
       ei_color_t* text_color,
       ei_surface_t* img,
-      ei_rect_t img_rect,
+      ei_rect_t* img_rect,
       ei_point_t where,
       ei_rect_t* clipper);
 

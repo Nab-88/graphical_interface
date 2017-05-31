@@ -154,7 +154,7 @@ void draw_widgets(ei_widget_t* widget);
  *
  * @return  The top_left point to start drawing
  */
-ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor);
+ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_width, ei_size_t size);
 
 /*Declaration of the library of class of widgets
  */

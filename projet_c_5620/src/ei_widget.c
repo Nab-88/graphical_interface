@@ -392,14 +392,16 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
 	if (img != NULL) {
 		img_rect = frame -> img_rect;
 		anchor = frame -> img_anchor;
-		where = ei_get_where(rectangle, anchor, border_width);
+		where = ei_get_where(rectangle, anchor, border_width, (**img_rect).size);
 	} else if (text != NULL) {
-		text_font = *(frame -> text_font);
+		text_font = frame -> text_font;
 		text_color = frame -> text_color;
 		anchor = frame -> text_anchor;
-		where = ei_get_where(rectangle, anchor, border_width);
+		ei_surface_t text_surface = hw_text_create_surface(*text, *text_font, &color);
+		ei_size_t text_size = hw_surface_get_size(text_surface);
+		where = ei_get_where(rectangle, anchor, border_width, text_size);
 	}
-	ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, **img_rect, *where, clipper);
+	ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
 }
 
 /**
@@ -411,47 +413,46 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
  *
  * @return  The top_left point to start drawing
  */
-ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor) {
+ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_width, ei_size_t size) {
 	ei_point_t* where = calloc(1, sizeof(ei_point_t));
 	ei_point_t point_ancre = {rectangle.top_left.x + rectangle.size.width/2, rectangle.top_left.y + rectangle.size.height/2};
 	switch (*anchor) {
         case ei_anc_none:
-            where = &point_ancre;
+		case ei_anc_center:
+            where -> x = point_ancre.x - 0.5 * size.width;
+			where -> y = point_ancre.y - 0.5 * size.height;
             break;
         case ei_anc_northwest:
-            where = &point_ancre;
+			where -> x = point_ancre.x - ((rectangle.size.width)/2) + border_width;
+			where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
             break;
         case ei_anc_west:
-            where -> x = point_ancre.x;
-            where -> y = point_ancre.y + 0.5 * (rect_widget -> size.height);
+            where -> x = point_ancre.x - ((rectangle.size.width)/2) + border_width;
+            where -> y = point_ancre.y - 0.5 * size.height;
             break;
         case ei_anc_southwest:
-            where -> x = point_ancre.x;
-            where -> y = point_ancre.y - (rect_widget -> size.height);
+            where -> x = point_ancre.x - (rectangle.size.width/2) + border_width;
+            where -> y = point_ancre.y + (rectangle.size.height/2) - size.height - border_width;
             break;
         case ei_anc_south:
-            where -> x = point_ancre.x - 0.5 * (rect_widget -> size.width);
-            where -> y = point_ancre.y - (rect_widget -> size.height);
+            where -> x = point_ancre.x - 0.5 * size.width;
+            where -> y = point_ancre.y + (rectangle.size.height/2) - size.height - border_width;
             break;
         case ei_anc_southeast:
-            where -> x = point_ancre.x - (rect_widget -> size.width);
-            where -> y = point_ancre.y - (rect_widget -> size.height);
+            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - border_width;
+            where -> y = point_ancre.y + (rectangle.size.height/2) - size.height - border_width;
             break;
         case ei_anc_east:
-            where -> x = point_ancre.x - (rect_widget -> size.width);
-            where -> y = point_ancre.y - 0.5*(rect_widget -> size.height);
+            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - border_width;
+            where -> y = point_ancre.y - 0.5 * size.height;
             break;
         case ei_anc_northeast:
-            where -> x = point_ancre.x - (rect_widget -> size.width);
-            where -> y = point_ancre.y;
+            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - border_width;
+            where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
             break;
         case ei_anc_north:
-            where -> x = point_ancre.x - 0.5 * (rect_widget -> size.width);
-            where -> y = point_ancre.y;
-            break;
-        case ei_anc_center:
-            where -> x = point_ancre.x - 0.5 * (rect_widget -> size.width);
-            where -> y = point_ancre.y - 0.5 * (rect_widget -> size.height);
+            where -> x = point_ancre.x - 0.5 * (size.width);
+            where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
             break;
         default:
             break;
@@ -471,10 +472,17 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     ei_color_t* color = malloc(sizeof(ei_color_t));
     *color = ei_default_background_color;
     frame -> color = color;
-    frame -> border_width = 0;
-    frame -> relief = ei_relief_none;
-    frame -> text_font = ei_default_font;
-    frame -> text_color = &ei_font_default_color;
+	int* border_width = calloc(1, sizeof(int));
+    frame -> border_width = border_width;
+	ei_relief_t *relief = malloc(sizeof(ei_relief_t));
+	*relief = ei_relief_none;
+    frame -> relief = relief;
+	ei_font_t* text_font = malloc(sizeof(ei_font_t));
+	*text_font = ei_default_font;
+    frame -> text_font = text_font;
+	ei_color_t* text_color = malloc(sizeof(ei_color_t));
+	*text_color = ei_font_default_color;
+    frame -> text_color = text_color;
     ei_anchor_t* center_text = malloc(sizeof(ei_anchor_t));
     *center_text = ei_anc_center;
     ei_anchor_t* center_img = malloc(sizeof(ei_anchor_t));
