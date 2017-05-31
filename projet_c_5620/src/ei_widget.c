@@ -10,6 +10,7 @@
 #include "ei_all_widgets.h"
 #include <stdlib.h>
 #include <string.h>
+#include "ei_application.h"
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -36,6 +37,7 @@ ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
         child -> next_sibling = widget;
         parent -> children_tail = widget;
     }
+    (widget -> wclass -> setdefaultsfunc)(widget);
     return widget;
 
 }
@@ -135,14 +137,27 @@ void			ei_frame_configure		(ei_widget_t*		widget,
        widget -> requested_size = *requested_size;
     }
     ei_frame_t* frame = (ei_frame_t*) widget;
-    frame -> color = color;
-    frame -> border_width = border_width;
-    frame -> relief = relief;
-    frame -> text = text;
-    frame -> text_font = text_font;
-    frame -> text_color = text_color;
-    frame -> img = img;
-
+    if (color != NULL){
+        frame -> color = color;
+    }
+    if (border_width != NULL){
+        frame -> border_width = border_width;
+    }
+    if (relief != NULL){
+        frame -> relief = relief;
+    }
+    if (text != NULL){
+        frame -> text = text;
+    }
+    if (text_font != NULL){
+        frame -> text_font = text_font;
+    }
+    if (text_color != NULL){
+        frame -> text_color = text_color;
+    }
+    if (img != NULL){
+        frame -> img = img;
+    }
     if (img_rect != NULL){
         frame -> img_rect = img_rect;
     }
@@ -288,6 +303,22 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
  * @param	widget		A pointer to the widget instance to intialize.
  */
 void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
+    ei_frame_t* frame = (ei_frame_t *) widget;
+    ei_color_t* color = malloc(sizeof(ei_color_t));
+    *color = ei_default_background_color;
+    frame -> color = color;
+    frame -> border_width = 0;
+    frame -> relief = ei_relief_none;
+    frame -> text_font = ei_default_font;
+    frame -> text_color = &ei_font_default_color;
+    ei_anchor_t* center_text = malloc(sizeof(ei_anchor_t));
+    *center_text = ei_anc_center;
+    ei_anchor_t* center_img = malloc(sizeof(ei_anchor_t));
+    *center_img = ei_anc_center;
+    frame -> text_anchor = center_text;
+    frame -> img_anchor = center_img;
+
+
 }
 
 /**

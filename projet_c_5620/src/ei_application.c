@@ -43,6 +43,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     widget -> wclass = class;
     widget -> screen_location = hw_surface_get_rect(main_window);
     ROOT = *widget;
+    (ROOT.wclass -> setdefaultsfunc)(&ROOT);
     SURFACE_ROOT = main_window;
 
 }
