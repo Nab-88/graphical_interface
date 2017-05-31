@@ -41,7 +41,7 @@ int ei_main(int argc, char** argv)
 	ei_size_t size2 = {200, 100};
 	ei_point_t top_left2 = {100, 100};
 	ei_rect_t rectangle2 = {top_left2, size2};
-	pts = ei_rounded_frame(rectangle, 50, 2);
+	pts = ei_rounded_frame(rectangle2, 50, 2);
 	ei_draw_polygon(main_window, pts, color2, NULL);
 
 	// Wait for a key press.

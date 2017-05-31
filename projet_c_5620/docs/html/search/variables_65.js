@@ -7,5 +7,6 @@ var searchData=
   ['ei_5ffont_5fdefault_5fsize',['ei_font_default_size',['../ei__types_8h.html#a157b1b2a04132b2ac00400b202b134de',1,'ei_types.h']]],
   ['ei_5fmousebutton_5fleft',['EI_MOUSEBUTTON_LEFT',['../hw__interface_8h.html#a026cb381ddcadffd54b5da73d782dea2',1,'hw_interface.h']]],
   ['ei_5fmousebutton_5fmiddle',['EI_MOUSEBUTTON_MIDDLE',['../hw__interface_8h.html#a18a48d087980072d755e0c585454c48b',1,'hw_interface.h']]],
-  ['ei_5fmousebutton_5fright',['EI_MOUSEBUTTON_RIGHT',['../hw__interface_8h.html#add78e49422c7326a48963b9f288da47c',1,'hw_interface.h']]]
+  ['ei_5fmousebutton_5fright',['EI_MOUSEBUTTON_RIGHT',['../hw__interface_8h.html#add78e49422c7326a48963b9f288da47c',1,'hw_interface.h']]],
+  ['error',['error',['../structei__side__t.html#a64124d5400ca15cf29ac983c9497e2a2',1,'ei_side_t']]]
 ];

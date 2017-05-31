@@ -110,7 +110,7 @@ Configures the attributes of widgets of the class \char`\"{}button\char`\"{}.
 
 
 \begin{DoxyParams}{Parameters}
-{\em widget,requested\-\_\-size,color,border\-\_\-width,relief,text,text\-\_\-font,text\-\_\-color,text\-\_\-anchor,img,img\-\_\-rect,img\-\_\-anchor} & See the parameter definition of \hyperlink{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{ei\-\_\-frame\-\_\-configure}. The only difference is that relief defaults to \hyperlink{ei__types_8h_aa79a32b1d8ece0e44cfa394e870b270bac1e7867185743599ffcceb42784bd4e3}{ei\-\_\-relief\-\_\-raised} and border\-\_\-width defaults to \hyperlink{ei__widget_8h_a9d4970e13991bc2e49f47892c7e9429f}{k\-\_\-default\-\_\-button\-\_\-border\-\_\-width}. \\
+{\em widget,requested\-\_\-size,color,border\-\_\-width,relief,text,text\-\_\-font,text\-\_\-color,text\-\_\-anchor,img,img\-\_\-rect,img\-\_\-anchor} & See the parameter definition of \hyperlink{ei__widget_8c_aaaeb8447f509b20478940b514b542106}{ei\-\_\-frame\-\_\-configure}. The only difference is that relief defaults to \hyperlink{ei__types_8h_aa79a32b1d8ece0e44cfa394e870b270bac1e7867185743599ffcceb42784bd4e3}{ei\-\_\-relief\-\_\-raised} and border\-\_\-width defaults to \hyperlink{ei__widget_8h_a9d4970e13991bc2e49f47892c7e9429f}{k\-\_\-default\-\_\-button\-\_\-border\-\_\-width}. \\
 \hline
 {\em corner\-\_\-radius} & The radius (in pixels) of the rounded corners of the button. 0 means straight corners. Defaults to \hyperlink{ei__widget_8h_aa204a20fcee599bf19f02f7813dac04d}{k\-\_\-default\-\_\-button\-\_\-corner\-\_\-radius}. \\
 \hline
@@ -119,6 +119,10 @@ Configures the attributes of widgets of the class \char`\"{}button\char`\"{}.
 {\em user\-\_\-param} & A programmer supplied parameter that will be passed to the callback when called. Defaults to N\-U\-L\-L. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 175 of file ei\-\_\-widget.\-c.
+
 \hypertarget{ei__widget_8h_aaaeb8447f509b20478940b514b542106}{\index{ei\-\_\-widget.\-h@{ei\-\_\-widget.\-h}!ei\-\_\-frame\-\_\-configure@{ei\-\_\-frame\-\_\-configure}}
 \index{ei\-\_\-frame\-\_\-configure@{ei\-\_\-frame\-\_\-configure}!ei_widget.h@{ei\-\_\-widget.\-h}}
 \subsubsection[{ei\-\_\-frame\-\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-frame\-\_\-configure (
@@ -175,6 +179,10 @@ Configures the attributes of widgets of the class \char`\"{}frame\char`\"{}.
 {\em img\-\_\-anchor} & The anchor of the image, i.\-e. where it is placed whithin the widget when the size of the widget is bigger than the size of the image. Defaults to \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450a5704b2469014b3e93fbdb0b297ed92b0}{ei\-\_\-anc\-\_\-center}. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 122 of file ei\-\_\-widget.\-c.
+
 \hypertarget{ei__widget_8h_a853349fd4f65ae575a1989a9713059b4}{\index{ei\-\_\-widget.\-h@{ei\-\_\-widget.\-h}!ei\-\_\-toplevel\-\_\-configure@{ei\-\_\-toplevel\-\_\-configure}}
 \index{ei\-\_\-toplevel\-\_\-configure@{ei\-\_\-toplevel\-\_\-configure}!ei_widget.h@{ei\-\_\-widget.\-h}}
 \subsubsection[{ei\-\_\-toplevel\-\_\-configure}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-toplevel\-\_\-configure (
@@ -212,6 +220,10 @@ Configures the attributes of widgets of the class \char`\"{}toplevel\char`\"{}.
 {\em min\-\_\-size} & For resizable widgets, defines the minimum size. The default minimum size of a toplevel is (160, 120). If $\ast$min\-\_\-size is N\-U\-L\-L, this requires the toplevel to be configured to its default size. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 213 of file ei\-\_\-widget.\-c.
+
 \hypertarget{ei__widget_8h_a06da409592af870c9ab9c36f85147ce8}{\index{ei\-\_\-widget.\-h@{ei\-\_\-widget.\-h}!ei\-\_\-widget\-\_\-create@{ei\-\_\-widget\-\_\-create}}
 \index{ei\-\_\-widget\-\_\-create@{ei\-\_\-widget\-\_\-create}!ei_widget.h@{ei\-\_\-widget.\-h}}
 \subsubsection[{ei\-\_\-widget\-\_\-create}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-create (
@@ -239,6 +251,10 @@ Creates a new instance of a widget of some particular class, as a descendant of 
 \begin{DoxyReturn}{Returns}
 The newly created widget, or N\-U\-L\-L if there was an error. 
 \end{DoxyReturn}
+
+
+Definition at line 25 of file ei\-\_\-widget.\-c.
+
 \hypertarget{ei__widget_8h_a57aa6b5c33e92eb9728dc478f15b7de6}{\index{ei\-\_\-widget.\-h@{ei\-\_\-widget.\-h}!ei\-\_\-widget\-\_\-destroy@{ei\-\_\-widget\-\_\-destroy}}
 \index{ei\-\_\-widget\-\_\-destroy@{ei\-\_\-widget\-\_\-destroy}!ei_widget.h@{ei\-\_\-widget.\-h}}
 \subsubsection[{ei\-\_\-widget\-\_\-destroy}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-widget\-\_\-destroy (
@@ -255,6 +271,10 @@ Destroys a widget. Removes it from screen if it is managed by a geometry manager
 {\em widget} & The widget that is to be destroyed. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 65 of file ei\-\_\-widget.\-c.
+
 \hypertarget{ei__widget_8h_a3a91c65052c667a7a5eefef1606c099d}{\index{ei\-\_\-widget.\-h@{ei\-\_\-widget.\-h}!ei\-\_\-widget\-\_\-pick@{ei\-\_\-widget\-\_\-pick}}
 \index{ei\-\_\-widget\-\_\-pick@{ei\-\_\-widget\-\_\-pick}!ei_widget.h@{ei\-\_\-widget.\-h}}
 \subsubsection[{ei\-\_\-widget\-\_\-pick}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-widget\-\_\-pick (
@@ -274,6 +294,10 @@ Returns the widget that is at a given location on screen.
 \begin{DoxyReturn}{Returns}
 The top-\/most widget at this location, or N\-U\-L\-L if there is no widget at this location (except for the root widget). 
 \end{DoxyReturn}
+
+
+Definition at line 77 of file ei\-\_\-widget.\-c.
+
 
 
 \subsection{Variable Documentation}

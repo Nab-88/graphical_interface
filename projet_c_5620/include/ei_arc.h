@@ -90,19 +90,34 @@ void free_ei_linked_point(ei_linked_point_t* first);
 ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int choice);
 
 /**
-* \brief The function draws a button
+* \brief The function draws a button/frame
 *
-* @param  surface the surface where we draw the button
-* @param	rectangle the rectangle which contains the button
-* @param  rayon the radius of the rounded part of the frame
-* @param  color_bg the color of the background of the button
-* @param  color_fg the color of the text in the button
-* @param  text the text inside the rectangle
-* @param  effect if true button is pressed if false button is not pressed
-* @param  font font with which we write the button
+* @param  surface the surface where we draw the button/frame
+* @param  rectangle the rectangle which contains the button/frame
+* @param  color the color of the background of the button/frame
+* @param  corner_radius the radius of the rounded part of the frame/button
+* @param  border_width the length of the border of the button/frame
+* @param  relief it is the relief of the button/frame
+* @param  text  the text
+* @param  text_font  font with which we write the button
+* @param  text_color the color of the text in the button/frame
+* @param  img the image
+* @param  img_rect the rectangle which restrains the image
+* @param  where the position where the first point of the image/text will be
 * @param  clipper the rectangle where we write the image
-* @param  border_length the length of the border of the button
 */
-void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_point_t where, ei_relief_t effect, ei_font_t font, ei_rect_t* clipper, int border_length);
+void ei_draw_button(ei_surface_t surface,
+     ei_rect_t rectangle,
+     ei_color_t color,
+      int corner_radius,
+      int border_width,
+      ei_relief_t relief,
+      char** text,
+      ei_font_t text_font,
+      ei_color_t* text_color,
+      ei_surface_t* img,
+      ei_rect_t img_rect,
+      ei_point_t where,
+      ei_rect_t* clipper);
 
 #endif

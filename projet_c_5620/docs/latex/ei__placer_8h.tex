@@ -23,7 +23,7 @@ typedef struct \hyperlink{structei__placer__params__t}{ei\-\_\-placer\-\_\-param
 void \hyperlink{ei__placer_8h_ae7e1c98d8ae1be26ad3ff0c3fde9d8e2}{ei\-\_\-place} (struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget, \hyperlink{ei__types_8h_a3852c963af609d31d7cfcff79c4c8450}{ei\-\_\-anchor\-\_\-t} $\ast$anchor, int $\ast$x, int $\ast$y, int $\ast$width, int $\ast$height, float $\ast$rel\-\_\-x, float $\ast$rel\-\_\-y, float $\ast$rel\-\_\-width, float $\ast$rel\-\_\-height)
 \begin{DoxyCompactList}\small\item\em Configures the geometry of a widget using the \char`\"{}placer\char`\"{} geometry manager. If the widget was already managed by another geometry manager, then it is first removed from the previous geometry manager. If the widget was already managed by the \char`\"{}placer\char`\"{}, then this calls simply updates the placer parameters\-: arguments that are not N\-U\-L\-L replace previous values. When the arguments are passed as N\-U\-L\-L, the placer uses default values (detailed in the argument descriptions below). If no size is provided (either absolute or relative), then the requested size of the widget is used, i.\-e. the minimal size required to display its content. \end{DoxyCompactList}\item 
 void \hyperlink{ei__placer_8h_af6ab9a9a1147224d5c107ff5d950ec6f}{ei\-\_\-placer\-\_\-run} (struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget)
-\begin{DoxyCompactList}\small\item\em Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to \hyperlink{ei__placer_8h_ae7e1c98d8ae1be26ad3ff0c3fde9d8e2}{ei\-\_\-place}. Geometry re-\/computation is necessary for example when the text label of a widget has changed, and thus the widget \char`\"{}natural\char`\"{} size has changed. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to \hyperlink{ei__placer_8c_ae7e1c98d8ae1be26ad3ff0c3fde9d8e2}{ei\-\_\-place}. Geometry re-\/computation is necessary for example when the text label of a widget has changed, and thus the widget \char`\"{}natural\char`\"{} size has changed. \end{DoxyCompactList}\item 
 void \hyperlink{ei__placer_8h_a277bbc4cb6e175127219ddcea161c1bc}{ei\-\_\-placer\-\_\-forget} (struct \hyperlink{structei__widget__t}{ei\-\_\-widget\-\_\-t} $\ast$widget)
 \begin{DoxyCompactList}\small\item\em Tells the placer to remove a widget from the screen and forget about it. Note\-: the widget is not destroyed and still exists in memory. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -92,6 +92,10 @@ Configures the geometry of a widget using the \char`\"{}placer\char`\"{} geometr
 {\em rel\-\_\-height} & The relative height of the widget\-: 0.\-0 corresponds to a height of 0, 1.\-0 to the height of the master (defaults to 0.\-0). \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 46 of file ei\-\_\-placer.\-c.
+
 \hypertarget{ei__placer_8h_a277bbc4cb6e175127219ddcea161c1bc}{\index{ei\-\_\-placer.\-h@{ei\-\_\-placer.\-h}!ei\-\_\-placer\-\_\-forget@{ei\-\_\-placer\-\_\-forget}}
 \index{ei\-\_\-placer\-\_\-forget@{ei\-\_\-placer\-\_\-forget}!ei_placer.h@{ei\-\_\-placer.\-h}}
 \subsubsection[{ei\-\_\-placer\-\_\-forget}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-placer\-\_\-forget (
@@ -108,6 +112,10 @@ Tells the placer to remove a widget from the screen and forget about it. Note\-:
 {\em widget} & The widget to remove from screen. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 204 of file ei\-\_\-placer.\-c.
+
 \hypertarget{ei__placer_8h_af6ab9a9a1147224d5c107ff5d950ec6f}{\index{ei\-\_\-placer.\-h@{ei\-\_\-placer.\-h}!ei\-\_\-placer\-\_\-run@{ei\-\_\-placer\-\_\-run}}
 \index{ei\-\_\-placer\-\_\-run@{ei\-\_\-placer\-\_\-run}!ei_placer.h@{ei\-\_\-placer.\-h}}
 \subsubsection[{ei\-\_\-placer\-\_\-run}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-placer\-\_\-run (
@@ -117,10 +125,14 @@ Tells the placer to remove a widget from the screen and forget about it. Note\-:
 )}}\label{ei__placer_8h_af6ab9a9a1147224d5c107ff5d950ec6f}
 
 
-Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to \hyperlink{ei__placer_8h_ae7e1c98d8ae1be26ad3ff0c3fde9d8e2}{ei\-\_\-place}. Geometry re-\/computation is necessary for example when the text label of a widget has changed, and thus the widget \char`\"{}natural\char`\"{} size has changed. 
+Tells the placer to recompute the geometry of a widget. The widget must have been previsouly placed by a call to \hyperlink{ei__placer_8c_ae7e1c98d8ae1be26ad3ff0c3fde9d8e2}{ei\-\_\-place}. Geometry re-\/computation is necessary for example when the text label of a widget has changed, and thus the widget \char`\"{}natural\char`\"{} size has changed. 
 
 
 \begin{DoxyParams}{Parameters}
 {\em widget} & The widget which geometry must be re-\/computed. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 132 of file ei\-\_\-placer.\-c.
+

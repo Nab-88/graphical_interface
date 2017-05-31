@@ -747,9 +747,9 @@ int			ei_copy_surface(ei_surface_t		destination,
 */
 ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, int angle_fin){
   float val = 3.14159265/180;
-  float pas = ((float)(angle_fin - angle_debut)) /1000;
+  float pas = ((float)(angle_fin - angle_debut)) /100;
   ei_point_t first_point = {(int) (centre.x + rayon*cos(angle_debut*val)),(int) (centre.y + rayon*sin(angle_debut*val))};
-  ei_linked_point_t* start = malloc(sizeof(ei_linked_point_t));
+  ei_linked_point_t* start = calloc(1, sizeof(ei_linked_point_t));
   start -> point = first_point;
   float angle, fin;
   if (pas > 0) {
@@ -760,12 +760,12 @@ ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, in
       fin = angle_debut;
       pas = -pas;
   }
-  ei_linked_point_t* current = malloc(sizeof(ei_linked_point_t));
+  ei_linked_point_t* current = calloc(1, sizeof(ei_linked_point_t));
   ei_linked_point_t* ancient = start;
   while (angle < fin) {
       angle += pas;
       ei_point_t point = {(int) (centre.x + rayon*cos(angle*val)),(int) (centre.y + rayon*sin(angle*val))};
-      ei_linked_point_t* current = malloc(sizeof(ei_linked_point_t));
+      ei_linked_point_t* current = calloc(1, sizeof(ei_linked_point_t));
       current -> point = point;
       ancient -> next = current;
       ancient = current;
@@ -823,11 +823,23 @@ void print_linked_point(ei_linked_point_t* first) {
 ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int choice){
   // verifier que rayon est pas trop petit ni trop grand ...
   ei_point_t centre = {rectangle.top_left.x + rayon, rectangle.top_left.y + rayon};
-  int h = rectangle.size.height / 2;
-  ei_point_t point_gauche = {rectangle.top_left.x + h, rectangle.top_left.y + h};
-  ei_point_t point_droit = {rectangle.top_left.x + rectangle.size.width - h, rectangle.top_left.y + h};
-  ei_linked_point_t* centre_gauche = malloc(sizeof(ei_linked_point_t));
-  ei_linked_point_t* centre_droit = malloc(sizeof(ei_linked_point_t));
+  int h;
+  ei_point_t point_gauche, point_droit;
+  if (rectangle.size.height <= rectangle.size.width) {
+      h = rectangle.size.height / 2;
+      point_gauche.x = rectangle.top_left.x + h;
+      point_gauche.y = rectangle.top_left.y + h;
+      point_droit.x = rectangle.top_left.x + rectangle.size.width - h;
+      point_droit.y = rectangle.top_left.y + h;
+  } else {
+      h = rectangle.size.width / 2;
+      point_droit.x = rectangle.top_left.x + h;
+      point_droit.y = rectangle.top_left.y + h;
+      point_gauche.x = rectangle.top_left.x + h;
+      point_gauche.y = rectangle.top_left.y + rectangle.size.height - h;
+  }
+  ei_linked_point_t* centre_gauche = calloc(1, sizeof(ei_linked_point_t));
+  ei_linked_point_t* centre_droit = calloc(1, sizeof(ei_linked_point_t));
   centre_gauche -> point = point_gauche;
   centre_droit -> point = point_droit;
   if (choice == 1) {
@@ -903,74 +915,91 @@ ei_linked_point_t* ei_rounded_frame(ei_rect_t rectangle, uint32_t rayon, int cho
 }
 
 /**
-* \brief The function draws a button
+* \brief The function draws a button/frame
 *
-* @param  surface the surface where we draw the button
-* @param	rectangle the rectangle which contains the button
-* @param  rayon the radius of the rounded part of the frame
-* @param  color_bg the color of the background of the button
-* @param  color_fg the color of the text in the button
-* @param  text the text inside the rectangle
-* @param  effect if true button is pressed if false button is not pressed
-* @param  font font with which we write the button
+* @param  surface the surface where we draw the button/frame
+* @param  rectangle the rectangle which contains the button/frame
+* @param  color the color of the background of the button/frame
+* @param  corner_radius the radius of the rounded part of the frame/button
+* @param  border_width the length of the border of the button/frame
+* @param  relief it is the relief of the button/frame
+* @param  text  the text
+* @param  text_font  font with which we write the button
+* @param  text_color the color of the text in the button/frame
+* @param  img the image
+* @param  img_rect the rectangle which restrains the image
+* @param  where the position where the first point of the image/text will be
 * @param  clipper the rectangle where we write the image
-*
 */
 
-void ei_draw_button(ei_surface_t surface, ei_rect_t rectangle, uint32_t rayon, ei_color_t color_bg, ei_color_t color_fg, char* text, ei_point_t where, ei_relief_t effect, ei_font_t font, ei_rect_t* clipper, int border_length) {
+void ei_draw_button(ei_surface_t surface,
+     ei_rect_t rectangle,
+     ei_color_t color,
+      int corner_radius,
+      int border_width,
+      ei_relief_t relief,
+      char** text,
+      ei_font_t text_font,
+      ei_color_t* text_color,
+      ei_surface_t* img,
+      ei_rect_t img_rect,
+      ei_point_t where,
+      ei_rect_t* clipper) {
   hw_surface_lock(surface);
-  ei_linked_point_t* frame = ei_rounded_frame(rectangle, rayon, 1);
-  ei_surface_t text_surface = hw_text_create_surface(text, font, &color_fg);
-  ei_size_t text_size = hw_surface_get_size(text_surface);
-  assert(text_size.width < rectangle.size.width - 2*border_length);
-  assert(text_size.height < rectangle.size.height - 2*border_length);
-  assert(rectangle.size.width/2 - 2*border_length >= rayon);
-  assert(rectangle.size.height/2 - 2*border_length >= rayon);
-  if (effect == ei_relief_raised) {
-    color_bg.blue = min(color_bg.blue + 40, 255);
-    color_bg.red = min(color_bg.red + 40, 255);
-    color_bg.green = min(color_bg.green + 40, 255);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue = max(color_bg.blue - 80, 0);
-    color_bg.red = max(color_bg.red - 80, 0);
-    color_bg.green = max(color_bg.green - 80, 0);
-    frame = ei_rounded_frame(rectangle, rayon, 2);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue += 40;
-    color_bg.red += 40;
-    color_bg.green += 40;
-    rectangle.size.width -= 2*border_length;
-    rectangle.size.height -= 2*border_length;
-    rectangle.top_left.x += border_length;
-    rectangle.top_left.y += border_length;
-    frame = ei_rounded_frame(rectangle, rayon, 0);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    ei_draw_text(surface, &where, text, font, &color_fg, clipper);
-} else if (effect == ei_relief_sunken) {
-    color_bg.blue = max(color_bg.blue - 40, 0);
-    color_bg.red = max(color_bg.red - 40, 0);
-    color_bg.green = max(color_bg.green - 40, 0);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue = min(color_bg.blue + 80, 255);
-    color_bg.red = min(color_bg.red + 80, 255);
-    color_bg.green = min(color_bg.green + 80, 255);
-    frame = ei_rounded_frame(rectangle, rayon, 2);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    color_bg.blue -= 40;
-    color_bg.red -= 40;
-    color_bg.green -= 40;
-    rectangle.size.width -= 2*border_length;
-    rectangle.size.height -= 2*border_length;
-    rectangle.top_left.x += border_length;
-    rectangle.top_left.y += border_length;
-    frame = ei_rounded_frame(rectangle, rayon, 0);
-    ei_draw_polygon(surface, frame, color_bg, clipper);
-    ei_point_t where2 = {where.x + 3,where.y + 3};
-    ei_draw_text(surface, &where2, text, font, &color_fg, clipper);
-  } else {
-      frame = ei_rounded_frame(rectangle, rayon, 0);
-      ei_draw_polygon(surface, frame, color_bg, clipper);
-      ei_draw_text(surface, &where, text, font, &color_fg, clipper);
+  ei_linked_point_t* frame = ei_rounded_frame(rectangle, corner_radius, 1);
+  assert(rectangle.size.width/2 - 2*border_width >= corner_radius);
+  assert(rectangle.size.height/2 - 2*border_width >= corner_radius);
+  if (relief == ei_relief_raised) {
+    color.blue = min(color.blue + 40, 255);
+    color.red = min(color.red + 40, 255);
+    color.green = min(color.green + 40, 255);
+    ei_draw_polygon(surface, frame, color, clipper);
+    color.blue = max(color.blue - 80, 0);
+    color.red = max(color.red - 80, 0);
+    color.green = max(color.green - 80, 0);
+    frame = ei_rounded_frame(rectangle, corner_radius, 2);
+    ei_draw_polygon(surface, frame, color, clipper);
+    free_ei_linked_point(frame);
+    color.blue += 40;
+    color.red += 40;
+    color.green += 40;
+
+} else if (relief == ei_relief_sunken) {
+    color.blue = max(color.blue - 40, 0);
+    color.red = max(color.red - 40, 0);
+    color.green = max(color.green - 40, 0);
+    ei_draw_polygon(surface, frame, color, clipper);
+    color.blue = min(color.blue + 80, 255);
+    color.red = min(color.red + 80, 255);
+    color.green = min(color.green + 80, 255);
+    frame = ei_rounded_frame(rectangle, corner_radius, 2);
+    ei_draw_polygon(surface, frame, color, clipper);
+    free_ei_linked_point(frame);
+    color.blue -= 40;
+    color.red -= 40;
+    color.green -= 40;
+    where.x += 3;
+    where.y += 3;
+  }
+rectangle.size.width -= 2*border_width;
+rectangle.size.height -= 2*border_width;
+rectangle.top_left.x += border_width;
+rectangle.top_left.y += border_width;
+frame = ei_rounded_frame(rectangle, corner_radius, 0);
+ei_draw_polygon(surface, frame, color, clipper);
+free_ei_linked_point(frame);
+if (text != NULL) {
+    ei_surface_t text_surface = hw_text_create_surface(*text, text_font, text_color);
+    ei_size_t text_size = hw_surface_get_size(text_surface);
+    hw_surface_free(text_surface);
+    assert(text_size.width <= rectangle.size.width - 2*border_width);
+    assert(text_size.height <= rectangle.size.height - 2*border_width);
+    ei_draw_text(surface, &where, *text, text_font, text_color, clipper);
+} else if (img != NULL) {
+    // on utilise copy
+    ei_rect_t rect = {where, img_rect.size};
+    ei_copy_surface(surface, &rect, *img, &img_rect, hw_surface_has_alpha(surface));
+
 }
 hw_surface_unlock(surface);
 hw_surface_update_rects(surface, (const struct ei_linked_rect_t *) clipper);

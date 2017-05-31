@@ -16,7 +16,7 @@ void \hyperlink{ei__application_8h_a4bb2bfc3248b18adad2b272b011883ab}{ei\-\_\-ap
 void \hyperlink{ei__application_8h_ad7ab77d706b9648b49c33ef3d2c830c0}{ei\-\_\-app\-\_\-free} ()
 \begin{DoxyCompactList}\small\item\em Releases all the resources of the application, and releases the hardware (ie. calls \hyperlink{hw__interface_8h_a6e856924f3b4c8966a870e56a3b1dcb1}{hw\-\_\-quit}). \end{DoxyCompactList}\item 
 void \hyperlink{ei__application_8h_a4b18dede5829aec0e5b246ccf66bf439}{ei\-\_\-app\-\_\-run} ()
-\begin{DoxyCompactList}\small\item\em Runs the application\-: enters the main event loop. Exits when \hyperlink{ei__application_8h_a05dff77e07ed2d7a896b14c15a939457}{ei\-\_\-app\-\_\-quit\-\_\-request} is called. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Runs the application\-: enters the main event loop. Exits when \hyperlink{ei__application_8c_a05dff77e07ed2d7a896b14c15a939457}{ei\-\_\-app\-\_\-quit\-\_\-request} is called. \end{DoxyCompactList}\item 
 void \hyperlink{ei__application_8h_a670d0bcb22879506fdb9944ae26df2f5}{ei\-\_\-app\-\_\-invalidate\-\_\-rect} (\hyperlink{structei__rect__t}{ei\-\_\-rect\-\_\-t} $\ast$rect)
 \begin{DoxyCompactList}\small\item\em Adds a rectangle to the list of rectangles that must be updated on screen. The real update on the screen will be done at the right moment in the main loop. \end{DoxyCompactList}\item 
 void \hyperlink{ei__application_8h_a05dff77e07ed2d7a896b14c15a939457}{ei\-\_\-app\-\_\-quit\-\_\-request} ()
@@ -65,6 +65,10 @@ Creates an application.
 {\em full\-Screen} & If true, the root window is the entire screen. Otherwise, it is a system window. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 32 of file ei\-\_\-application.\-c.
+
 \hypertarget{ei__application_8h_ad7ab77d706b9648b49c33ef3d2c830c0}{\index{ei\-\_\-application.\-h@{ei\-\_\-application.\-h}!ei\-\_\-app\-\_\-free@{ei\-\_\-app\-\_\-free}}
 \index{ei\-\_\-app\-\_\-free@{ei\-\_\-app\-\_\-free}!ei_application.h@{ei\-\_\-application.\-h}}
 \subsubsection[{ei\-\_\-app\-\_\-free}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-app\-\_\-free (
@@ -75,6 +79,10 @@ Creates an application.
 
 
 Releases all the resources of the application, and releases the hardware (ie. calls \hyperlink{hw__interface_8h_a6e856924f3b4c8966a870e56a3b1dcb1}{hw\-\_\-quit}). 
+
+
+
+Definition at line 56 of file ei\-\_\-application.\-c.
 
 \hypertarget{ei__application_8h_a670d0bcb22879506fdb9944ae26df2f5}{\index{ei\-\_\-application.\-h@{ei\-\_\-application.\-h}!ei\-\_\-app\-\_\-invalidate\-\_\-rect@{ei\-\_\-app\-\_\-invalidate\-\_\-rect}}
 \index{ei\-\_\-app\-\_\-invalidate\-\_\-rect@{ei\-\_\-app\-\_\-invalidate\-\_\-rect}!ei_application.h@{ei\-\_\-application.\-h}}
@@ -92,6 +100,10 @@ Adds a rectangle to the list of rectangles that must be updated on screen. The r
 {\em rect} & The rectangle to add, expressed in the root window coordinates. A copy is made, so it is safe to release the rectangle on return. \\
 \hline
 \end{DoxyParams}
+
+
+Definition at line 100 of file ei\-\_\-application.\-c.
+
 \hypertarget{ei__application_8h_a05dff77e07ed2d7a896b14c15a939457}{\index{ei\-\_\-application.\-h@{ei\-\_\-application.\-h}!ei\-\_\-app\-\_\-quit\-\_\-request@{ei\-\_\-app\-\_\-quit\-\_\-request}}
 \index{ei\-\_\-app\-\_\-quit\-\_\-request@{ei\-\_\-app\-\_\-quit\-\_\-request}!ei_application.h@{ei\-\_\-application.\-h}}
 \subsubsection[{ei\-\_\-app\-\_\-quit\-\_\-request}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-app\-\_\-quit\-\_\-request (
@@ -102,6 +114,10 @@ Adds a rectangle to the list of rectangles that must be updated on screen. The r
 
 
 Tells the application to quite. Is usually called by an event handler (for example when pressing the \char`\"{}\-Escape\char`\"{} key). 
+
+
+
+Definition at line 108 of file ei\-\_\-application.\-c.
 
 \hypertarget{ei__application_8h_adf0b5ac3d996e47e37c65907671fb9b7}{\index{ei\-\_\-application.\-h@{ei\-\_\-application.\-h}!ei\-\_\-app\-\_\-root\-\_\-surface@{ei\-\_\-app\-\_\-root\-\_\-surface}}
 \index{ei\-\_\-app\-\_\-root\-\_\-surface@{ei\-\_\-app\-\_\-root\-\_\-surface}!ei_application.h@{ei\-\_\-application.\-h}}
@@ -117,6 +133,10 @@ Returns the surface of the root window. Used to create surfaces with similar r, 
 \begin{DoxyReturn}{Returns}
 The surface of the root window. 
 \end{DoxyReturn}
+
+
+Definition at line 128 of file ei\-\_\-application.\-c.
+
 \hypertarget{ei__application_8h_a97eeb53e6bac85cfb5f19f4baa77e114}{\index{ei\-\_\-application.\-h@{ei\-\_\-application.\-h}!ei\-\_\-app\-\_\-root\-\_\-widget@{ei\-\_\-app\-\_\-root\-\_\-widget}}
 \index{ei\-\_\-app\-\_\-root\-\_\-widget@{ei\-\_\-app\-\_\-root\-\_\-widget}!ei_application.h@{ei\-\_\-application.\-h}}
 \subsubsection[{ei\-\_\-app\-\_\-root\-\_\-widget}]{\setlength{\rightskip}{0pt plus 5cm}{\bf ei\-\_\-widget\-\_\-t}$\ast$ ei\-\_\-app\-\_\-root\-\_\-widget (
@@ -131,6 +151,10 @@ Returns the \char`\"{}root widget\char`\"{} of the application\-: a \char`\"{}fr
 \begin{DoxyReturn}{Returns}
 The root widget. 
 \end{DoxyReturn}
+
+
+Definition at line 118 of file ei\-\_\-application.\-c.
+
 \hypertarget{ei__application_8h_a4b18dede5829aec0e5b246ccf66bf439}{\index{ei\-\_\-application.\-h@{ei\-\_\-application.\-h}!ei\-\_\-app\-\_\-run@{ei\-\_\-app\-\_\-run}}
 \index{ei\-\_\-app\-\_\-run@{ei\-\_\-app\-\_\-run}!ei_application.h@{ei\-\_\-application.\-h}}
 \subsubsection[{ei\-\_\-app\-\_\-run}]{\setlength{\rightskip}{0pt plus 5cm}void ei\-\_\-app\-\_\-run (
@@ -140,5 +164,9 @@ The root widget.
 )}}\label{ei__application_8h_a4b18dede5829aec0e5b246ccf66bf439}
 
 
-Runs the application\-: enters the main event loop. Exits when \hyperlink{ei__application_8h_a05dff77e07ed2d7a896b14c15a939457}{ei\-\_\-app\-\_\-quit\-\_\-request} is called. 
+Runs the application\-: enters the main event loop. Exits when \hyperlink{ei__application_8c_a05dff77e07ed2d7a896b14c15a939457}{ei\-\_\-app\-\_\-quit\-\_\-request} is called. 
+
+
+
+Definition at line 80 of file ei\-\_\-application.\-c.
 
