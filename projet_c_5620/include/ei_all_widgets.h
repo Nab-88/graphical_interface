@@ -2,7 +2,7 @@
  * @file	ei_widget.h
  *
  * @brief 	API for widgets management: creation, configuration, hierarchy, redisplay.
- * 
+ *
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  */
@@ -12,7 +12,7 @@
 
 #include "ei_widget.h"
 
-/* 
+/*
  *\brief Definition of a frame which can be used to draw a simple frame with 3D effect or not.
  *
  */
@@ -31,7 +31,33 @@ typedef struct ei_frame_t {
     ei_rect_t** img_rect;
     ei_anchor_t* img_anchor;
 } ei_frame_t;
-    
+
+
+/*
+ *\brief Definition of a button which can be used to draw a button.
+ *
+ */
+typedef struct ei_button_t {
+    ei_widget_t widget;
+
+    ei_size_t* requested_size;
+    const ei_color_t* color;
+    int*		border_width;
+    int*		corner_radius;
+    ei_relief_t*	relief;
+    char **text;
+    ei_font_t* text_font;
+    ei_color_t* text_color;
+    ei_anchor_t* text_anchor;
+    ei_surface_t* img;
+    ei_rect_t** img_rect;
+    ei_anchor_t* img_anchor;
+    ei_callback_t*		callback;
+    void**			user_param;
+} ei_button_t;
+
+
+
 /**
  * \brief	A function that allocates a block of memory that is big enough to store the
  *		attributes of a widget of a class. After allocation, the function *must*
@@ -85,7 +111,7 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget);
 void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
 							 ei_rect_t		rect);
 /**
- * @brief	A function that is called in response to an event. This function 
+ * @brief	A function that is called in response to an event. This function
  *		is internal to the library. It implements the generic behavior of
  *		a widget (for example a button looks sunken when clicked)
  *
@@ -105,7 +131,7 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 /*
  * \brief Frees all widgets from widget.
  *
- * \param   widget  the widget from which to free. 
+ * \param   widget  the widget from which to free.
  */
 
 void free_widgets(ei_widget_t* widget);
