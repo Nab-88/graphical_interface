@@ -71,6 +71,16 @@ typedef struct ei_toplevel_t {
 } ei_toplevel_t;
 
 /**
+ * @brief	Returns the widget that is has the given id
+ *
+ * @param	where		The location on screen, expressed in the root window coordinates.
+ * @param   pick_id     The Id that we are looking for
+ *
+ * @return
+ */
+ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id);
+
+/**
  * \brief	Registers the "frame" widget class in the program. This must be called only
  *		once before widgets of the class "toplevel" can be created and configured with
  *		\ref ei_toplevel_configure.
@@ -332,6 +342,14 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
  */
 ei_color_t* convert_pick_id_to_pick_color(uint32_t id);
 
+/**
+ * @brief	Changes the relief of a button
+ *
+ * @param	relief	The relief that we change to
+ * @param   widget the current widget
+ */
+void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget);
+
 
 /*Declaration of the library of class of widgets
  */
@@ -339,5 +357,7 @@ ei_widgetclass_t LIB;
 ei_widget_t ROOT;
 ei_surface_t SURFACE_ROOT;
 ei_surface_t SURFACE_PICK;
+ei_bool_t SORTIE;
+ei_widget_t* EVENT_ACTIVE;
 
 #endif

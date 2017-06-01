@@ -12,6 +12,7 @@
 #include <string.h>
 #include "ei_arc.h"
 #include "ei_application.h"
+#include "ei_event.h"
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -100,9 +101,50 @@ void			ei_widget_destroy		(ei_widget_t*		widget){
  *				at this location (except for the root widget).
  */
 ei_widget_t*		ei_widget_pick			(ei_point_t*		where){
+	// Recuperer l'ID du widget qu'on cherche sur la pick_surface
+	ei_surface_t pick_surface = SURFACE_PICK;
+	uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(pick_surface);
+	ei_size_t surface_size = hw_surface_get_size(pick_surface);
+	pixel_ptr += where -> x + where -> y * surface_size.width;
+	int ir, ig, ib, ia;
+	hw_surface_get_channel_indices(pick_surface, &ir, &ig, &ib, &ia);
+	ei_color_t* color = calloc(1, sizeof(ei_color_t));
+	color -> red = (unsigned char)((*pixel_ptr <<((3-ir)*8)) >> 24);
+	color -> green = (unsigned char)((*pixel_ptr <<((3-ig)*8)) >> 24);
+	color -> blue = (unsigned char)((*pixel_ptr <<((3-ib)*8)) >> 24);
+	color -> alpha = (unsigned char)((*pixel_ptr <<((3-ia)*8)) >> 24);
+	uint32_t pick_id = color -> red << 24;
+	pick_id += color -> green << 16;
+	pick_id += color -> blue << 8;
+	pick_id += color -> alpha;
+	// Parcours de tout les widgets
+	ei_widget_t* current = ei_app_root_widget();
+	return ei_find_pick_color(current, pick_id);
+
 }
 
-
+/**
+ * @brief	Returns the widget that is has the given id
+ *
+ * @param	where		The location on screen, expressed in the root window coordinates.
+ * @param   pick_id     The Id that we are looking for
+ *
+ * @return
+ */
+ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id) {
+	ei_widget_t* answer = NULL;
+	while (widget != NULL){
+		if (widget -> pick_id == pick_id && widget != &ROOT) {
+			return widget;
+		}
+		answer = ei_find_pick_color(widget -> children_head, pick_id);
+		if (answer != NULL) {
+			break;
+		}
+		widget = widget -> next_sibling;
+	}
+	return answer;
+}
 
 
 /**
@@ -606,7 +648,7 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
             where -> y = point_ancre.y - 0.5 * size.height;
             break;
         case ei_anc_northeast:
-            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - border_width;
+            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - 2*border_width;
             where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
             break;
         case ei_anc_north:
@@ -811,6 +853,19 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
  */
 ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
+	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	 if (event -> type == ei_ev_mouse_buttondown) {
+		 if (widget != ei_event_get_active_widget()) {
+			 (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+			draw_widgets(widget -> children_head);
+		 }
+		 ei_event_set_active_widget(widget);
+	 }
+	 else if (event -> type == ei_ev_mouse_buttonup) {
+	 }
+	 else if (event -> type == ei_ev_mouse_move) {
+	 }
+	 return EI_TRUE;
 }
 
 /**
@@ -830,7 +885,50 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
  */
 ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
+ 	ei_button_t* button = (ei_button_t*) widget;
+	ei_relief_t* relief = button -> relief;
+	if (event -> type == ei_ev_mouse_buttondown) {
+		*relief = ei_relief_sunken;
+		ei_change_relief_button(relief, widget);
+		ei_event_set_active_widget(widget);
+	}
+	else if (event -> type == ei_ev_mouse_buttonup) {
+		*relief = ei_relief_raised;
+		ei_change_relief_button(relief, widget);
+		ei_event_set_active_widget(widget -> parent);
+	}
+	else if (event -> type == ei_ev_mouse_move) {
+		ei_point_t where = event -> param.mouse.where;
+		ei_widget_t* compare = ei_widget_pick(&where);
+		if (compare == NULL || compare -> pick_id != widget -> pick_id) {
+			if (*relief != ei_relief_raised) {
+				*relief = ei_relief_raised;
+				ei_change_relief_button(relief, widget);
+			}
+		}
+		else {
+			if (*relief != ei_relief_sunken) {
+				*relief = ei_relief_sunken;
+				ei_change_relief_button(relief, widget);
+			}
+		}
+	}
+	return EI_TRUE;
 }
+
+
+/**
+ * @brief	Changes the relief of a button
+ *
+ * @param	relief	The relief that we change to
+ * @param   widget the current widget
+ */
+void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
+	ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
+	ei_placer_run(widget);
+	(widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+}
+
 /**
  * @brief	Registers a class to the program so that widgets of this class can be created.
  *		This must be done only once per widged class in the application.

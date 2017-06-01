@@ -1,4 +1,5 @@
 #include "ei_event.h"
+#include "ei_all_widgets.h"
 /**
  *  @file	ei_event.c
  *  @brief	Allows the binding and unbinding of callbacks to events.
@@ -16,6 +17,7 @@
  *				that a widget is no more being manipulated.
  */
 void ei_event_set_active_widget(ei_widget_t* widget){
+    EVENT_ACTIVE = widget;
 }
 
 /**
@@ -24,6 +26,7 @@ void ei_event_set_active_widget(ei_widget_t* widget){
  * @return			The widget currenlty being manipulated, or NULL.
  */
 ei_widget_t* ei_event_get_active_widget(){
+    return EVENT_ACTIVE;
 }
 
 

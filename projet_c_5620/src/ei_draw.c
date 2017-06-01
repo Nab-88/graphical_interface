@@ -543,8 +543,6 @@ void			ei_draw_text		(ei_surface_t		surface,
             dest_ptr += surface_size.width - rect_source -> size.width;
             current_pixel.x = where -> x;
             current_pixel.y += 1;
-
-            // src_ptr += text_surface_size.width - rect_source -> size.width;
         }
     }
     hw_surface_unlock(surface);
@@ -987,9 +985,6 @@ frame = ei_rounded_frame(rectangle, corner_radius, 0);
 ei_draw_polygon(surface, frame, color, clipper);
 free_ei_linked_point(frame);
 if (text != NULL) {
-    ei_surface_t text_surface = hw_text_create_surface(*text, text_font, text_color);
-    ei_size_t text_size = hw_surface_get_size(text_surface);
-    hw_surface_free(text_surface);
     ei_draw_text(surface, &where, *text, text_font, text_color, clipper);
 } else if (img != NULL) {
     // on utilise copy
