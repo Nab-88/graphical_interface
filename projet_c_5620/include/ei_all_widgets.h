@@ -324,9 +324,9 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
 
 /**
  * @brief	Converts pick_id to pick_color.
- *		
  *
- * @param	id      The pick_id.	
+ *
+ * @param	id      The pick_id.
  *
  * @return			Returns the pick color.
  */
@@ -338,6 +338,6 @@ ei_color_t* convert_pick_id_to_pick_color(uint32_t id);
 ei_widgetclass_t LIB;
 ei_widget_t ROOT;
 ei_surface_t SURFACE_ROOT;
-
+ei_surface_t SURFACE_PICK;
 
 #endif

@@ -35,6 +35,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
 
     //Create the main window
 	ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
+    ei_surface_t pick_surface = hw_surface_create(main_window, main_window_size, EI_TRUE);
     ei_frame_register_class();
     ei_button_register_class();
     ei_toplevel_register_class();
@@ -44,9 +45,12 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     ei_widget_t *widget = (class -> allocfunc)();
     widget -> wclass = class;
     widget -> screen_location = hw_surface_get_rect(main_window);
+    widget -> pick_id = 0;
+    widget -> pick_color = convert_pick_id_to_pick_color(0);
     ROOT = *widget;
     (ROOT.wclass -> setdefaultsfunc)(&ROOT);
     SURFACE_ROOT = main_window;
+    SURFACE_PICK = pick_surface;
     ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 }
@@ -66,7 +70,7 @@ void ei_app_free(){
 /*
  * \brief Frees all widgets from widget.
  *
- * \param   widget  the widget from which to free. 
+ * \param   widget  the widget from which to free.
  */
 
 void free_widgets(ei_widget_t* widget){
@@ -88,10 +92,10 @@ void ei_app_run(){
 
 void draw_widgets(ei_widget_t* widget){
     while (widget != NULL){
-        if (widget != &ROOT){
+        if (widget != ei_app_root_widget()){
             ei_placer_run(widget);
         }
-        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), NULL, &(widget -> screen_location));
+        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
         draw_widgets(widget -> children_head);
         widget = widget -> next_sibling;
     }

@@ -134,6 +134,7 @@ void ei_draw_button(ei_surface_t surface,
 void ei_draw_toplevel(ei_surface_t surface,
                 ei_rect_t rectangle,
                 ei_color_t* color,
+                ei_color_t* color2,
                 int border_width,
                 char** title,
                 ei_rect_t* clipper);

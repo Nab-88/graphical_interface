@@ -496,6 +496,7 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
     ei_frame_t* frame = (ei_frame_t*) widget;
 	ei_rect_t rectangle = widget -> screen_location;
 	ei_color_t color = *(frame -> color);
+	ei_color_t pick_color = *(widget -> pick_color);
 	int border_width = *(frame -> border_width);
 	ei_relief_t relief = *(frame -> relief);
 	char** text = frame -> text;
@@ -511,13 +512,14 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
 		where = ei_get_where(rectangle, anchor, border_width, (**img_rect).size);
 	} else if (text != NULL) {
 		text_font = frame -> text_font;
-		text_color = frame -> text_color;
+		text_color = (ei_color_t*) frame -> text_color;
 		anchor = frame -> text_anchor;
 		ei_surface_t text_surface = hw_text_create_surface(*text, *text_font, &color);
 		ei_size_t text_size = hw_surface_get_size(text_surface);
 		where = ei_get_where(rectangle, anchor, border_width, text_size);
 	}
 	ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+	ei_draw_button(pick_surface, rectangle, pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
 }
 
 /**
@@ -536,6 +538,7 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
     ei_button_t* button = (ei_button_t*) widget;
 	ei_rect_t rectangle = widget -> screen_location;
 	ei_color_t color = *(button -> color);
+	ei_color_t pick_color = *(widget -> pick_color);
 	int border_width = *(button -> border_width);
 	ei_relief_t relief = *(button -> relief);
 	char** text = button -> text;
@@ -558,6 +561,7 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
 		where = ei_get_where(rectangle, anchor, border_width, text_size);
 	}
 	ei_draw_button(surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+	ei_draw_button(pick_surface, rectangle, pick_color, *(button -> corner_radius), 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
 }
 /**
  * \brief  The function gives the top_left from which to draw a text or an
@@ -631,11 +635,15 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
 	 ei_rect_t rectangle = widget -> screen_location;
 	 ei_color_t* color = toplevel -> color;
+	 ei_color_t* pick_color = widget -> pick_color;
 	 int* border_width = toplevel -> border_width;
 	 char** title = toplevel -> title;
+	 char* nothing = calloc(1, sizeof(char));
 	 ei_bool_t* closable = toplevel -> closable;
 	 ei_axis_set_t* resizable = toplevel -> resizable;
-	 ei_draw_toplevel(surface, rectangle, color, *border_width, title, clipper);
+	 ei_color_t window_color = {110, 110, 110, 0};
+	 ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
+	 ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
  }
 
 /**

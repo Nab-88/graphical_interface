@@ -3,7 +3,7 @@
  *  @file	ei_event.c
  *  @brief	Allows the binding and unbinding of callbacks to events.
  *
- *  \author 
+ *  \author
  *  Created by François Bérard on 30.12.11.
  *  Copyright 2011 Ensimag. All rights reserved.
  *
@@ -57,4 +57,3 @@ void ei_event_set_default_handle_func(ei_default_handle_func_t func){
  */
 ei_default_handle_func_t ei_event_get_default_handle_func(){
 }
-
