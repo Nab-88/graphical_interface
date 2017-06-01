@@ -43,6 +43,9 @@
  * @param	rel_height	The relative height of the widget: 0.0 corresponds to a height of 0,
  *				1.0 to the height of the master (defaults to 0.0).
  */
+#define max(a,b) ((a) > (b) ? a : b)
+#define min(a,b) ((a) < (b) ? a : b)
+
 void			ei_place			(struct ei_widget_t*	widget,
         ei_anchor_t*		anchor,
         int*			x,
@@ -54,70 +57,70 @@ void			ei_place			(struct ei_widget_t*	widget,
         float*			rel_width,
         float*			rel_height)
 {
-widget -> placer_params = calloc(1, sizeof(ei_placer_params_t));
-if (anchor != NULL) {
-  widget -> placer_params -> anchor = anchor;
-  widget -> placer_params -> anchor_data = *anchor;
-}
-else{
-  widget -> placer_params -> anchor_data = ei_anc_none;
-}
-if (x != NULL) {
-  widget -> placer_params -> x = x;
-  widget -> placer_params -> x_data = *x;
-}
-else{
-  widget -> placer_params -> x_data = 0;
-}
-if (y != NULL) {
-  widget -> placer_params -> y = y;
-  widget -> placer_params -> y_data = *y;
-}
-else{
-  widget -> placer_params -> y_data = 0;
-}
-if (height != NULL) {
-  widget -> placer_params -> h = height;
-  widget -> placer_params -> h_data = *height;
-}
-else{
-  widget -> placer_params -> h_data = (widget -> requested_size).height;
-}
-if (width != NULL) {
-  widget -> placer_params -> w = width;
-  widget -> placer_params -> w_data = *width;
-}
-else{
-  widget -> placer_params -> w_data = (widget -> requested_size).width;
-}
-if (rel_x != NULL) {
-  widget -> placer_params -> rx = rel_x;
-  widget -> placer_params -> rx_data = *rel_x;
-}
-else{
-  widget -> placer_params -> rx_data = 0;
-}
-if (rel_y != NULL) {
-  widget -> placer_params -> ry = rel_y;
-  widget -> placer_params -> ry_data = *rel_y;
-}
-else{
-  widget -> placer_params -> ry_data = 0;
-}
-if (rel_height != NULL) {
-  widget -> placer_params -> rh = rel_height;
-  widget -> placer_params -> rh_data = *rel_height;
-}
-else{
-  widget -> placer_params -> rh_data = 0;
-}
-if (rel_width != NULL) {
-  widget -> placer_params -> rw = rel_width;
-  widget -> placer_params -> rw_data = *rel_width;
-}
-else{
-  widget -> placer_params -> rw_data = 0;
-}
+    widget -> placer_params = calloc(1, sizeof(ei_placer_params_t));
+    if (anchor != NULL) {
+        widget -> placer_params -> anchor = anchor;
+        widget -> placer_params -> anchor_data = *anchor;
+    }
+    else{
+        widget -> placer_params -> anchor_data = ei_anc_none;
+    }
+    if (x != NULL) {
+        widget -> placer_params -> x = x;
+        widget -> placer_params -> x_data = *x;
+    }
+    else{
+        widget -> placer_params -> x_data = 0;
+    }
+    if (y != NULL) {
+        widget -> placer_params -> y = y;
+        widget -> placer_params -> y_data = *y;
+    }
+    else{
+        widget -> placer_params -> y_data = 0;
+    }
+    if (height != NULL) {
+        widget -> placer_params -> h = height;
+        widget -> placer_params -> h_data = *height;
+    }
+    else{
+        widget -> placer_params -> h_data = (widget -> requested_size).height;
+    }
+    if (width != NULL) {
+        widget -> placer_params -> w = width;
+        widget -> placer_params -> w_data = *width;
+    }
+    else{
+        widget -> placer_params -> w_data = (widget -> requested_size).width;
+    }
+    if (rel_x != NULL) {
+        widget -> placer_params -> rx = rel_x;
+        widget -> placer_params -> rx_data = *rel_x;
+    }
+    else{
+        widget -> placer_params -> rx_data = 0;
+    }
+    if (rel_y != NULL) {
+        widget -> placer_params -> ry = rel_y;
+        widget -> placer_params -> ry_data = *rel_y;
+    }
+    else{
+        widget -> placer_params -> ry_data = 0;
+    }
+    if (rel_height != NULL) {
+        widget -> placer_params -> rh = rel_height;
+        widget -> placer_params -> rh_data = *rel_height;
+    }
+    else{
+        widget -> placer_params -> rh_data = 0;
+    }
+    if (rel_width != NULL) {
+        widget -> placer_params -> rw = rel_width;
+        widget -> placer_params -> rw_data = *rel_width;
+    }
+    else{
+        widget -> placer_params -> rw_data = 0;
+    }
 }
 
 
@@ -130,26 +133,26 @@ else{
  * @param	widget		The widget which geometry must be re-computed.
  */
 void ei_placer_run(struct ei_widget_t* widget){
-ei_anchor_t		anchor = (widget -> placer_params) -> anchor_data;
-int			x = (widget -> placer_params) -> x_data;
-int			y = (widget -> placer_params) -> y_data;
-int			width = (widget -> placer_params) -> w_data;
-int			height = (widget -> placer_params) -> h_data;
-float			rel_x = (widget -> placer_params) -> rx_data;
-float			rel_y = (widget -> placer_params) -> ry_data;
-float			rel_width = (widget -> placer_params) -> rw_data;
-float 		rel_height = (widget -> placer_params) -> rh_data;
-ei_rect_t* rect_widget = &(widget -> screen_location);
-//===============================Managing rect size========================
-(rect_widget -> size).height = (((widget -> parent) -> screen_location).size.height) * (rel_height) + height;
-(rect_widget -> size).width = (((widget -> parent) -> screen_location).size.width) * (rel_width) + width;
-//===============================Managing anchor========================
-ei_point_t point_ancre;
-int parent_height = ((widget -> parent) -> screen_location).size.height;
-int parent_width = ((widget -> parent) -> screen_location).size.width;
-ei_point_t parent_origin = ((widget -> parent) -> screen_location).top_left;
-point_ancre.x = parent_origin.x + parent_width * (rel_x) + x;
-point_ancre.y = parent_origin.y + parent_height * (rel_y) + y;
+    ei_anchor_t		anchor = (widget -> placer_params) -> anchor_data;
+    int			x = (widget -> placer_params) -> x_data;
+    int			y = (widget -> placer_params) -> y_data;
+    int			width = (widget -> placer_params) -> w_data;
+    int			height = (widget -> placer_params) -> h_data;
+    float			rel_x = (widget -> placer_params) -> rx_data;
+    float			rel_y = (widget -> placer_params) -> ry_data;
+    float			rel_width = (widget -> placer_params) -> rw_data;
+    float 		rel_height = (widget -> placer_params) -> rh_data;
+    ei_rect_t* rect_widget = &(widget -> screen_location);
+    //===============================Managing rect size========================
+    (rect_widget -> size).height = max((((widget -> parent) -> screen_location).size.height) * (rel_height), height);
+    (rect_widget -> size).width = max((((widget -> parent) -> screen_location).size.width) * (rel_width), width);
+    //===============================Managing anchor========================
+    ei_point_t point_ancre;
+    int parent_height = ((widget -> parent) -> screen_location).size.height;
+    int parent_width = ((widget -> parent) -> screen_location).size.width;
+    ei_point_t parent_origin = ((widget -> parent) -> screen_location).top_left;
+    point_ancre.x = parent_origin.x + parent_width * (rel_x) + x;
+    point_ancre.y = parent_origin.y + parent_height * (rel_y) + y;
     switch (anchor) {
         case ei_anc_none:
             rect_widget -> top_left = point_ancre;
@@ -202,5 +205,5 @@ point_ancre.y = parent_origin.y + parent_height * (rel_y) + y;
  * @param	widget		The widget to remove from screen.
  */
 void ei_placer_forget(struct ei_widget_t* widget){
-  free(widget -> placer_params);
+    free(widget -> placer_params);
 }
