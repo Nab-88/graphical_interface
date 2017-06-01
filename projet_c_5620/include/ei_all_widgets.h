@@ -338,7 +338,6 @@ ei_color_t* convert_pick_id_to_pick_color(uint32_t id);
 ei_widgetclass_t LIB;
 ei_widget_t ROOT;
 ei_surface_t SURFACE_ROOT;
-uint32_t COLOR_ID = 1;
 
 
 #endif

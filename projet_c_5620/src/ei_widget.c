@@ -24,6 +24,8 @@
  *
  * @return			The newly created widget, or NULL if there was an error.
  */
+uint32_t COLOR_ID = 1;
+
 ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
 							 ei_widget_t*		parent){
     ei_widgetclass_t *class = ei_widgetclass_from_name(class_name);
