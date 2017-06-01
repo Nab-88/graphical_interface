@@ -9,6 +9,8 @@
 #include "ei_draw.h"
 #include "ei_application.h"
 #include "ei_all_widgets.h"
+#include "ei_event.h"
+#include "ei_widgetclass.h"
 
 
 /**
@@ -45,12 +47,14 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     ei_widget_t *widget = (class -> allocfunc)();
     widget -> wclass = class;
     widget -> screen_location = hw_surface_get_rect(main_window);
-    widget -> pick_id = 0;
     widget -> pick_color = convert_pick_id_to_pick_color(0);
     ROOT = *widget;
+    SORTIE = EI_FALSE;
     (ROOT.wclass -> setdefaultsfunc)(&ROOT);
+    ROOT.pick_id = 0;
     SURFACE_ROOT = main_window;
     SURFACE_PICK = pick_surface;
+    ei_event_set_active_widget(NULL);
     ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 }
@@ -87,7 +91,57 @@ void free_widgets(ei_widget_t* widget){
  */
 void ei_app_run(){
     draw_widgets(ei_app_root_widget ());
-    getchar();
+    ei_event_t event;
+    event.type = ei_ev_none;
+    while (SORTIE == EI_FALSE){
+        hw_event_wait_next(&event);
+        ei_point_t where;
+        ei_widget_t* widget;
+        switch (event.type) {
+            case ei_ev_keydown:
+                if (event.param.key.key_sym == SDLK_ESCAPE) {
+                    ei_app_quit_request();
+                }
+                break;
+            case ei_ev_mouse_buttondown:
+                where = event.param.mouse.where;
+                widget = ei_widget_pick(&where);
+                if (widget != NULL) {
+                    if (strcmp(widget -> wclass -> name,"button") == 0) {
+                        ei_button_handlefunc_t(widget, &event);
+                    }
+                    else if (strcmp(widget -> wclass -> name,"toplevel") == 0) {
+                        ei_toplevel_handlefunc_t(widget, &event);
+                    }
+                }
+                break;
+            case ei_ev_mouse_buttonup:
+                where = event.param.mouse.where;
+                widget = ei_widget_pick(&where);
+                if (widget != NULL) {
+                    if (strcmp(widget -> wclass -> name,"button") == 0) {
+                        ei_button_handlefunc_t(widget, &event);
+                    }
+                    else if (strcmp(widget -> wclass -> name,"toplevel") == 0) {
+                        ei_toplevel_handlefunc_t(widget, &event);
+                    }
+                }
+                break;
+            case ei_ev_mouse_move:
+                widget = ei_event_get_active_widget();
+                if (widget != NULL) {
+                    if (strcmp(widget -> wclass -> name, "button") == 0) {
+                        ei_button_handlefunc_t(widget, &event);
+                    }
+                    else if (strcmp(widget -> wclass -> name,"toplevel") == 0) {
+                        ei_toplevel_handlefunc_t(widget, &event);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 void draw_widgets(ei_widget_t* widget){
@@ -117,7 +171,7 @@ void ei_app_invalidate_rect(ei_rect_t* rect){
  *		when pressing the "Escape" key).
  */
 void ei_app_quit_request(){
-
+    SORTIE = EI_TRUE;
 }
 
 /**
