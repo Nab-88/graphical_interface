@@ -39,8 +39,28 @@ ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
         parent -> children_tail = widget;
     }
     (widget -> wclass -> setdefaultsfunc)(widget);
+    widget -> pick_id = COLOR_ID;
+    widget -> pick_color = convert_pick_id_to_pick_color(COLOR_ID);
+    COLOR_ID ++;
     return widget;
 
+}
+
+/**
+ * @brief	Converts pick_id to pick_color.
+ *		
+ *
+ * @param	id      The pick_id.	
+ *
+ * @return			Returns the pick color.
+ */
+ei_color_t* convert_pick_id_to_pick_color(uint32_t id){
+    ei_color_t* pick = calloc(1, sizeof(ei_color_t));
+    pick -> red = (char) (id << 24);
+    pick -> green = (char) (id << 16);
+    pick -> blue = (char) (id << 8);
+    pick -> alpha = (char) id;
+    return pick;
 }
 
 

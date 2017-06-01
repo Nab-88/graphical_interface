@@ -322,10 +322,23 @@ void draw_widgets(ei_widget_t* widget);
  */
 ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_width, ei_size_t size);
 
+/**
+ * @brief	Converts pick_id to pick_color.
+ *		
+ *
+ * @param	id      The pick_id.	
+ *
+ * @return			Returns the pick color.
+ */
+ei_color_t* convert_pick_id_to_pick_color(uint32_t id);
+
+
 /*Declaration of the library of class of widgets
  */
 ei_widgetclass_t LIB;
 ei_widget_t ROOT;
 ei_surface_t SURFACE_ROOT;
+uint32_t COLOR_ID = 1;
+
 
 #endif
