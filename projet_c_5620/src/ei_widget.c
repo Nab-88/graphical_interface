@@ -48,9 +48,9 @@ ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
 
 /**
  * @brief	Converts pick_id to pick_color.
- *		
  *
- * @param	id      The pick_id.	
+ *
+ * @param	id      The pick_id.
  *
  * @return			Returns the pick color.
  */
