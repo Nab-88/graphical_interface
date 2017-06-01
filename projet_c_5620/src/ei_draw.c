@@ -947,8 +947,6 @@ void ei_draw_button(ei_surface_t surface,
       ei_rect_t* clipper) {
   hw_surface_lock(surface);
   ei_linked_point_t* frame = ei_rounded_frame(rectangle, corner_radius, 1);
-  assert(rectangle.size.width/2 - 2*border_width >= corner_radius);
-  assert(rectangle.size.height/2 - 2*border_width >= corner_radius);
   if (relief == ei_relief_raised) {
     color.blue = min(color.blue + 40, 255);
     color.red = min(color.red + 40, 255);
@@ -992,8 +990,6 @@ if (text != NULL) {
     ei_surface_t text_surface = hw_text_create_surface(*text, text_font, text_color);
     ei_size_t text_size = hw_surface_get_size(text_surface);
     hw_surface_free(text_surface);
-    assert(text_size.width <= rectangle.size.width - 2*border_width);
-    assert(text_size.height <= rectangle.size.height - 2*border_width);
     ei_draw_text(surface, &where, *text, text_font, text_color, clipper);
 } else if (img != NULL) {
     // on utilise copy
@@ -1038,10 +1034,10 @@ void ei_draw_toplevel(ei_surface_t surface,
                 char** title,
                 ei_rect_t* clipper) {
   hw_surface_lock(surface);
-  ei_point_t centre = {rectangle.top_left.x + border_width, rectangle.top_left.y + border_width};
-  ei_linked_point_t* first = ei_arc(centre, border_width, 180, 270);
-  centre.x = centre.x + rectangle.size.width - 2*border_width;
-  ei_linked_point_t* second = ei_arc(centre, border_width, 270, 360);
+  ei_point_t centre = {rectangle.top_left.x + 10, rectangle.top_left.y + 10};
+  ei_linked_point_t* first = ei_arc(centre, 10, 180, 270);
+  centre.x = centre.x + rectangle.size.width - 20;
+  ei_linked_point_t* second = ei_arc(centre, 10, 270, 360);
   ei_point_t corner_southwest = {rectangle.top_left.x, rectangle.top_left.y + rectangle.size.height};
   ei_point_t corner_southeast = {rectangle.top_left.x + rectangle.size.width, corner_southwest.y};
   ei_linked_point_t* third = calloc(1, sizeof(ei_linked_point_t));
@@ -1060,9 +1056,9 @@ void ei_draw_toplevel(ei_surface_t surface,
   third -> next = fourth;
   ei_color_t* color2 = calloc(1, sizeof(ei_color_t));
   fourth -> next = NULL;
-  color2 -> blue = 0;
-  color2 -> red = 255;
-  color2 -> green = 0;
+  color2 -> blue = 110;
+  color2 -> red = 110;
+  color2 -> green = 110;
   color2 -> alpha = 0;
   ei_draw_polygon(surface, first, *color2, clipper);
   free_ei_linked_point(first);
@@ -1080,7 +1076,7 @@ void ei_draw_toplevel(ei_surface_t surface,
   color -> red -= 40;
   color -> green -= 40;
   ei_point_t* where = calloc(1, sizeof(ei_point_t));
-  where -> x = rectangle.top_left.x;
+  where -> x = rectangle.top_left.x + 10;
   where -> y = rectangle.top_left.y - text_size.height - border_width;
   ei_draw_text(surface, where, *title, ei_default_font, &text_color, clipper);
   hw_surface_unlock(surface);

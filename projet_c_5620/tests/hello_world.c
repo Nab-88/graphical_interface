@@ -60,7 +60,7 @@ int ei_main(int argc, char** argv)
 	ei_size_t	window_size		= {320,240};
 	char*		window_title		= "Hello World";
 	ei_color_t	window_color		= {0xA0,0xA0,0xA0, 0xff};
-	int		window_border_width	= 10;
+	int		window_border_width	= 4;
 	ei_bool_t	window_closable		= EI_FALSE;
 	ei_axis_set_t	window_resizable	= ei_axis_none;
 	ei_point_t	window_position		= {30, 10};

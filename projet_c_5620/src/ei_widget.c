@@ -268,12 +268,12 @@ void			ei_button_configure		(ei_widget_t*		widget,
                     if (text != NULL){
                         ei_surface_t text_surface = hw_text_create_surface(*(button -> text), *(button -> text_font), (button -> text_color));
                         ei_size_t text_size = hw_surface_get_size(text_surface);
-                        (widget -> requested_size).width = text_size.width + *(button -> border_width)*2 + 5;
-                        (widget -> requested_size).height = text_size.height + *(button -> border_width)*2 + 5;
+                        (widget -> requested_size).width = text_size.width + *(button -> border_width)*2;
+                        (widget -> requested_size).height = text_size.height + *(button -> border_width)*2;
                     } else if (img != NULL) {
                         ei_size_t size = (**(button -> img_rect)).size;
-                        (widget -> requested_size).width = size.width + *(button -> border_width)*2 + 5;
-                        (widget -> requested_size).height = size.height + *(button -> border_width)*2 + 5;
+                        (widget -> requested_size).width = size.width + *(button -> border_width)*2;
+                        (widget -> requested_size).height = size.height + *(button -> border_width)*2;
                     }
 
 }
