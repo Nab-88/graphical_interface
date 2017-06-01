@@ -1072,9 +1072,6 @@ void ei_draw_toplevel(ei_surface_t surface,
   first = ei_rounded_frame(rectangle, 0, 0);
   ei_draw_polygon(surface, first, *color, clipper);
   free_ei_linked_point(first);
-  color -> blue -= 40;
-  color -> red -= 40;
-  color -> green -= 40;
   ei_point_t* where = calloc(1, sizeof(ei_point_t));
   where -> x = rectangle.top_left.x + 10;
   where -> y = rectangle.top_left.y - text_size.height - border_width;
