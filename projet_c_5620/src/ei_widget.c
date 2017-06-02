@@ -285,37 +285,40 @@ void			ei_button_configure		(ei_widget_t*		widget,
                 ei_button_t* button = (ei_button_t*) widget;
 
 				 if (relief != NULL) {
-					button -> relief = relief;
+					*(button -> relief) = *relief;
 				 }
 				 if (border_width != NULL) {
-					 button -> border_width = border_width;
+					 *(button -> border_width) = *border_width;
 				 }
 				 if (corner_radius != NULL) {
-					 button -> corner_radius = corner_radius;
+					 *(button -> corner_radius) = *corner_radius;
 				 }
 				 if (callback != NULL) {
 				 	button -> callback = callback;
-				 }
+                 }
 				 if (user_param != NULL){
 					 button -> user_param = user_param;
 				 }
 				 if (img_rect != NULL){
-						 button -> img_rect = img_rect;
+                     button -> img_rect = calloc(1, sizeof(ei_rect_t*));
+                     *(button -> img_rect) = *img_rect;
 				 }
 				 if (img_anchor != NULL){
-						 button -> img_anchor = img_anchor;
+                     button -> img_anchor = calloc(1,sizeof(ei_anchor_t)); 
+                     *(button -> img_anchor) = *img_anchor;
 				 }
 				 if (img != NULL){
-							button -> img = img;
+                     button -> img = calloc(1, sizeof(ei_rect_t));
+					*(button -> img) = *img;
 					}
 				 if (text_anchor != NULL){
-					 button -> text_anchor = text_anchor;
+					 (button -> text_anchor) = text_anchor;
 				 }
 				 if (text_color != NULL){
-		 			button -> text_color = text_color;
+		 			*(button -> text_color) = *text_color;
 		 		}
 				if (text_font != NULL){
-					button -> text_font = text_font;
+					*(button -> text_font) = *text_font;
 				}
 				if (text != NULL) {
 					button -> text = text;
@@ -377,22 +380,22 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 	 }
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
 	 if (color != NULL){
-			 toplevel -> color = color;
+			 *(toplevel -> color) = *color;
 	 }
 	 if (border_width != NULL){
-			 toplevel -> border_width = border_width;
+			 *(toplevel -> border_width) = *border_width;
 	 }
 	 if (title != NULL){
 			 toplevel -> title = title;
 	 }
 	 if (closable != NULL){
-			 toplevel -> closable = closable;
+			 *(toplevel -> closable) = *closable;
 	 }
 	 if (resizable != NULL){
-			 toplevel -> resizable = resizable;
+			 *(toplevel -> resizable) = *resizable;
 	 }
 	 if (min_size != NULL){
-			 toplevel -> min_size = min_size;
+			 *(toplevel -> min_size) = *min_size;
 	 }
 }
 
