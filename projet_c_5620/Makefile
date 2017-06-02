@@ -235,8 +235,8 @@ ${OBJDIR}/hello_world.o : ${TESTS}/hello_world.c
 
 # puzzle
 
-puzzle : ${OBJDIR}/puzzle.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o puzzle ${LDFLAGS} ${OBJDIR}/puzzle.o ${LIBEI} ${LIBS}
+puzzle : ${OBJDIR}/puzzle.o ${LIBEIBASE} ${LIBEI} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o
+	${LINK} -o puzzle ${LDFLAGS} ${OBJDIR}/puzzle.o ${LIBEI} ${LIBS} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o
 
 ${OBJDIR}/puzzle.o : ${TESTS}/puzzle.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/puzzle.c -o ${OBJDIR}/puzzle.o
