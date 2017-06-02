@@ -362,5 +362,6 @@ ei_surface_t SURFACE_PICK;
 ei_bool_t SORTIE;
 ei_widget_t* EVENT_ACTIVE;
 ei_point_t* WIN_MOVE;
+ei_default_handle_func_t DEF_FUNC;
 
 #endif
