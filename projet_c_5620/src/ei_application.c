@@ -109,35 +109,20 @@ void ei_app_run(){
                 where = event.param.mouse.where;
                 widget = ei_widget_pick(&where);
                 if (widget != NULL) {
-                    if (strcmp(widget -> wclass -> name,"button") == 0) {
-                        ei_button_handlefunc_t(widget, &event);
-                    }
-                    else if (strcmp(widget -> wclass -> name,"toplevel") == 0) {
-                        ei_toplevel_handlefunc_t(widget, &event);
-                    }
+                    (widget -> wclass -> handlefunc)(widget, &event);
                 }
                 break;
             case ei_ev_mouse_buttonup:
                 where = event.param.mouse.where;
                 widget = ei_event_get_active_widget();
                 if (widget != NULL) {
-                    if (strcmp(widget -> wclass -> name,"button") == 0) {
-                        ei_button_handlefunc_t(widget, &event);
+                    (widget -> wclass -> handlefunc)(widget, &event);
                     }
-                    else if (strcmp(widget -> wclass -> name,"toplevel") == 0) {
-                        ei_toplevel_handlefunc_t(widget, &event);
-                    }
-                }
                 break;
             case ei_ev_mouse_move:
                 widget = ei_event_get_active_widget();
                 if (widget != NULL) {
-                    if (strcmp(widget -> wclass -> name, "button") == 0) {
-                        ei_button_handlefunc_t(widget, &event);
-                    }
-                    else if (strcmp(widget -> wclass -> name,"toplevel") == 0) {
-                        ei_toplevel_handlefunc_t(widget, &event);
-                    }
+                    (widget -> wclass -> handlefunc)(widget, &event);
                 }
                 break;
             default:
