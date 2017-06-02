@@ -854,18 +854,51 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	 ei_point_t where = event -> param.mouse.where;
 	 if (event -> type == ei_ev_mouse_buttondown) {
 		 if (widget != ei_event_get_active_widget()) {
-			 (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+			(widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
 			draw_widgets(widget -> children_head);
 		 }
 		 ei_event_set_active_widget(widget);
+		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
+		 	*WIN_MOVE = where;
+		 }
 	 }
 	 else if (event -> type == ei_ev_mouse_buttonup) {
+		 WIN_MOVE -> x = 0;
+		 WIN_MOVE -> y = 0;
+		 ei_event_set_active_widget(widget -> parent);
 	 }
 	 else if (event -> type == ei_ev_mouse_move) {
+		 if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
+			 int dx = where.x - WIN_MOVE -> x;
+			 int dy = where.y - WIN_MOVE -> y;
+			 int x = widget -> screen_location.top_left.x + dx;
+			 int y = widget -> screen_location.top_left.y + dy;
+			 ei_place(widget, NULL, &x, &y, NULL, NULL, NULL, NULL,NULL,NULL);
+			 ei_placer_run(widget);
+			 *WIN_MOVE = where;
+			 draw_widgets(widget -> parent);
+			  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+			  draw_widgets(widget -> children_head);
+		 }
 	 }
 	 return EI_TRUE;
+}
+
+ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event) {
+	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	ei_point_t where = event -> param.mouse.where;
+	int x_min, x_max, y_min, y_max;
+	x_min = widget -> screen_location.top_left.x;
+	y_min = widget -> screen_location.top_left.y;
+	x_max = widget -> screen_location.top_left.x + widget -> screen_location.size.width;
+	y_max = y_min + 30 + *(toplevel -> border_width);
+	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
+		return EI_TRUE;
+	}
+	return EI_FALSE;
 }
 
 /**
