@@ -20,12 +20,12 @@ typedef struct ei_frame_t {
     ei_widget_t widget;
 
     ei_size_t* requested_size;
-    const ei_color_t* color;
+    ei_color_t* color;
     int* border_width;
     ei_relief_t* relief;
     char **text;
     ei_font_t* text_font;
-    const ei_color_t* text_color;
+    ei_color_t* text_color;
     ei_anchor_t* text_anchor;
     ei_surface_t* img;
     ei_rect_t** img_rect;
@@ -40,7 +40,7 @@ typedef struct ei_button_t {
     ei_widget_t widget;
 
     ei_size_t* requested_size;
-    const ei_color_t* color;
+    ei_color_t* color;
     int*		border_width;
     int*		corner_radius;
     ei_relief_t*	relief;
