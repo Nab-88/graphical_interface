@@ -300,10 +300,11 @@ void			ei_button_configure		(ei_widget_t*		widget,
         *(button -> corner_radius) = *corner_radius;
     }
     if (callback != NULL) {
-        button -> callback = callback;
+        button -> callback = malloc(sizeof(ei_callback_t));
+        *(button -> callback) = *callback;
     }
     if (user_param != NULL){
-        button -> user_param = user_param;
+        *(button -> user_param) = *user_param;
     }
     if (img_rect != NULL){
         button -> img_rect = calloc(1, sizeof(ei_rect_t*));
@@ -748,6 +749,7 @@ void	ei_button_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     ei_color_t* color = malloc(sizeof(ei_color_t));
     *color = ei_default_background_color;
     button -> color = color;
+    button -> user_param = calloc(1, sizeof(void *));
 	int* border_width = calloc(1, sizeof(int));
     button -> border_width = border_width;
 	ei_relief_t *relief = malloc(sizeof(ei_relief_t));
@@ -946,6 +948,9 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 		*relief = ei_relief_sunken;
 		ei_change_relief_button(relief, widget);
 		ei_event_set_active_widget(widget);
+        if (button -> callback != NULL){
+            (*(button -> callback))(widget, event, *(button -> user_param));
+        }
 	}
 	else if (event -> type == ei_ev_mouse_buttonup) {
 		*relief = ei_relief_raised;
