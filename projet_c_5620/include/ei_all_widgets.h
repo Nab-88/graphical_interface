@@ -352,6 +352,12 @@ void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget);
 
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event);
 
+/**
+ * @brief   Gets the previous widget among the sons of its parent.
+ *
+ * @param   widget  The widget that is concerned.
+ */
+ei_widget_t*    ei_widget_previous (ei_widget_t* widget);
 
 /*Declaration of the library of class of widgets
  */

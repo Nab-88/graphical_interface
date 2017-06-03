@@ -89,6 +89,40 @@ ei_widgetclass_t*	ei_widgetclass_from_name	(ei_widgetclass_name_t name){
  * @param	widget		The widget that is to be destroyed.
  */
 void			ei_widget_destroy		(ei_widget_t*		widget){
+    free_widgets(widget -> children_tail);
+    ei_widget_t* parent = (widget -> parent);
+    ei_widget_t* previous = ei_widget_previous(widget);
+    if (previous == NULL){
+        parent -> children_head = widget -> next_sibling;
+    } else if ( widget == parent -> children_tail) {
+        parent -> children_tail = previous;
+        previous -> next_sibling = NULL;
+    } else {
+        previous -> next_sibling = widget -> next_sibling;
+    }
+    (widget -> wclass -> releasefunc)(widget);
+
+    
+}
+
+ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
+    ei_widget_t* prev = (widget -> parent) -> children_head;
+    ei_widget_t* parent = (widget -> parent);
+    if (widget == parent -> children_head){
+        return NULL;
+    }
+    while (((prev -> next_sibling) != widget) && (prev -> next_sibling) != (parent -> children_tail) && (prev -> next_sibling) != NULL){
+        prev = prev -> next_sibling;
+    }
+    if (prev -> next_sibling != parent -> children_tail){
+        return prev;
+    } else {
+        if (widget == parent -> children_tail) {
+            return prev;
+        } else {
+            return NULL;
+        }
+    }
 }
 
 
@@ -509,7 +543,7 @@ void*	ei_button_allocfunc_t		(){
 
 void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
     ei_frame_t* frame = (ei_frame_t*) widget;
-    free(widget -> wclass);
+    //free(widget -> wclass);
     free(frame);
 }
 
@@ -524,7 +558,7 @@ void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
 
 void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
     ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-    free(widget -> wclass);
+    //free(widget -> wclass);
     free(toplevel);
 }
 
@@ -539,7 +573,7 @@ void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
 
 void	ei_button_releasefunc_t	(struct ei_widget_t*	widget){
     ei_button_t* button = (ei_button_t*) widget;
-    free(widget -> wclass);
+    //free(widget -> wclass);
     free(button);
 }
 /**
