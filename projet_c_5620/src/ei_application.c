@@ -116,7 +116,6 @@ void ei_app_run(){
         }
         if (event.type == ei_ev_mouse_move) {
           widget = ei_event_get_active_widget();
-          widget = NULL;
           if (widget != NULL) {
               (widget -> wclass -> handlefunc)(widget, &event);
           }
