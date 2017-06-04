@@ -9,6 +9,7 @@
 
 #include "ei_all_widgets.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "ei_arc.h"
 #include "ei_application.h"
@@ -26,6 +27,19 @@
  * @return			The newly created widget, or NULL if there was an error.
  */
 uint32_t COLOR_ID = 1;
+
+/*
+ * button_press --
+ *
+ *	Callback called when a user clicks on the button.
+ */
+ void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
+ {
+ 	ei_widget_destroy(widget -> parent);
+	printf("J'ai détruit le widget !!! hihihi\n");
+	ei_event_set_active_widget(NULL);
+ }
+
 
 ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
 							 ei_widget_t*		parent){
@@ -101,8 +115,7 @@ void			ei_widget_destroy		(ei_widget_t*		widget){
         previous -> next_sibling = widget -> next_sibling;
     }
     (widget -> wclass -> releasefunc)(widget);
-
-    
+		draw_widgets(parent);
 }
 
 ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
@@ -346,7 +359,7 @@ void			ei_button_configure		(ei_widget_t*		widget,
         **(button -> img_rect) = **img_rect;
     }
     if (img_anchor != NULL){
-        button -> img_anchor = calloc(1,sizeof(ei_anchor_t)); 
+        button -> img_anchor = calloc(1,sizeof(ei_anchor_t));
         *(button -> img_anchor) = *img_anchor;
     }
     if (img != NULL){
@@ -441,6 +454,9 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 	 }
 	 if (closable != NULL){
 			 *(toplevel -> closable) = *closable;
+	 }
+	 if (*(toplevel -> closable) == EI_TRUE) {
+	 		FIRST_DRAW ++;
 	 }
 	 if (resizable != NULL){
 			 *(toplevel -> resizable) = *resizable;
@@ -715,6 +731,8 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
 	return where;
 }
 
+
+
 /**
  * \brief	A function that draws widgets of a class.
  *
@@ -734,12 +752,40 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 	 ei_color_t* pick_color = widget -> pick_color;
 	 int* border_width = toplevel -> border_width;
 	 char** title = toplevel -> title;
-	 char* nothing = calloc(1, sizeof(char));
-	 ei_bool_t* closable = toplevel -> closable;
 	 ei_axis_set_t* resizable = toplevel -> resizable;
 	 ei_color_t window_color = {110, 110, 110, 0};
 	 ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
 	 ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
+	 if (*(toplevel -> closable) == EI_TRUE && FIRST_DRAW != 0) {
+		 ei_point_t point;
+		 ei_size_t size;
+		 point.x = 10;
+		 point.y = 10;
+		 ei_anchor_t anchor = ei_anc_none;
+		 size.width = 16;
+		 size.height = 16;
+		 ei_widget_t* closable = ei_widget_create("button", widget);
+		 ei_color_t* red = calloc(1, sizeof(ei_color_t));
+		 red -> red = 255;
+		 int width = 3;
+		 int radius = 10;
+		 ei_callback_t callback = button_press2;
+		 ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
+		 ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
+		 FIRST_DRAW --;
+	 }
+	 if (*resizable != ei_axis_none) {
+			ei_rect_t* rect_resiz = malloc(sizeof(ei_rect_t));
+			rect_resiz ->top_left.x = rectangle.top_left.x + rectangle.size.width - 10 - *border_width;
+			rect_resiz ->top_left.y = rectangle.top_left.y + rectangle.size.height - 10 - *border_width;
+			rect_resiz ->size.width = 10 + *border_width;
+			rect_resiz ->size.height = 10 + *border_width;
+			ei_point_t* where = calloc(1, sizeof(ei_point_t));
+			*where = (ei_point_t) {0, 0};
+			ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none, NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
+			ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
+	 }
+
  }
 
 /**
@@ -918,11 +964,29 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
 		 	*WIN_MOVE = where;
-		 }
+		} else if (*(toplevel -> resizable) != ei_axis_none) {
+			if (is_on_the_square(widget, event) == EI_TRUE) {
+				switch (*(toplevel -> resizable)) {
+					case ei_axis_both:
+						*WIN_RESIZ = where;
+						break;
+					case ei_axis_x:
+						*WIN_RESIZ = (ei_point_t) {where.x, 0};
+						break;
+					case ei_axis_y:
+						*WIN_RESIZ = (ei_point_t) {0, where.y};
+						break;
+					default:
+						break;
+				}
+			}
+		}
 	 }
 	 else if (event -> type == ei_ev_mouse_buttonup) {
 		 WIN_MOVE -> x = 0;
 		 WIN_MOVE -> y = 0;
+		 WIN_RESIZ -> x = 0;
+		 WIN_RESIZ -> y = 0;
 		 ei_event_set_active_widget(widget -> parent);
 		 (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
 		 draw_widgets(widget -> children_head);
@@ -941,6 +1005,36 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		  //  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
 		  //  draw_widgets(widget -> children_head);
 		 }
+		 if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
+			 int dx, dy;
+			 if (WIN_RESIZ -> x != 0) {
+				 dx = where.x - WIN_RESIZ -> x;
+				 WIN_RESIZ -> x = where.x;
+				} else {
+					dx = 0;
+				}
+				if (WIN_RESIZ -> y != 0) {
+					dy = where.y - WIN_RESIZ -> y;
+					WIN_RESIZ -> y = where.y;
+				} else {
+					dy = 0;
+				}
+			 int x = widget -> screen_location.top_left.x;
+ 			 int y = widget -> screen_location.top_left.y;
+			 int width = widget -> screen_location.size.width + dx;
+			 int height = widget -> screen_location.size.height + dy;
+			 if (width < 160) {
+			 	width = 160;
+			 }
+			 if (height < 120) {
+			 	height = 120;
+			 }
+			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
+			 ei_placer_run(widget);
+			 draw_widgets(widget -> parent);
+			//  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+			//  draw_widgets(widget -> children_head);
+		 }
 	 }
 	 return EI_TRUE;
 }
@@ -953,6 +1047,20 @@ ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event) {
 	y_min = widget -> screen_location.top_left.y;
 	x_max = widget -> screen_location.top_left.x + widget -> screen_location.size.width;
 	y_max = y_min + 30 + *(toplevel -> border_width);
+	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
+		return EI_TRUE;
+	}
+	return EI_FALSE;
+}
+
+ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event) {
+	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	ei_point_t where = event -> param.mouse.where;
+	int x_min, x_max, y_min, y_max;
+	x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10;
+	y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10;
+	x_max = x_min + 10;
+	y_max = y_min + 10;
 	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
 		return EI_TRUE;
 	}
