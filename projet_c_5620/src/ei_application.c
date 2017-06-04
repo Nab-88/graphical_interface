@@ -96,75 +96,80 @@ void free_widgets(ei_widget_t* widget){
  *		\ref ei_app_quit_request is called.
  */
 void ei_app_run(){
-    draw_widgets(ei_app_root_widget ());
-    ei_event_t event;
-    event.type = ei_ev_none;
-    while (SORTIE == EI_FALSE){
-        hw_event_wait_next(&event);
-        ei_point_t where;
-        ei_widget_t* widget;
-        ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
-        if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup){
-            where = event.param.mouse.where;
-            widget = ei_widget_pick(&where);
-            if (widget != NULL) {
-                (widget -> wclass -> handlefunc)(widget, &event);
-            }
-            else{
-              def_func(&event);
-            }
-        }
-        if (event.type == ei_ev_mouse_move) {
-          widget = ei_event_get_active_widget();
-          widget = NULL;
-          if (widget != NULL) {
-              (widget -> wclass -> handlefunc)(widget, &event);
-          }
-          else{
-            def_func(&event);
-          }
-        }
-        else{
-          def_func(&event);
-        }
-      if (DRAW == EI_TRUE){
-          DRAW = EI_FALSE;
-          draw_widgets(ei_app_root_widget());
-      }
-      } 
-}
+  draw_widgets(ei_app_root_widget ());
+  ei_event_t event;
+  event.type = ei_ev_none;
+  while (SORTIE == EI_FALSE){
+      hw_event_wait_next(&event);
+      ei_point_t where;
+      ei_widget_t* widget;
+      ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
+//      if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup){
+//          where = event.param.mouse.where;
+//          widget = ei_widget_pick(&where);
+//          if (widget != NULL) {
+//              (widget -> wclass -> handlefunc)(widget, &event);
+//          }
+//          else{
+//            def_func(&event);
+//          }
+//      }
+//      if (event.type == ei_ev_mouse_move) {
+//        widget = ei_event_get_active_widget();
+//        widget = NULL;
+//        if (widget != NULL) {
+//            (widget -> wclass -> handlefunc)(widget, &event);
+//        }
+//        else{
+//          def_func(&event);
+//        }
+//      }
+//      else{
+//        def_func(&event);
+//      }
+//    if (DRAW == EI_TRUE){
+//        DRAW = EI_FALSE;
+//        draw_widgets(ei_app_root_widget());
+//    }
+//    } 
+//}
     //     }
 
-    //     switch (event.type) {
-    //         case ei_ev_keydown:
-    //             if (event.param.key.key_sym == SDLK_ESCAPE) {
-    //                 ei_app_quit_request();
-    //             }
-    //             break;
-    //         case ei_ev_mouse_buttondown:
-    //             where = event.param.mouse.where;
-    //             widget = ei_widget_pick(&where);
-    //             if (widget != NULL) {
-    //                 (widget -> wclass -> handlefunc)(widget, &event);
-    //             }
-    //             break;
-    //         case ei_ev_mouse_buttonup:
-    //             where = event.param.mouse.where;
-    //             widget = ei_event_get_active_widget();
-    //             if (widget != NULL) {
-    //                 (widget -> wclass -> handlefunc)(widget, &event);
-    //                 }
-    //             break;
-    //         case ei_ev_mouse_move:
-    //             widget = ei_event_get_active_widget();
-    //             if (widget != NULL) {
-    //                 (widget -> wclass -> handlefunc)(widget, &event);
-    //             }
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // }
+         switch (event.type) {
+             case ei_ev_keydown:
+                 if (event.param.key.key_sym == SDLK_ESCAPE) {
+                     ei_app_quit_request();
+                 }
+                 break;
+             case ei_ev_mouse_buttondown:
+                 where = event.param.mouse.where;
+                 widget = ei_widget_pick(&where);
+                 if (widget != NULL) {
+                     (widget -> wclass -> handlefunc)(widget, &event);
+                 }
+                 break;
+             case ei_ev_mouse_buttonup:
+                 where = event.param.mouse.where;
+                 widget = ei_event_get_active_widget();
+                 if (widget != NULL) {
+                     (widget -> wclass -> handlefunc)(widget, &event);
+                     }
+                 break;
+             case ei_ev_mouse_move:
+                 widget = ei_event_get_active_widget();
+                 if (widget != NULL) {
+                     (widget -> wclass -> handlefunc)(widget, &event);
+                 }
+                 break;
+             default:
+                 break;
+         }
+     if (DRAW == EI_TRUE){
+         DRAW = EI_FALSE;
+         draw_widgets(ei_app_root_widget());
+     }
+     }
+}
 
 
 void draw_widgets(ei_widget_t* widget){

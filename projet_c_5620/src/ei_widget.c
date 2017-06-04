@@ -114,8 +114,8 @@ void			ei_widget_destroy		(ei_widget_t*		widget){
     } else {
         previous -> next_sibling = widget -> next_sibling;
     }
-    (widget -> wclass -> releasefunc)(widget);
-		draw_widgets(parent);
+    //(widget -> wclass -> releasefunc)(widget);
+		//draw_widgets(parent);
 }
 
 ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
@@ -1028,7 +1028,7 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 			 }
 			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
 			 ei_placer_run(widget);
-			 draw_widgets(widget -> parent);
+			 //draw_widgets(widget -> parent);
 			//  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
 			//  draw_widgets(widget -> children_head);
 		 }
