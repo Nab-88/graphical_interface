@@ -1,5 +1,7 @@
 #include "ei_event.h"
+#include <stdlib.h>
 #include "ei_all_widgets.h"
+#include "ei_application.h"
 /**
  *  @file	ei_event.c
  *  @brief	Allows the binding and unbinding of callbacks to events.
@@ -18,6 +20,20 @@
  */
 void ei_event_set_active_widget(ei_widget_t* widget){
     EVENT_ACTIVE = widget;
+    if (widget != NULL && widget != ei_app_root_widget()){
+        ei_widget_t* parent = (widget -> parent);
+        ei_widget_t* previous = ei_widget_previous(widget);
+        if (previous == NULL && widget != parent -> children_tail){
+            parent -> children_head = widget -> next_sibling;
+        } else if ( widget == parent -> children_tail) {
+            return;
+        } else {
+            previous -> next_sibling = widget -> next_sibling;
+        }
+        parent -> children_tail -> next_sibling = widget;
+        parent -> children_tail = widget;
+        widget -> next_sibling = NULL;
+    }
 }
 
 /**
