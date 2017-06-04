@@ -759,7 +759,7 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 	 if (*(toplevel -> closable) == EI_TRUE && FIRST_DRAW != 0) {
 		 ei_point_t point;
 		 ei_size_t size;
-		 point.x = rectangle.size.width - 26;
+		 point.x = 10;
 		 point.y = 10;
 		 ei_anchor_t anchor = ei_anc_none;
 		 size.width = 16;
@@ -963,11 +963,29 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
 		 	*WIN_MOVE = where;
-		 }
+		} else if (*(toplevel -> resizable) != ei_axis_none) {
+			if (is_on_the_square(widget, event) == EI_TRUE) {
+				switch (*(toplevel -> resizable)) {
+					case ei_axis_both:
+						*WIN_RESIZ = where;
+						break;
+					case ei_axis_x:
+						*WIN_RESIZ = (ei_point_t) {where.x, 0};
+						break;
+					case ei_axis_y:
+						*WIN_RESIZ = (ei_point_t) {0, where.y};
+						break;
+					default:
+						break;
+				}
+			}
+		}
 	 }
 	 else if (event -> type == ei_ev_mouse_buttonup) {
 		 WIN_MOVE -> x = 0;
 		 WIN_MOVE -> y = 0;
+		 WIN_RESIZ -> x = 0;
+		 WIN_RESIZ -> y = 0;
 		 ei_event_set_active_widget(widget -> parent);
          DRAW = EI_TRUE;
 
@@ -984,6 +1002,36 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 			 ei_placer_run(widget);
 			 *WIN_MOVE = where;
 		 }
+		 if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
+			 int dx, dy;
+			 if (WIN_RESIZ -> x != 0) {
+				 dx = where.x - WIN_RESIZ -> x;
+				 WIN_RESIZ -> x = where.x;
+				} else {
+					dx = 0;
+				}
+				if (WIN_RESIZ -> y != 0) {
+					dy = where.y - WIN_RESIZ -> y;
+					WIN_RESIZ -> y = where.y;
+				} else {
+					dy = 0;
+				}
+			 int x = widget -> screen_location.top_left.x;
+ 			 int y = widget -> screen_location.top_left.y;
+			 int width = widget -> screen_location.size.width + dx;
+			 int height = widget -> screen_location.size.height + dy;
+			 if (width < 160) {
+			 	width = 160;
+			 }
+			 if (height < 120) {
+			 	height = 120;
+			 }
+			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
+			 ei_placer_run(widget);
+			 draw_widgets(widget -> parent);
+			//  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+			//  draw_widgets(widget -> children_head);
+		 }
 	 }
 	 return EI_TRUE;
 }
@@ -996,6 +1044,20 @@ ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event) {
 	y_min = widget -> screen_location.top_left.y;
 	x_max = widget -> screen_location.top_left.x + widget -> screen_location.size.width;
 	y_max = y_min + 30 + *(toplevel -> border_width);
+	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
+		return EI_TRUE;
+	}
+	return EI_FALSE;
+}
+
+ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event) {
+	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+	ei_point_t where = event -> param.mouse.where;
+	int x_min, x_max, y_min, y_max;
+	x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10;
+	y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10;
+	x_max = x_min + 10;
+	y_max = y_min + 10;
 	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
 		return EI_TRUE;
 	}

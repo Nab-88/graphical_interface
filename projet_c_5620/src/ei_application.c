@@ -58,6 +58,9 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     SURFACE_ROOT = main_window;
     SURFACE_PICK = pick_surface;
     FIRST_DRAW = 0;
+    WIN_RESIZ = malloc(sizeof(ei_point_t));
+    WIN_RESIZ -> x = 0;
+    WIN_RESIZ -> y = 0;
     ei_event_set_active_widget(NULL);
     ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }
@@ -100,37 +103,65 @@ void ei_app_run(){
         hw_event_wait_next(&event);
         ei_point_t where;
         ei_widget_t* widget;
-        switch (event.type) {
-            case ei_ev_keydown:
-                if (event.param.key.key_sym == SDLK_ESCAPE) {
-                    ei_app_quit_request();
-                }
-                break;
-            case ei_ev_mouse_buttondown:
-                where = event.param.mouse.where;
-                widget = ei_widget_pick(&where);
-                if (widget != NULL) {
-                    (widget -> wclass -> handlefunc)(widget, &event);
-                }
-                break;
-            case ei_ev_mouse_buttonup:
-                where = event.param.mouse.where;
-                widget = ei_event_get_active_widget();
-                if (widget != NULL) {
-                    (widget -> wclass -> handlefunc)(widget, &event);
-                    }
-                break;
-            case ei_ev_mouse_move:
-                widget = ei_event_get_active_widget();
-                if (widget != NULL) {
-                    (widget -> wclass -> handlefunc)(widget, &event);
-                }
-                break;
-            default:
-                break;
+        ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
+        if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup){
+            where = event.param.mouse.where;
+            widget = ei_widget_pick(&where);
+            if (widget =! NULL) {
+                (widget -> wclass -> handlefunc)(widget, &event);
+            }
+            else{
+              def_func(&event);
+            }
         }
-    }
+        if (event.type == ei_ev_mouse_move) {
+          widget = ei_event_get_active_widget();
+          widget = NULL;
+          if (widget =! NULL) {
+              (widget -> wclass -> handlefunc)(widget, &event);
+          }
+          else{
+            def_func(&event);
+          }
+        }
+        else{
+          def_func(&event);
+        }
+      } 
 }
+    //     }
+
+    //     switch (event.type) {
+    //         case ei_ev_keydown:
+    //             if (event.param.key.key_sym == SDLK_ESCAPE) {
+    //                 ei_app_quit_request();
+    //             }
+    //             break;
+    //         case ei_ev_mouse_buttondown:
+    //             where = event.param.mouse.where;
+    //             widget = ei_widget_pick(&where);
+    //             if (widget != NULL) {
+    //                 (widget -> wclass -> handlefunc)(widget, &event);
+    //             }
+    //             break;
+    //         case ei_ev_mouse_buttonup:
+    //             where = event.param.mouse.where;
+    //             widget = ei_event_get_active_widget();
+    //             if (widget != NULL) {
+    //                 (widget -> wclass -> handlefunc)(widget, &event);
+    //                 }
+    //             break;
+    //         case ei_ev_mouse_move:
+    //             widget = ei_event_get_active_widget();
+    //             if (widget != NULL) {
+    //                 (widget -> wclass -> handlefunc)(widget, &event);
+    //             }
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // }
+
 
 void draw_widgets(ei_widget_t* widget){
     while (widget != NULL){
