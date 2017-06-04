@@ -104,7 +104,7 @@ void ei_app_run(){
         ei_point_t where;
         ei_widget_t* widget;
         ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
-        if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup || event.type == ei_ev_mouse_move){
+        if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup){
             where = event.param.mouse.where;
             widget = ei_widget_pick(&where);
             if (widget =! NULL) {
@@ -114,10 +114,20 @@ void ei_app_run(){
               def_func(&event);
             }
         }
+        if (event.type == ei_ev_mouse_move) {
+          widget = ei_event_get_active_widget();
+          widget = NULL;
+          if (widget =! NULL) {
+              (widget -> wclass -> handlefunc)(widget, &event);
+          }
+          else{
+            def_func(&event);
+          }
+        }
         else{
           def_func(&event);
         }
-      }
+      } 
 }
     //     }
 
