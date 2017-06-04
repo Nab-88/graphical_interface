@@ -57,6 +57,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     WIN_MOVE -> y = 0;
     SURFACE_ROOT = main_window;
     SURFACE_PICK = pick_surface;
+    FIRST_DRAW = 0;
     ei_event_set_active_widget(NULL);
     ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 }

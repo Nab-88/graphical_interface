@@ -361,6 +361,7 @@ ei_widget_t*    ei_widget_previous (ei_widget_t* widget);
 
 /*Declaration of the library of class of widgets
  */
+int FIRST_DRAW;
 ei_widgetclass_t LIB;
 ei_widget_t ROOT;
 ei_surface_t SURFACE_ROOT;

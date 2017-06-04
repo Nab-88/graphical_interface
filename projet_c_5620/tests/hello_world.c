@@ -71,8 +71,8 @@ int ei_main(int argc, char** argv)
     char*		window_title2		= "Hello World";
     ei_color_t	window_color2		= {0xA0,0xA0,0xA0, 0xff};
     int		window_border_width2	= 4;
-    ei_bool_t	window_closable2		= EI_FALSE;
-    ei_axis_set_t	window_resizable2	= ei_axis_none;
+    ei_bool_t	window_closable2		= EI_TRUE;
+    ei_axis_set_t	window_resizable2	= ei_axis_both;
 
 	/* Create the application and change the color of the background. */
 	ei_app_create(&screen_size, EI_FALSE);
