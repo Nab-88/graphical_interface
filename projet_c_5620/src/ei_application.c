@@ -107,7 +107,7 @@ void ei_app_run(){
         if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup){
             where = event.param.mouse.where;
             widget = ei_widget_pick(&where);
-            if (widget =! NULL) {
+            if (widget != NULL) {
                 (widget -> wclass -> handlefunc)(widget, &event);
             }
             else{
@@ -117,7 +117,7 @@ void ei_app_run(){
         if (event.type == ei_ev_mouse_move) {
           widget = ei_event_get_active_widget();
           widget = NULL;
-          if (widget =! NULL) {
+          if (widget != NULL) {
               (widget -> wclass -> handlefunc)(widget, &event);
           }
           else{
@@ -127,6 +127,10 @@ void ei_app_run(){
         else{
           def_func(&event);
         }
+      if (DRAW == EI_TRUE){
+          DRAW = EI_FALSE;
+          draw_widgets(ei_app_root_widget());
+      }
       } 
 }
     //     }
