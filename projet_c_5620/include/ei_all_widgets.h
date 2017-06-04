@@ -351,7 +351,7 @@ ei_color_t* convert_pick_id_to_pick_color(uint32_t id);
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget);
 
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event);
-
+ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event);
 /**
  * @brief   Gets the previous widget among the sons of its parent.
  *
@@ -369,6 +369,7 @@ ei_surface_t SURFACE_PICK;
 ei_bool_t SORTIE;
 ei_widget_t* EVENT_ACTIVE;
 ei_point_t* WIN_MOVE;
+ei_point_t* WIN_RESIZ;
 ei_default_handle_func_t DEF_FUNC;
 
 #endif
