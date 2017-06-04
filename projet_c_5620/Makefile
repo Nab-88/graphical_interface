@@ -244,8 +244,8 @@ ${OBJDIR}/puzzle.o : ${TESTS}/puzzle.c
 
 # two048
 
-two048 : ${OBJDIR}/two048.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o two048 ${LDFLAGS} ${OBJDIR}/two048.o ${LIBEI} ${LIBS}
+two048 : ${OBJDIR}/two048.o ${LIBEIBASE} ${LIBEI} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o
+	${LINK} -o two048 ${LDFLAGS} ${OBJDIR}/two048.o ${LIBEI} ${LIBS}  ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o
 
 ${OBJDIR}/two048.o : ${TESTS}/two048.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/two048.c -o ${OBJDIR}/two048.o

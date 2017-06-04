@@ -20,12 +20,12 @@ typedef struct ei_frame_t {
     ei_widget_t widget;
 
     ei_size_t* requested_size;
-    const ei_color_t* color;
+    ei_color_t* color;
     int* border_width;
     ei_relief_t* relief;
     char **text;
     ei_font_t* text_font;
-    const ei_color_t* text_color;
+    ei_color_t* text_color;
     ei_anchor_t* text_anchor;
     ei_surface_t* img;
     ei_rect_t** img_rect;
@@ -40,7 +40,7 @@ typedef struct ei_button_t {
     ei_widget_t widget;
 
     ei_size_t* requested_size;
-    const ei_color_t* color;
+    ei_color_t* color;
     int*		border_width;
     int*		corner_radius;
     ei_relief_t*	relief;
@@ -352,6 +352,12 @@ void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget);
 
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event);
 
+/**
+ * @brief   Gets the previous widget among the sons of its parent.
+ *
+ * @param   widget  The widget that is concerned.
+ */
+ei_widget_t*    ei_widget_previous (ei_widget_t* widget);
 
 /*Declaration of the library of class of widgets
  */
@@ -362,5 +368,6 @@ ei_surface_t SURFACE_PICK;
 ei_bool_t SORTIE;
 ei_widget_t* EVENT_ACTIVE;
 ei_point_t* WIN_MOVE;
+ei_default_handle_func_t DEF_FUNC;
 
 #endif

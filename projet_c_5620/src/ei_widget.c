@@ -90,6 +90,40 @@ ei_widgetclass_t*	ei_widgetclass_from_name	(ei_widgetclass_name_t name){
  * @param	widget		The widget that is to be destroyed.
  */
 void			ei_widget_destroy		(ei_widget_t*		widget){
+    free_widgets(widget -> children_tail);
+    ei_widget_t* parent = (widget -> parent);
+    ei_widget_t* previous = ei_widget_previous(widget);
+    if (previous == NULL){
+        parent -> children_head = widget -> next_sibling;
+    } else if ( widget == parent -> children_tail) {
+        parent -> children_tail = previous;
+        previous -> next_sibling = NULL;
+    } else {
+        previous -> next_sibling = widget -> next_sibling;
+    }
+    (widget -> wclass -> releasefunc)(widget);
+
+    
+}
+
+ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
+    ei_widget_t* prev = (widget -> parent) -> children_head;
+    ei_widget_t* parent = (widget -> parent);
+    if (widget == parent -> children_head){
+        return NULL;
+    }
+    while (((prev -> next_sibling) != widget) && (prev -> next_sibling) != (parent -> children_tail) && (prev -> next_sibling) != NULL){
+        prev = prev -> next_sibling;
+    }
+    if (prev -> next_sibling != parent -> children_tail){
+        return prev;
+    } else {
+        if (widget == parent -> children_tail) {
+            return prev;
+        } else {
+            return NULL;
+        }
+    }
 }
 
 
@@ -204,31 +238,37 @@ void			ei_frame_configure		(ei_widget_t*		widget,
     }
     ei_frame_t* frame = (ei_frame_t*) widget;
     if (color != NULL){
-        frame -> color = color;
+        *(frame -> color) = *color;
     }
     if (border_width != NULL){
-        frame -> border_width = border_width;
+        *(frame -> border_width) = *border_width;
     }
     if (relief != NULL){
-        frame -> relief = relief;
+        *(frame -> relief) = *relief;
     }
     if (text != NULL){
-        frame -> text = text;
+        frame -> text = calloc(1, sizeof(char*));
+        *(frame -> text) = calloc(strlen(*text), sizeof(char));
+        strncpy(*(frame -> text), *text, strlen(*text));
     }
     if (text_font != NULL){
-        frame -> text_font = text_font;
+        *(frame -> text_font) = *text_font;
     }
     if (text_color != NULL){
-        frame -> text_color = text_color;
+        *(frame -> text_color) = *text_color;
     }
     if (img != NULL){
-        frame -> img = img;
+        frame -> img = malloc(sizeof(ei_surface_t));
+        *(frame -> img) = *img;
     }
     if (img_rect != NULL){
-        frame -> img_rect = img_rect;
+        frame -> img_rect = calloc(1, sizeof(ei_rect_t*));
+        *(frame -> img_rect) = calloc(1, sizeof(ei_rect_t));
+        **(frame -> img_rect) = **img_rect;
     }
     if (img_anchor != NULL){
-        frame -> img_anchor = img_anchor;
+        frame -> img_anchor = malloc(sizeof(ei_anchor_t));
+        *(frame -> img_anchor) = *img_anchor;
     }
     if (requested_size != NULL){
         widget -> requested_size = *requested_size;
@@ -242,8 +282,8 @@ void			ei_frame_configure		(ei_widget_t*		widget,
             ei_size_t size = (**(frame -> img_rect)).size;
             (widget -> requested_size).width = size.width + *(frame -> border_width)*2 + 5;
             (widget -> requested_size).height = size.height + *(frame -> border_width)*2 + 5;
-                    }
-}
+        }
+    }
 }
 
 
@@ -268,64 +308,75 @@ void			ei_frame_configure		(ei_widget_t*		widget,
  *				when called. Defaults to NULL.
  */
 void			ei_button_configure		(ei_widget_t*		widget,
-							 ei_size_t*		requested_size,
-							 const ei_color_t*	color,
-							 int*			border_width,
-							 int*			corner_radius,
-							 ei_relief_t*		relief,
-							 char**			text,
-							 ei_font_t*		text_font,
-							 ei_color_t*		text_color,
-							 ei_anchor_t*		text_anchor,
-							 ei_surface_t*		img,
-							 ei_rect_t**		img_rect,
-							 ei_anchor_t*		img_anchor,
-							 ei_callback_t*		callback,
-							 void**			user_param){
+        ei_size_t*		requested_size,
+        const ei_color_t*	color,
+        int*			border_width,
+        int*			corner_radius,
+        ei_relief_t*		relief,
+        char**			text,
+        ei_font_t*		text_font,
+        ei_color_t*		text_color,
+        ei_anchor_t*		text_anchor,
+        ei_surface_t*		img,
+        ei_rect_t**		img_rect,
+        ei_anchor_t*		img_anchor,
+        ei_callback_t*		callback,
+        void**			user_param){
 
-                ei_button_t* button = (ei_button_t*) widget;
+    ei_button_t* button = (ei_button_t*) widget;
 
-				 if (relief != NULL) {
-					button -> relief = relief;
-				 }
-				 if (border_width != NULL) {
-					 button -> border_width = border_width;
-				 }
-				 if (corner_radius != NULL) {
-					 button -> corner_radius = corner_radius;
-				 }
-				 if (callback != NULL) {
-				 	button -> callback = callback;
-				 }
-				 if (user_param != NULL){
-					 button -> user_param = user_param;
-				 }
-				 if (img_rect != NULL){
-						 button -> img_rect = img_rect;
-				 }
-				 if (img_anchor != NULL){
-						 button -> img_anchor = img_anchor;
-				 }
-				 if (img != NULL){
-							button -> img = img;
-					}
-				 if (text_anchor != NULL){
-					 button -> text_anchor = text_anchor;
-				 }
-				 if (text_color != NULL){
-		 			button -> text_color = text_color;
-		 		}
-				if (text_font != NULL){
-					button -> text_font = text_font;
+    if (relief != NULL) {
+        *(button -> relief) = *relief;
+    }
+    if (border_width != NULL) {
+        *(button -> border_width) = *border_width;
+    }
+    if (corner_radius != NULL) {
+        *(button -> corner_radius) = *corner_radius;
+    }
+    if (callback != NULL) {
+        button -> callback = malloc(sizeof(ei_callback_t));
+        *(button -> callback) = *callback;
+    }
+    if (user_param != NULL){
+        *(button -> user_param) = *user_param;
+    }
+    if (img_rect != NULL){
+        button -> img_rect = calloc(1, sizeof(ei_rect_t*));
+        *(button -> img_rect) = calloc(1, sizeof(ei_rect_t));
+        **(button -> img_rect) = **img_rect;
+    }
+    if (img_anchor != NULL){
+        button -> img_anchor = calloc(1,sizeof(ei_anchor_t)); 
+        *(button -> img_anchor) = *img_anchor;
+    }
+    if (img != NULL){
+        button -> img = calloc(1, sizeof(ei_rect_t));
+        *(button -> img) = *img;
+    }
+    if (text_anchor != NULL){
+        button -> text_anchor = calloc(1, sizeof(ei_rect_t));
+        (button -> text_anchor) = text_anchor;
+    }
+    if (text_color != NULL){
+        *(button -> text_color) = *text_color;
+    }
+    if (text_font != NULL){
+					*(button -> text_font) = *text_font;
 				}
 				if (text != NULL) {
-					button -> text = text;
+                    button -> text = calloc(1, sizeof(char*));
+                    *(button -> text) = calloc(strlen(*text), sizeof(char));
+                    strncpy(*(button -> text), *text, strlen(*text));
+					//*(button -> text) = *text;
 				}
 				if (color != NULL) {
-					button -> color = color;
+                    button -> color = calloc(1, sizeof(ei_color_t));
+					*(button -> color) = *color;
 				}
 				if (requested_size != NULL){
-					 button -> requested_size = requested_size;
+                    button -> requested_size = malloc(sizeof(ei_size_t));
+					 *(button -> requested_size) = *requested_size;
 				}
                 if (requested_size != NULL){
                     widget -> requested_size = *requested_size;
@@ -378,22 +429,25 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 	 }
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
 	 if (color != NULL){
-			 toplevel -> color = color;
+			 *(toplevel -> color) = *color;
 	 }
 	 if (border_width != NULL){
-			 toplevel -> border_width = border_width;
+			 *(toplevel -> border_width) = *border_width;
 	 }
 	 if (title != NULL){
-			 toplevel -> title = title;
+             toplevel -> title = calloc(1, sizeof(char*));
+             *(toplevel -> title) = calloc(strlen(*title), sizeof(char));
+        strncpy(*(toplevel -> title), *title, strlen(*title));
+		//	 *(toplevel -> title) = *title;
 	 }
 	 if (closable != NULL){
-			 toplevel -> closable = closable;
+			 *(toplevel -> closable) = *closable;
 	 }
 	 if (resizable != NULL){
-			 toplevel -> resizable = resizable;
+			 *(toplevel -> resizable) = *resizable;
 	 }
 	 if (min_size != NULL){
-			 toplevel -> min_size = min_size;
+			 *(toplevel -> min_size) = *min_size;
 	 }
 }
 
@@ -490,7 +544,7 @@ void*	ei_button_allocfunc_t		(){
 
 void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
     ei_frame_t* frame = (ei_frame_t*) widget;
-    free(widget -> wclass);
+    //free(widget -> wclass);
     free(frame);
 }
 
@@ -505,7 +559,7 @@ void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
 
 void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
     ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-    free(widget -> wclass);
+    //free(widget -> wclass);
     free(toplevel);
 }
 
@@ -520,7 +574,7 @@ void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
 
 void	ei_button_releasefunc_t	(struct ei_widget_t*	widget){
     ei_button_t* button = (ei_button_t*) widget;
-    free(widget -> wclass);
+    //free(widget -> wclass);
     free(button);
 }
 /**
@@ -768,6 +822,7 @@ void	ei_button_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     ei_color_t* color = malloc(sizeof(ei_color_t));
     *color = ei_default_background_color;
     button -> color = color;
+    button -> user_param = calloc(1, sizeof(void *));
 	int* border_width = calloc(1, sizeof(int));
     button -> border_width = border_width;
 	ei_relief_t *relief = malloc(sizeof(ei_relief_t));
@@ -966,6 +1021,9 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 		*relief = ei_relief_sunken;
 		ei_change_relief_button(relief, widget);
 		ei_event_set_active_widget(widget);
+        if (button -> callback != NULL){
+            (*(button -> callback))(widget, event, *(button -> user_param));
+        }
 	}
 	else if (event -> type == ei_ev_mouse_buttonup) {
 		*relief = ei_relief_raised;
