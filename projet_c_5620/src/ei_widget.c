@@ -9,6 +9,7 @@
 
 #include "ei_all_widgets.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include "ei_arc.h"
 #include "ei_application.h"
@@ -661,6 +662,17 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
 	return where;
 }
 
+/*
+ * button_press --
+ *
+ *	Callback called when a user clicks on the button.
+ */
+ void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
+ {
+ 	printf("Click !\n");
+ }
+
+
 /**
  * \brief	A function that draws widgets of a class.
  *
@@ -680,12 +692,39 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 	 ei_color_t* pick_color = widget -> pick_color;
 	 int* border_width = toplevel -> border_width;
 	 char** title = toplevel -> title;
-	 char* nothing = calloc(1, sizeof(char));
-	 ei_bool_t* closable = toplevel -> closable;
+	 ei_bool_t* bool_closable = toplevel -> closable;
 	 ei_axis_set_t* resizable = toplevel -> resizable;
 	 ei_color_t window_color = {110, 110, 110, 0};
 	 ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
 	 ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
+	 if (*bool_closable == EI_TRUE) {
+		 ei_point_t point;
+		 ei_size_t size;
+		 point.x = rectangle.top_left.x + rectangle.size.width - 55;
+		 point.y = rectangle.top_left.y;
+		 size.width = 16;
+		 size.height = 16;
+		 ei_widget_t* closable = ei_widget_create("button", widget);
+		 ei_color_t* red = calloc(1, sizeof(ei_color_t));
+		 red -> red = 255;
+		 int width = 3;
+		 int radius = 10;
+		 ei_callback_t callback = button_press2;
+		 ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, NULL, NULL);
+		 ei_place(closable, NULL, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
+		 (closable -> wclass ->  drawfunc)(closable, ei_app_root_surface(), SURFACE_PICK, &(closable -> screen_location));
+	 }
+	 if (*resizable != ei_axis_none) {
+			ei_rect_t* rect_resiz = malloc(sizeof(ei_rect_t));
+			rect_resiz ->top_left.x = rectangle.top_left.x + rectangle.size.width - 10 - *border_width;
+			rect_resiz ->top_left.y = rectangle.top_left.y + rectangle.size.height - 10 - *border_width;
+			rect_resiz ->size.width = 10 + *border_width;
+			rect_resiz ->size.height = 10 + *border_width;
+			ei_point_t* where = calloc(1, sizeof(ei_point_t));
+			*where = (ei_point_t) {0, 0};
+			ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none, NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
+			ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
+	 }
  }
 
 /**
