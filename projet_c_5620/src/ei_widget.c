@@ -958,8 +958,7 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 	 ei_point_t where = event -> param.mouse.where;
 	 if (event -> type == ei_ev_mouse_buttondown) {
 		 if (widget != ei_event_get_active_widget()) {
-			(widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
-			draw_widgets(widget -> children_head);
+             DRAW = EI_TRUE;
 		 }
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
@@ -970,12 +969,13 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 WIN_MOVE -> x = 0;
 		 WIN_MOVE -> y = 0;
 		 ei_event_set_active_widget(widget -> parent);
-		 (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
-		 draw_widgets(widget -> children_head);
+         DRAW = EI_TRUE;
+
 
 	 }
 	 else if (event -> type == ei_ev_mouse_move) {
 		 if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
+             DRAW = EI_TRUE;
 			 int dx = where.x - WIN_MOVE -> x;
 			 int dy = where.y - WIN_MOVE -> y;
 			 int x = widget -> screen_location.top_left.x + dx;
@@ -983,9 +983,6 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 			 ei_place(widget, NULL, &x, &y, NULL, NULL, NULL, NULL,NULL,NULL);
 			 ei_placer_run(widget);
 			 *WIN_MOVE = where;
-			 draw_widgets(widget -> parent);
-		  //  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
-		  //  draw_widgets(widget -> children_head);
 		 }
 	 }
 	 return EI_TRUE;
@@ -1035,7 +1032,7 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 	else if (event -> type == ei_ev_mouse_buttonup) {
 		*relief = ei_relief_raised;
 		ei_change_relief_button(relief, widget);
-		ei_event_set_active_widget(widget -> parent);//Probleme ici ... le widet parent ne repasse pas au premier plan
+		ei_event_set_active_widget(widget -> parent);
 	}
 	else if (event -> type == ei_ev_mouse_move) {
 		ei_point_t where = event -> param.mouse.where;
@@ -1066,7 +1063,7 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
 	ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
 	ei_placer_run(widget);
-	(widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+    DRAW = EI_TRUE;
 }
 
 /**
