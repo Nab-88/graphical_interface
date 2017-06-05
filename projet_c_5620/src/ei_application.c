@@ -65,7 +65,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     WIN_RESIZ -> y = 0;
     ei_event_set_active_widget(NULL);
     ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+    DRAW_RECT = NULL;
 }
 
 /**
@@ -177,14 +177,26 @@ void ei_app_run(){
 
 void draw_widgets(ei_widget_t* widget){
     while (widget != NULL){
+      ei_rect_t* clipper = NULL;
         if (widget != ei_app_root_widget()){
             ei_placer_run(widget);
         }
-        ei_rect_t* clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
+        if (DRAW_RECT != NULL) {
+          clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
+          clipper = ei_intersection(clipper, &(DRAW_RECT -> rect));
+        }
         (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, clipper);
         draw_widgets(widget -> children_head);
         widget = widget -> next_sibling;
     }
+}
+
+void ei_intersection_linked_rect(ei_rect_t* rect1, ei_linked_rect_t* rect2) {
+  ei_linked_rect_t* current = rect2;
+  while (current != rect2) {
+    current -> rect = *(ei_intersection(&(current -> rect), rect1));
+    current = current -> next;
+  }
 }
 
 ei_rect_t* ei_intersection(ei_rect_t* rect1, ei_rect_t* rect2) {
