@@ -104,7 +104,7 @@ void ei_app_run(){
     hw_surface_unlock(SURFACE_PICK);
     hw_surface_update_rects(SURFACE_PICK, NULL);
     hw_surface_unlock(ei_app_root_surface());
-    hw_surface_update_rects(ei_app_root_surface(), NULL);
+    hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
     DRAW_RECT = NULL;
     ei_event_t event;
   event.type = ei_ev_none;
@@ -128,7 +128,7 @@ void ei_app_run(){
          hw_surface_unlock(SURFACE_PICK);
          hw_surface_update_rects(SURFACE_PICK, NULL);
          hw_surface_unlock(ei_app_root_surface());
-         hw_surface_update_rects(ei_app_root_surface(), NULL);
+         hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
            }
         }
          }
@@ -147,7 +147,7 @@ void ei_app_run(){
          hw_surface_unlock(SURFACE_PICK);
          hw_surface_update_rects(SURFACE_PICK, NULL);
          hw_surface_unlock(ei_app_root_surface());
-         hw_surface_update_rects(ei_app_root_surface(), NULL);
+         hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
          }       }
        }
      }
@@ -165,7 +165,7 @@ void ei_app_run(){
          hw_surface_unlock(SURFACE_PICK);
          hw_surface_update_rects(SURFACE_PICK, NULL);
          hw_surface_unlock(ei_app_root_surface());
-         hw_surface_update_rects(ei_app_root_surface(), NULL);
+         hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
          }       }
        }
      }
@@ -178,7 +178,7 @@ void ei_app_run(){
          hw_surface_unlock(SURFACE_PICK);
          hw_surface_update_rects(SURFACE_PICK, NULL);
          hw_surface_unlock(ei_app_root_surface());
-         hw_surface_update_rects(ei_app_root_surface(), NULL);
+         hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
        }
      }
      }
@@ -189,7 +189,7 @@ void ei_app_run(){
          hw_surface_unlock(SURFACE_PICK);
          hw_surface_update_rects(SURFACE_PICK, NULL);
          hw_surface_unlock(ei_app_root_surface());
-         hw_surface_update_rects(ei_app_root_surface(), NULL);
+         hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
          DRAW_RECT = NULL;
      }
      }

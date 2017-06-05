@@ -997,7 +997,6 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
              *x = widget -> screen_location.top_left.x + dx;
 			 int* y = calloc(1, sizeof(int));
              *y = widget -> screen_location.top_left.y + dy;
-       ei_linked_rect_t* new_rect = calloc(1, sizeof(ei_linked_rect_t));
        int width = widget -> screen_location.size.width;
        int height = widget -> screen_location.size.height;
        ei_point_t point = {*x, *y};
