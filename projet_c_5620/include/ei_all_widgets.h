@@ -19,7 +19,6 @@
 typedef struct ei_frame_t {
     ei_widget_t widget;
 
-    ei_size_t* requested_size;
     ei_color_t* color;
     int* border_width;
     ei_relief_t* relief;
@@ -39,7 +38,6 @@ typedef struct ei_frame_t {
 typedef struct ei_button_t {
     ei_widget_t widget;
 
-    ei_size_t* requested_size;
     ei_color_t* color;
     int*		border_width;
     int*		corner_radius;
@@ -61,7 +59,6 @@ typedef struct ei_button_t {
  */
 typedef struct ei_toplevel_t {
     ei_widget_t widget;
-    ei_size_t* requested_size;
     ei_color_t* color;
     int*		border_width;
     char **title;
@@ -364,8 +361,8 @@ ei_widget_t*    ei_widget_previous (ei_widget_t* widget);
 
 /*Declaration of the library of class of widgets
  */
-ei_widgetclass_t LIB;
-ei_widget_t ROOT;
+ei_widgetclass_t* LIB;
+ei_widget_t* ROOT;
 ei_surface_t SURFACE_ROOT;
 ei_surface_t SURFACE_PICK;
 ei_bool_t SORTIE;

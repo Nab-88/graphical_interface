@@ -94,7 +94,7 @@ ei_color_t* convert_pick_id_to_pick_color(uint32_t id){
  * @return			The structure describing the class.
  */
 ei_widgetclass_t*	ei_widgetclass_from_name	(ei_widgetclass_name_t name){
-    ei_widgetclass_t *current = &LIB;
+    ei_widgetclass_t *current = LIB;
     while (strncmp(current -> name, name, strlen(name)) != 0) {
         current = current -> next;
     }
@@ -186,7 +186,7 @@ ei_widget_t*		ei_widget_pick			(ei_point_t*		where){
 ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id) {
 	ei_widget_t* answer = NULL;
 	while (widget != NULL){
-		if (widget -> pick_id == pick_id && widget != &ROOT) {
+		if (widget -> pick_id == pick_id && widget != ROOT) {
 			return widget;
 		}
 		answer = ei_find_pick_color(widget -> children_head, pick_id);
@@ -387,10 +387,6 @@ void			ei_button_configure		(ei_widget_t*		widget,
 				if (color != NULL) {
                     button -> color = calloc(1, sizeof(ei_color_t));
 					*(button -> color) = *color;
-				}
-				if (requested_size != NULL){
-                    button -> requested_size = malloc(sizeof(ei_size_t));
-					 *(button -> requested_size) = *requested_size;
 				}
                 if (requested_size != NULL){
                     widget -> requested_size = *requested_size;
@@ -1164,7 +1160,7 @@ void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
  * @param	widgetclass	The structure describing the class.
  */
 void			ei_widgetclass_register		(ei_widgetclass_t* widgetclass){
-    ei_widgetclass_t* current = &LIB;
+    ei_widgetclass_t* current = LIB;
     while (current -> next != NULL){
         current = current -> next;
     }

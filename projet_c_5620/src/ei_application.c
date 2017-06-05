@@ -41,6 +41,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     //Create the main window
 	ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
     ei_surface_t pick_surface = hw_surface_create(main_window, main_window_size, EI_TRUE);
+    LIB = calloc(1, sizeof(ei_widgetclass_t));
     ei_frame_register_class();
     ei_button_register_class();
     ei_toplevel_register_class();
@@ -51,10 +52,10 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     widget -> wclass = class;
     widget -> screen_location = hw_surface_get_rect(main_window);
     widget -> pick_color = convert_pick_id_to_pick_color(0);
-    ROOT = *widget;
+    ROOT = widget;
     SORTIE = EI_FALSE;
-    (ROOT.wclass -> setdefaultsfunc)(&ROOT);
-    ROOT.pick_id = 0;
+    (ROOT -> wclass -> setdefaultsfunc)(ROOT);
+    ROOT -> pick_id = 0;
     WIN_MOVE = malloc(sizeof(ei_point_t));
     WIN_MOVE -> x = 0;
     WIN_MOVE -> y = 0;
@@ -64,7 +65,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     WIN_RESIZ -> x = 0;
     WIN_RESIZ -> y = 0;
     ei_event_set_active_widget(NULL);
-    ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    ei_place(ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
     DRAW_RECT = NULL;
 }
 
@@ -75,7 +76,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
 
 
 void ei_app_free(){
-    free_widgets(ei_app_root_widget () -> children_head);
+    free_widgets(ei_app_root_widget ());
     hw_quit();
 
 }
@@ -272,7 +273,7 @@ void ei_app_quit_request(){
  * @return 			The root widget.
  */
 ei_widget_t* ei_app_root_widget(){
-    return &ROOT;
+    return ROOT;
 }
 
 /**

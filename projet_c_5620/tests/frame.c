@@ -36,7 +36,7 @@ int ei_main(int argc, char** argv)
 	int ele1 = 50;
 	ei_toplevel_configure(toplevel, &toplevel_size, &frame_color, &border_width, text, NULL, NULL, NULL);
 	ei_place(toplevel, NULL, &(ele1), &(ele1), NULL, NULL, NULL, NULL, NULL, NULL);
-	ei_frame_configure(toplevel, NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+	//ei_frame_configure(toplevel, NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 	ei_surface_t image		= hw_image_load(image_filename, ei_app_root_surface());
 	ei_size_t image_size	= hw_surface_get_size(image);
 	image_size.width = 100;
