@@ -164,8 +164,8 @@ void ei_app_run(){
              default:
                  break;
          }
-     if (DRAW == EI_TRUE){
-         DRAW = EI_FALSE;
+     if (DRAW_RECT != NULL){
+         DRAW_RECT = NULL;
          draw_widgets(ei_app_root_widget());
      }
      }

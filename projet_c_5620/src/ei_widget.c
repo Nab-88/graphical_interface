@@ -960,7 +960,7 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 	 ei_point_t where = event -> param.mouse.where;
 	 if (event -> type == ei_ev_mouse_buttondown) {
 		 if (widget != ei_event_get_active_widget()) {
-             DRAW = EI_TRUE;
+             DRAW_RECT = &(widget -> screen_location);
 		 }
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
@@ -988,14 +988,14 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 WIN_MOVE -> y = 0;
 		 WIN_RESIZ -> x = 0;
 		 WIN_RESIZ -> y = 0;
-		 ei_event_set_active_widget(widget -> parent);
-         DRAW = EI_TRUE;
+		 ei_event_set_active_widget(widget);
+         DRAW_RECT = &(widget -> screen_location);
 
 
 	 }
 	 else if (event -> type == ei_ev_mouse_move) {
 		 if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
-             DRAW = EI_TRUE;
+             DRAW_RECT = &(widget -> screen_location);
 			 int dx = where.x - WIN_MOVE -> x;
 			 int dy = where.y - WIN_MOVE -> y;
 			 int x = widget -> screen_location.top_left.x + dx;
@@ -1125,7 +1125,7 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
 	ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
 	ei_placer_run(widget);
-    DRAW = EI_TRUE;
+    DRAW_RECT = &(widget -> screen_location);
 }
 
 /**
