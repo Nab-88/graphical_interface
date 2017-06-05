@@ -152,7 +152,7 @@ void create_window(game_t* g)
 	tile_bg_pos.y		= 2 * g->tile_bd;
 	for (y = 0; y < g->nb_tile_y; y++) {
 		tile_bg_pos.x	= 2 * g->tile_bd;
-		
+
 		for (x = 0; x < g->nb_tile_x; x++) {
 			tile_bg		= ei_widget_create("frame", g->toplevel);
 			ei_frame_configure(tile_bg, &tile_bg_size, &g_bg_col, &tile_bg_borderwidth, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -207,7 +207,7 @@ void update_board(game_t* g)
 	tile_pos.y		= 2 * g->tile_bd;
 	for (y = 0; y < g->nb_tile_y; y++) {
 		tile_pos.x	= 2 * g->tile_bd;
-		
+
 		for (x = 0; x < g->nb_tile_x; x++) {
 			tile_w		= *tile_w_ptr;
 			tile_value	= *tile_v_ptr;
@@ -222,7 +222,7 @@ void update_board(game_t* g)
 				}
 			} else {
 				if (tile_w == NULL) {
-				
+
 					// The board has a value here, but the widget does not exist: create it.
 
 					tile_w		= ei_widget_create("frame", g->toplevel);
@@ -528,7 +528,7 @@ int ei_main(int argc, char* argv[])
 	ei_event_set_default_handle_func(global_event_handler);
 
 	ei_app_run();
-	
+
 	ei_app_free();
 
 	return (EXIT_SUCCESS);
