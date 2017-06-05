@@ -20,6 +20,21 @@
  */
 void ei_event_set_active_widget(ei_widget_t* widget){
     EVENT_ACTIVE = widget;
+    ei_widget_t* current = widget;
+    if (current != NULL){
+        while (current != ei_app_root_widget()){
+            place_on_the_right(current);
+            current = current -> parent;
+    }
+    }
+}
+
+/**
+ * Places the further right among its siblings.
+ *
+ * @param	widget		The widget to move.
+ */
+void place_on_the_right(ei_widget_t* widget){
     if (widget != NULL && widget != ei_app_root_widget()){
         ei_widget_t* parent = (widget -> parent);
         ei_widget_t* previous = ei_widget_previous(widget);
@@ -35,7 +50,6 @@ void ei_event_set_active_widget(ei_widget_t* widget){
         widget -> next_sibling = NULL;
     }
 }
-
 /**
  * Returns the widget currently being manipulated by the user.
  *
