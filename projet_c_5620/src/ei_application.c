@@ -120,10 +120,18 @@ void ei_app_run(){
              (widget -> wclass -> handlefunc)(widget, &event);
          }
          else{
+             if (def_func != NULL){
            if (def_func(&event) == EI_TRUE) {
-             draw_widgets(ei_app_root_widget());
+         hw_surface_lock(ei_app_root_surface());
+         hw_surface_lock(SURFACE_PICK);
+         draw_widgets(ei_app_root_widget());
+         hw_surface_unlock(SURFACE_PICK);
+         hw_surface_update_rects(SURFACE_PICK, NULL);
+         hw_surface_unlock(ei_app_root_surface());
+         hw_surface_update_rects(ei_app_root_surface(), NULL);
            }
         }
+         }
      }
      if (event.type == ei_ev_mouse_buttonup) {
        widget = ei_event_get_active_widget();
@@ -131,9 +139,17 @@ void ei_app_run(){
            (widget -> wclass -> handlefunc)(widget, &event);
        }
        else{
+             if (def_func != NULL){
          if (def_func(&event) == EI_TRUE) {
-           draw_widgets(ei_app_root_widget());
+         hw_surface_lock(ei_app_root_surface());
+         hw_surface_lock(SURFACE_PICK);
+         draw_widgets(ei_app_root_widget());
+         hw_surface_unlock(SURFACE_PICK);
+         hw_surface_update_rects(SURFACE_PICK, NULL);
+         hw_surface_unlock(ei_app_root_surface());
+         hw_surface_update_rects(ei_app_root_surface(), NULL);
          }       }
+       }
      }
      if (event.type == ei_ev_mouse_move) {
        widget = ei_event_get_active_widget();
@@ -141,14 +157,30 @@ void ei_app_run(){
            (widget -> wclass -> handlefunc)(widget, &event);
        }
        else{
+             if (def_func != NULL){
          if (def_func(&event) == EI_TRUE) {
-           draw_widgets(ei_app_root_widget());
+         hw_surface_lock(ei_app_root_surface());
+         hw_surface_lock(SURFACE_PICK);
+         draw_widgets(ei_app_root_widget());
+         hw_surface_unlock(SURFACE_PICK);
+         hw_surface_update_rects(SURFACE_PICK, NULL);
+         hw_surface_unlock(ei_app_root_surface());
+         hw_surface_update_rects(ei_app_root_surface(), NULL);
          }       }
+       }
      }
      else{
+             if (def_func != NULL){
        if (def_func(&event) == EI_TRUE) {
+         hw_surface_lock(ei_app_root_surface());
+         hw_surface_lock(SURFACE_PICK);
          draw_widgets(ei_app_root_widget());
+         hw_surface_unlock(SURFACE_PICK);
+         hw_surface_update_rects(SURFACE_PICK, NULL);
+         hw_surface_unlock(ei_app_root_surface());
+         hw_surface_update_rects(ei_app_root_surface(), NULL);
        }
+     }
      }
      if (DRAW_RECT != NULL){
          hw_surface_lock(ei_app_root_surface());
