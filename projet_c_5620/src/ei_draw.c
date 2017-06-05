@@ -1058,15 +1058,15 @@ void ei_draw_toplevel(ei_surface_t surface,
       ei_surface_t text_surface = hw_text_create_surface(*title, ei_default_font, &text_color);
       ei_size_t text_size = hw_surface_get_size(text_surface);
       rectangle.top_left.x += border_width;
-      rectangle.top_left.y += 30 + border_width; // on choisit arbitrairement la taille de la bannière
+      rectangle.top_left.y += 30; // on choisit arbitrairement la taille de la bannière
       rectangle.size.width -= 2*border_width;
-      rectangle.size.height -= 2*border_width + 30;
+      rectangle.size.height -= border_width + 30;
       first = ei_rounded_frame(rectangle, 0, 0);
       ei_draw_polygon(surface, first, *color, clipper);
       free_ei_linked_point(first);
       ei_point_t* where = calloc(1, sizeof(ei_point_t));
       where -> x = rectangle.top_left.x + 25; // on garde de la place pour le bouton closable
-      where -> y = rectangle.top_left.y - text_size.height - border_width;
+      where -> y = rectangle.top_left.y - 30;
       ei_draw_text(surface, where, *title, ei_default_font, &text_color, clipper);
   }
   hw_surface_unlock(surface);

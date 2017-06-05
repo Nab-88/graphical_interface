@@ -103,7 +103,7 @@ void ei_app_run(){
       hw_event_wait_next(&event);
       ei_point_t where;
       ei_widget_t* widget;
-      ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
+      // ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
 //      if(event.type == ei_ev_mouse_buttondown || event.type == ei_ev_mouse_buttonup){
 //          where = event.param.mouse.where;
 //          widget = ei_widget_pick(&where);
@@ -131,7 +131,7 @@ void ei_app_run(){
 //        DRAW = EI_FALSE;
 //        draw_widgets(ei_app_root_widget());
 //    }
-//    } 
+//    }
 //}
     //     }
 
