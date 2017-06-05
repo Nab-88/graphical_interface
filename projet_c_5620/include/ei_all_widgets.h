@@ -362,16 +362,8 @@ ei_rect_t* ei_union(ei_rect_t* rect1, ei_rect_t* rect2);
  */
 ei_widget_t*    ei_widget_previous (ei_widget_t* widget);
 
-/**
- * Places the further right among its siblings.
- *
- * @param	widget		The widget to move.
- */
-void place_on_the_right(ei_widget_t* widget);
-
 /*Declaration of the library of class of widgets
  */
-int FIRST_DRAW;
 ei_widgetclass_t LIB;
 ei_widget_t ROOT;
 ei_surface_t SURFACE_ROOT;

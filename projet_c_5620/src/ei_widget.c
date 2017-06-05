@@ -457,9 +457,6 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 	 if (closable != NULL){
 			 *(toplevel -> closable) = *closable;
 	 }
-	 if (*(toplevel -> closable) == EI_TRUE) {
-	 		FIRST_DRAW ++;
-	 }
 	 if (resizable != NULL){
 			 *(toplevel -> resizable) = *resizable;
 	 }
@@ -759,7 +756,7 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 	 ei_color_t window_color = {110, 110, 110, 0};
 	 ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
 	 ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
-	 if (*(toplevel -> closable) == EI_TRUE && FIRST_DRAW != 0) {
+	 if (*(toplevel -> closable) == EI_TRUE && toplevel -> button_closable == NULL) {
 		 ei_point_t point;
 		 ei_size_t size;
 		 point.x = 10;
@@ -775,7 +772,6 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 		 ei_callback_t callback = button_press2;
 		 ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
 		 ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
-		 FIRST_DRAW --;
      toplevel -> button_closable = closable;
 	 }
 	 if (*resizable != ei_axis_none) {
