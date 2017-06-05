@@ -38,6 +38,8 @@ uint32_t COLOR_ID = 1;
  */
  void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
  {
+    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+    DRAW_RECT -> rect = widget -> parent -> screen_location;
  	ei_widget_destroy(widget -> parent);
 	printf("J'ai détruit le widget !!! hihihi\n");
 	ei_event_set_active_widget(NULL);
@@ -1022,6 +1024,8 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 
 		 }
 		 if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
+             DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+             DRAW_RECT -> rect = (widget -> screen_location);
 			 int dx, dy;
 			 if (WIN_RESIZ -> x != 0) {
 				 dx = where.x - WIN_RESIZ -> x;
@@ -1035,17 +1039,23 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 				} else {
 					dy = 0;
 				}
-			 int x = widget -> screen_location.top_left.x;
- 			 int y = widget -> screen_location.top_left.y;
+			 int* x = calloc(1, sizeof(int));
+			 *x = widget -> screen_location.top_left.x;
+			 int* y = calloc(1, sizeof(int));
+ 			 *y = widget -> screen_location.top_left.y;
 			 int width = widget -> screen_location.size.width + dx;
 			 int height = widget -> screen_location.size.height + dy;
+             ei_point_t point = {*x, *y};
+             ei_size_t size = {width, height};
+             ei_rect_t rectangle = {point, size};
+             DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
 			 if (width < 160) {
 			 	width = 160;
 			 }
 			 if (height < 120) {
 			 	height = 120;
 			 }
-			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
+			 ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
        ei_placer_run(widget);
      }
 	 }
