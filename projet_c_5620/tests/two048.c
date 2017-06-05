@@ -28,7 +28,9 @@
 
 void ei_widget_set_destroy_cb	(ei_widget_t*		widget,
 				 ei_callback_t		callback,
-				 void*			user_param);
+				 void*			user_param) {
+
+				 }
 
 
 
@@ -227,12 +229,12 @@ void update_board(game_t* g)
 
 					tile_w		= ei_widget_create("frame", g->toplevel);
 					*tile_w_ptr	= tile_w;
-					ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
 				}
 
 				sprintf(label, "%d", 1 << tile_value);
 				ei_frame_configure(tile_w, &tile_size, &g_tile_colors[tile_value], &tile_border, &tile_relief,
 							&label_ptr, &g->tile_font, NULL, NULL, NULL, NULL, NULL);
+				ei_place(tile_w, &tile_anchor, &tile_pos.x, &tile_pos.y, NULL, NULL, NULL, NULL, NULL, NULL);
 			}
 
 			tile_pos.x	+= g->tile_size + 2 * g->tile_bd;

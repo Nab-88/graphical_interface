@@ -250,9 +250,6 @@ void			ei_frame_configure		(ei_widget_t*		widget,
 							 ei_surface_t*		img,
 							 ei_rect_t**		img_rect,
 							 ei_anchor_t*		img_anchor){
-    if (requested_size != NULL){
-        widget -> requested_size = *requested_size;
-    }
     ei_frame_t* frame = (ei_frame_t*) widget;
     if (color != NULL){
         *(frame -> color) = *color;
@@ -941,6 +938,7 @@ void	ei_button_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
+      ei_event_set_active_widget(widget);
       return EI_FALSE;
 }
 
