@@ -354,6 +354,7 @@ ei_rect_t* ei_intersection(ei_rect_t* rect1, ei_rect_t* rect2) ;
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event);
 ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event);
 void ei_intersection_linked_rect(ei_rect_t* rect1, ei_linked_rect_t* rect2);
+ei_rect_t* ei_union(ei_rect_t* rect1, ei_rect_t* rect2);
 /**
  * @brief   Gets the previous widget among the sons of its parent.
  *

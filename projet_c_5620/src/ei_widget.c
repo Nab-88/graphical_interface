@@ -27,6 +27,9 @@
  * @return			The newly created widget, or NULL if there was an error.
  */
 uint32_t COLOR_ID = 1;
+#define max(a,b) ((a) > (b) ? a : b)
+#define min(a,b) ((a) < (b) ? a : b)
+
 
 /*
  * button_press --
@@ -1011,9 +1014,8 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
        int height = widget -> screen_location.size.height;
        ei_point_t point = {*x, *y};
        ei_size_t size = {width, height};
-       (new_rect -> rect).top_left = point;
-       (new_rect -> rect).size = size;
-       DRAW_RECT -> next = new_rect;
+       ei_rect_t rectangle = {point, size};
+       DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
 
        ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
 			 *WIN_MOVE = where;
@@ -1049,6 +1051,20 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 	 }
 	 return EI_TRUE;
 }
+
+ei_rect_t* ei_union(ei_rect_t* rect1, ei_rect_t* rect2) {
+  ei_point_t point1 = rect1 -> top_left;
+  ei_point_t point2 = rect2 -> top_left;
+  ei_size_t size1 = rect1 -> size;
+  ei_size_t size2 = rect2 -> size;
+  ei_rect_t* intersection = malloc(sizeof(ei_rect_t));
+  intersection -> top_left.x = min(point1.x, point2.x);
+  intersection -> top_left.y = min(point1.y, point2.y);
+  intersection -> size.width = max(size1.width, size2.width) + abs(point1.x - point2.x);
+  intersection -> size.height = max(size1.height, size2.height) + abs(point1.y - point2.y);
+  return intersection;
+}
+
 
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event) {
 	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
