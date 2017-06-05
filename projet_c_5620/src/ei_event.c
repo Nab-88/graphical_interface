@@ -12,6 +12,34 @@
  *
  */
 
+ /**
+  * Places the further right among its siblings.
+  *
+  * @param	widget		The widget to move.
+  */
+ void place_on_the_right(ei_widget_t* widget){
+     if (widget != NULL && widget != ei_app_root_widget()){
+         ei_widget_t* parent = (widget -> parent);
+         ei_widget_t* previous = ei_widget_previous(widget);
+         if (previous == NULL && widget != parent -> children_tail){
+             parent -> children_head = widget -> next_sibling;
+         } else if ( widget == parent -> children_tail) {
+             return;
+         } else {
+             previous -> next_sibling = widget -> next_sibling;
+         }
+         if (widget != parent -> children_tail){
+             if (DRAW_RECT == NULL){
+                 DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+             }
+             DRAW_RECT -> rect = (widget -> screen_location);
+         }
+         parent -> children_tail -> next_sibling = widget;
+         parent -> children_tail = widget;
+         widget -> next_sibling = NULL;
+     }
+ }
+ 
 /**
  * Sets the widget which is currently being manipulated by the user.
  *
@@ -29,33 +57,7 @@ void ei_event_set_active_widget(ei_widget_t* widget){
     }
 }
 
-/**
- * Places the further right among its siblings.
- *
- * @param	widget		The widget to move.
- */
-void place_on_the_right(ei_widget_t* widget){
-    if (widget != NULL && widget != ei_app_root_widget()){
-        ei_widget_t* parent = (widget -> parent);
-        ei_widget_t* previous = ei_widget_previous(widget);
-        if (previous == NULL && widget != parent -> children_tail){
-            parent -> children_head = widget -> next_sibling;
-        } else if ( widget == parent -> children_tail) {
-            return;
-        } else {
-            previous -> next_sibling = widget -> next_sibling;
-        }
-        if (widget != parent -> children_tail){
-            if (DRAW_RECT == NULL){
-                DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
-            }
-            DRAW_RECT -> rect = (widget -> screen_location);
-        }
-        parent -> children_tail -> next_sibling = widget;
-        parent -> children_tail = widget;
-        widget -> next_sibling = NULL;
-    }
-}
+
 /**
  * Returns the widget currently being manipulated by the user.
  *
