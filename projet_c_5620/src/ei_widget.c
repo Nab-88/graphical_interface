@@ -936,6 +936,7 @@ void	ei_button_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
+      return EI_FALSE;
 }
 
 /**
@@ -1067,10 +1068,10 @@ ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event) {
 	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
 	ei_point_t where = event -> param.mouse.where;
 	int x_min, x_max, y_min, y_max;
-	x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10;
-	y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10;
-	x_max = x_min + 10;
-	y_max = y_min + 10;
+	x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10 - *(toplevel -> border_width);
+	y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10 - *(toplevel -> border_width);
+	x_max = x_min + 10 + *(toplevel -> border_width);
+	y_max = y_min + 10 + *(toplevel -> border_width);
 	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
 		return EI_TRUE;
 	}
