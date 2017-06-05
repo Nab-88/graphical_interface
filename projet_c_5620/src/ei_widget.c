@@ -938,7 +938,7 @@ void	ei_button_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
 						 struct ei_event_t*	event){
-      ei_event_set_active_widget(widget);
+      ei_event_set_active_widget(widget -> parent);
       return EI_FALSE;
 }
 
@@ -962,10 +962,6 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
 	 ei_point_t where = event -> param.mouse.where;
 	 if (event -> type == ei_ev_mouse_buttondown) {
-		 if (widget != ei_event_get_active_widget()) {
-             //DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-             //DRAW_RECT -> rect = (widget -> screen_location);
-		 }
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
 		 	*WIN_MOVE = where;
@@ -993,10 +989,6 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 WIN_RESIZ -> x = 0;
 		 WIN_RESIZ -> y = 0;
 		 ei_event_set_active_widget(widget);
-         //DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-         //DRAW_RECT -> rect = (widget -> screen_location);
-
-
 	 }
 	 else if (event -> type == ei_ev_mouse_move) {
 		 if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
