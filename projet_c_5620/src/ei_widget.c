@@ -960,8 +960,7 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 	 ei_point_t where = event -> param.mouse.where;
 	 if (event -> type == ei_ev_mouse_buttondown) {
 		 if (widget != ei_event_get_active_widget()) {
-             DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-             DRAW_RECT -> rect = (widget -> screen_location);
+             DRAW_RECT = &(widget -> screen_location);
 		 }
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
@@ -990,34 +989,21 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 WIN_RESIZ -> x = 0;
 		 WIN_RESIZ -> y = 0;
 		 ei_event_set_active_widget(widget);
-         DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-         DRAW_RECT -> rect = (widget -> screen_location);
+         DRAW_RECT = &(widget -> screen_location);
 
 
 	 }
 	 else if (event -> type == ei_ev_mouse_move) {
 		 if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
-
-             DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-             DRAW_RECT -> rect = (widget -> screen_location);
+             DRAW_RECT = &(widget -> screen_location);
 			 int dx = where.x - WIN_MOVE -> x;
 			 int dy = where.y - WIN_MOVE -> y;
-			 int* x = calloc(1, sizeof(int));
-             *x = widget -> screen_location.top_left.x + dx;
-			 int* y = calloc(1, sizeof(int));
-             *y = widget -> screen_location.top_left.y + dy;
-       ei_linked_rect_t* new_rect = calloc(1, sizeof(ei_linked_rect_t));
+			 int x = widget -> screen_location.top_left.x + dx;
+			 int y = widget -> screen_location.top_left.y + dy;
        int width = widget -> screen_location.size.width;
        int height = widget -> screen_location.size.height;
-       ei_point_t point = {*x, *y};
-       ei_size_t size = {width, height};
-       (new_rect -> rect).top_left = point;
-       (new_rect -> rect).size = size;
-       DRAW_RECT -> next = new_rect;
-
-       ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
+			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
 			 *WIN_MOVE = where;
-
 		 }
 		 if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
 			 int dx, dy;
@@ -1139,8 +1125,7 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
 	ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
 	ei_placer_run(widget);
-    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
-    DRAW_RECT -> rect = (widget -> screen_location);
+    DRAW_RECT = &(widget -> screen_location);
 }
 
 /**
