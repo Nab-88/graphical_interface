@@ -963,8 +963,8 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 	 ei_point_t where = event -> param.mouse.where;
 	 if (event -> type == ei_ev_mouse_buttondown) {
 		 if (widget != ei_event_get_active_widget()) {
-             DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-             DRAW_RECT -> rect = (widget -> screen_location);
+             //DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+             //DRAW_RECT -> rect = (widget -> screen_location);
 		 }
 		 ei_event_set_active_widget(widget);
 		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
@@ -993,8 +993,8 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 		 WIN_RESIZ -> x = 0;
 		 WIN_RESIZ -> y = 0;
 		 ei_event_set_active_widget(widget);
-         DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-         DRAW_RECT -> rect = (widget -> screen_location);
+         //DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+         //DRAW_RECT -> rect = (widget -> screen_location);
 
 
 	 }
@@ -1124,6 +1124,8 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 	if (event -> type == ei_ev_mouse_buttondown) {
 		*relief = ei_relief_sunken;
 		ei_change_relief_button(relief, widget);
+        DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+        DRAW_RECT -> rect = widget -> screen_location;
 		ei_event_set_active_widget(widget);
         if (button -> callback != NULL){
             (*(button -> callback))(widget, event, *(button -> user_param));
@@ -1132,7 +1134,10 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 	else if (event -> type == ei_ev_mouse_buttonup) {
 		*relief = ei_relief_raised;
 		ei_change_relief_button(relief, widget);
+        DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+        DRAW_RECT -> rect = widget -> screen_location;
 		ei_event_set_active_widget(widget -> parent);
+
 	}
 	else if (event -> type == ei_ev_mouse_move) {
 		ei_point_t where = event -> param.mouse.where;
@@ -1163,8 +1168,6 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
 	ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
 	ei_placer_run(widget);
-    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
-    DRAW_RECT -> rect = (widget -> screen_location);
 }
 
 /**

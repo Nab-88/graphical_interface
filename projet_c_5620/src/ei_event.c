@@ -45,6 +45,12 @@ void place_on_the_right(ei_widget_t* widget){
         } else {
             previous -> next_sibling = widget -> next_sibling;
         }
+        if (widget != parent -> children_tail){
+            if (DRAW_RECT == NULL){
+                DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+            }
+            DRAW_RECT -> rect = (widget -> screen_location);
+        }
         parent -> children_tail -> next_sibling = widget;
         parent -> children_tail = widget;
         widget -> next_sibling = NULL;
