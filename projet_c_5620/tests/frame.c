@@ -19,7 +19,7 @@ int ei_main(int argc, char** argv)
 	static char*			image_filename	= "misc/klimt.jpg";
 
 	ei_widget_t*	frame;
-	ei_size_t	frame_size		= {110,110};
+	ei_size_t	frame_size		= {410,210};
 	int		frame_x			= 150;
 	int		frame_y			= 200;
 	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
@@ -40,7 +40,7 @@ int ei_main(int argc, char** argv)
 	ei_surface_t image		= hw_image_load(image_filename, ei_app_root_surface());
 	ei_size_t image_size	= hw_surface_get_size(image);
 	image_size.width = 100;
-	image_size.height = 100;
+	image_size.height = 300;
 	ei_rect_t *img_rect		= malloc(sizeof(ei_rect_t));
 	img_rect-> top_left = ei_point(0, 0);
 	img_rect -> size = image_size;
