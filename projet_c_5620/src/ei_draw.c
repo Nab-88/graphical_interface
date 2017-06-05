@@ -143,7 +143,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
             }
         }
         hw_surface_unlock(surface);
-        hw_surface_update_rects(surface, NULL);
+        hw_surface_update_rects(surface, clipper);
     }
 }
 
@@ -477,7 +477,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         update_intersect(TCA);
     }
     hw_surface_unlock(surface);
-    hw_surface_update_rects(surface, NULL);
+    hw_surface_update_rects(surface, clipper);
     free_all(TC, TCA, tab);
 }
 
@@ -546,7 +546,7 @@ void			ei_draw_text		(ei_surface_t		surface,
         }
     }
     hw_surface_unlock(surface);
-    hw_surface_update_rects(surface, NULL);
+    hw_surface_update_rects(surface, clipper);
     free(rect_source);
     free(rect_dest);
 }
@@ -572,7 +572,7 @@ void			ei_fill			(ei_surface_t		surface,
             pixel_ptr ++;
         }
         hw_surface_unlock(surface);
-        hw_surface_update_rects(surface, NULL);
+        hw_surface_update_rects(surface, clipper);
     }
     else {
         pixel_ptr += (clipper -> top_left.x) + surface_size.width * (clipper -> top_left.y);
@@ -585,7 +585,7 @@ void			ei_fill			(ei_surface_t		surface,
 
         }
         hw_surface_unlock(surface);
-        hw_surface_update_rects(surface, NULL);
+        hw_surface_update_rects(surface, clipper);
     }
 }
 

@@ -350,7 +350,7 @@ ei_color_t* convert_pick_id_to_pick_color(uint32_t id);
  * @param   widget the current widget
  */
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget);
-
+ei_rect_t* ei_intersection(ei_rect_t* rect1, ei_rect_t* rect2) ;
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event);
 ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event);
 /**

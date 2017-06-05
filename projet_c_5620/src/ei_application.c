@@ -12,6 +12,8 @@
 #include "ei_event.h"
 #include "ei_widgetclass.h"
 
+#define max(a,b) ((a) > (b) ? a : b)
+#define min(a,b) ((a) < (b) ? a : b)
 
 /**
  * \brief	Creates an application.
@@ -177,10 +179,24 @@ void draw_widgets(ei_widget_t* widget){
         if (widget != ei_app_root_widget()){
             ei_placer_run(widget);
         }
-        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
+        ei_rect_t* clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
+        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, clipper);
         draw_widgets(widget -> children_head);
         widget = widget -> next_sibling;
     }
+}
+
+ei_rect_t* ei_intersection(ei_rect_t* rect1, ei_rect_t* rect2) {
+  ei_point_t point1 = rect1 -> top_left;
+  ei_point_t point2 = rect2 -> top_left;
+  ei_size_t size1 = rect1 -> size;
+  ei_size_t size2 = rect2 -> size;
+  ei_rect_t* intersection = malloc(sizeof(ei_rect_t));
+  intersection -> top_left.x = max(point1.x, point2.x);
+  intersection -> top_left.y = max(point1.y, point2.y);
+  intersection -> size.width = max(min(size1.width - intersection ->top_left.x + point1.x, size2.width - intersection ->top_left.x + point2.x),0);
+  intersection -> size.height = max(min(size1.height - intersection ->top_left.y + point1.y, size2.height - intersection ->top_left.y + point2.y),0);
+  return intersection;
 }
 
 /**
