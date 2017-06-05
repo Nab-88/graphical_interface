@@ -37,6 +37,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     // Init access to hardware
     hw_init();
 
+
     //Create the main window
 	ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
     ei_surface_t pick_surface = hw_surface_create(main_window, main_window_size, EI_TRUE);
