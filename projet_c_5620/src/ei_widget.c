@@ -1010,7 +1010,7 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
        int width = widget -> screen_location.size.width;
        int height = widget -> screen_location.size.height;
        ei_point_t point = {*x, *y};
-       ei_size_t size = {height, width};
+       ei_size_t size = {width, height};
        (new_rect -> rect).top_left = point;
        (new_rect -> rect).size = size;
        DRAW_RECT -> next = new_rect;
