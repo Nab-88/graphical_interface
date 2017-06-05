@@ -189,7 +189,7 @@ void ei_app_run(){
          hw_surface_unlock(SURFACE_PICK);
          hw_surface_update_rects(SURFACE_PICK, NULL);
          hw_surface_unlock(ei_app_root_surface());
-         hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
+         hw_surface_update_rects(ei_app_root_surface(), NULL);
          DRAW_RECT = NULL;
      }
      }
