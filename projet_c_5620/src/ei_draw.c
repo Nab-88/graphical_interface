@@ -1053,14 +1053,12 @@ void ei_draw_toplevel(ei_surface_t surface,
   fourth -> next = NULL;
   ei_draw_polygon(surface, first, *color2, clipper);
   free_ei_linked_point(first);
-  // if (title != NULL && (strncpy(*title, "", 1) == 0)) {
   if (title != NULL) {
       ei_color_t text_color = {0, 0, 0, 0};
       ei_surface_t text_surface = hw_text_create_surface(*title, ei_default_font, &text_color);
       ei_size_t text_size = hw_surface_get_size(text_surface);
       rectangle.top_left.x += border_width;
       rectangle.top_left.y += 30 + border_width; // on choisit arbitrairement la taille de la bannière
-    //   rectangle.top_left.y += text_size.height + 2*border_width;
       rectangle.size.width -= 2*border_width;
       rectangle.size.height -= 2*border_width + 30;
       first = ei_rounded_frame(rectangle, 0, 0);

@@ -437,7 +437,8 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 							 ei_axis_set_t*		resizable,
 						 	 ei_size_t**		min_size){
 	 if (requested_size != NULL){
-			 widget -> requested_size = *requested_size;
+      requested_size -> height += 30;
+			widget -> requested_size = *requested_size;
 	 }
 	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
 	 if (color != NULL){
@@ -450,7 +451,6 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
              toplevel -> title = calloc(1, sizeof(char*));
              *(toplevel -> title) = calloc(strlen(*title), sizeof(char));
         strncpy(*(toplevel -> title), *title, strlen(*title));
-		//	 *(toplevel -> title) = *title;
 	 }
 	 if (closable != NULL){
 			 *(toplevel -> closable) = *closable;
@@ -464,6 +464,7 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
 	 if (min_size != NULL){
 			 *(toplevel -> min_size) = *min_size;
 	 }
+   toplevel -> button_closable = NULL;
 }
 
 /**
@@ -773,6 +774,7 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 		 ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
 		 ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
 		 FIRST_DRAW --;
+     toplevel -> button_closable = closable;
 	 }
 	 if (*resizable != ei_axis_none) {
 			ei_rect_t* rect_resiz = malloc(sizeof(ei_rect_t));
@@ -785,7 +787,6 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
 			ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none, NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
 			ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
 	 }
-
  }
 
 /**
