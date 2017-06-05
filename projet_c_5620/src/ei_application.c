@@ -63,6 +63,7 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
     WIN_RESIZ -> y = 0;
     ei_event_set_active_widget(NULL);
     ei_place(&ROOT, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
 }
 
 /**
@@ -165,8 +166,8 @@ void ei_app_run(){
                  break;
          }
      if (DRAW_RECT != NULL){
-         DRAW_RECT = NULL;
          draw_widgets(ei_app_root_widget());
+         DRAW_RECT = NULL;
      }
      }
 }

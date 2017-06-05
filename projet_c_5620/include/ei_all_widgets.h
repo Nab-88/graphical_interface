@@ -372,6 +372,6 @@ ei_widget_t* EVENT_ACTIVE;
 ei_point_t* WIN_MOVE;
 ei_point_t* WIN_RESIZ;
 ei_default_handle_func_t DEF_FUNC;
-ei_rect_t* DRAW_RECT;
+ei_linked_rect_t* DRAW_RECT;
 
 #endif

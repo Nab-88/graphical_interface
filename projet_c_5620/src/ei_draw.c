@@ -10,6 +10,7 @@
 #include "ei_draw.h"
 #include "ei_TC.h"
 #include "ei_arc.h"
+#include "ei_all_widgets.h"
 
 #define max(a,b) ((a) > (b) ? a : b)
 #define min(a,b) ((a) < (b) ? a : b)
@@ -143,7 +144,7 @@ void			ei_draw_polyline	(ei_surface_t			surface,
             }
         }
         hw_surface_unlock(surface);
-        hw_surface_update_rects(surface, NULL);
+        hw_surface_update_rects(surface, DRAW_RECT);
     }
 }
 
@@ -477,7 +478,7 @@ void			ei_draw_polygon		(ei_surface_t			surface,
         update_intersect(TCA);
     }
     hw_surface_unlock(surface);
-    hw_surface_update_rects(surface, NULL);
+    hw_surface_update_rects(surface, DRAW_RECT);
     free_all(TC, TCA, tab);
 }
 
@@ -546,7 +547,7 @@ void			ei_draw_text		(ei_surface_t		surface,
         }
     }
     hw_surface_unlock(surface);
-    hw_surface_update_rects(surface, NULL);
+    hw_surface_update_rects(surface, DRAW_RECT);
     free(rect_source);
     free(rect_dest);
 }
@@ -572,7 +573,7 @@ void			ei_fill			(ei_surface_t		surface,
             pixel_ptr ++;
         }
         hw_surface_unlock(surface);
-        hw_surface_update_rects(surface, NULL);
+        hw_surface_update_rects(surface, DRAW_RECT);
     }
     else {
         pixel_ptr += (clipper -> top_left.x) + surface_size.width * (clipper -> top_left.y);
@@ -585,7 +586,7 @@ void			ei_fill			(ei_surface_t		surface,
 
         }
         hw_surface_unlock(surface);
-        hw_surface_update_rects(surface, NULL);
+        hw_surface_update_rects(surface, DRAW_RECT);
     }
 }
 
@@ -671,13 +672,13 @@ int			ei_copy_surface(ei_surface_t		destination,
                ei_copy2(&dst_rect2, &src_rect2, destination, source, alpha);
                hw_surface_unlock(destination);
                hw_surface_unlock(source);
-               hw_surface_update_rects(destination, NULL);
+               hw_surface_update_rects(destination, DRAW_RECT);
                return 1;
              }
              else{
                hw_surface_unlock(destination);
                hw_surface_unlock(source);
-               hw_surface_update_rects(destination, NULL);
+               hw_surface_update_rects(destination, DRAW_RECT);
                  return 0;
                }
     }
@@ -687,13 +688,13 @@ int			ei_copy_surface(ei_surface_t		destination,
                ei_copy2(&dst_rect2, src_rect, destination, source, alpha);
                hw_surface_unlock(destination);
                hw_surface_unlock(source);
-               hw_surface_update_rects(destination, NULL);
+               hw_surface_update_rects(destination, DRAW_RECT);
                return 1;
              }
              else{
                hw_surface_unlock(destination);
                hw_surface_unlock(source);
-               hw_surface_update_rects(destination, NULL);
+               hw_surface_update_rects(destination, DRAW_RECT);
                return 0;
                }
     }
@@ -703,13 +704,13 @@ int			ei_copy_surface(ei_surface_t		destination,
                ei_copy2(dst_rect, &src_rect2, destination, source, alpha);
                hw_surface_unlock(destination);
                hw_surface_unlock(source);
-               hw_surface_update_rects(destination, NULL);
+               hw_surface_update_rects(destination, DRAW_RECT);
                return 1;
              }
              else{
                hw_surface_unlock(destination);
                hw_surface_unlock(source);
-               hw_surface_update_rects(destination, NULL);
+               hw_surface_update_rects(destination, DRAW_RECT);
                return 0;
                }
 
@@ -719,13 +720,13 @@ int			ei_copy_surface(ei_surface_t		destination,
              ei_copy2(dst_rect, src_rect, destination, source, alpha);
              hw_surface_unlock(destination);
              hw_surface_unlock(source);
-             hw_surface_update_rects(destination, NULL);
+             hw_surface_update_rects(destination, DRAW_RECT);
              return 1;
            }
            else{
              hw_surface_unlock(destination);
              hw_surface_unlock(source);
-             hw_surface_update_rects(destination, NULL);
+             hw_surface_update_rects(destination, DRAW_RECT);
              return 0;
              }
     }
