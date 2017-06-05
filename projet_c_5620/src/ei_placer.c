@@ -11,6 +11,7 @@
 #include "ei_placer.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "ei_widget.h"
 #include "ei_all_widgets.h"
 
@@ -136,6 +137,12 @@ void ei_placer_run(struct ei_widget_t* widget){
     ei_anchor_t		anchor = (widget -> placer_params) -> anchor_data;
     int			x = (widget -> placer_params) -> x_data;
     int			y = (widget -> placer_params) -> y_data;
+    if (strcmp(widget -> parent -> wclass -> name, "toplevel") == 0) {
+      ei_toplevel_t* toplevel = (ei_toplevel_t*) widget -> parent;
+      if (toplevel -> button_closable != widget) {
+        y += 30;
+      }
+    }
     int			width = (widget -> placer_params) -> w_data;
     int			height = (widget -> placer_params) -> h_data;
     float			rel_x = (widget -> placer_params) -> rx_data;

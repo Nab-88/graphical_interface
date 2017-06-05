@@ -68,6 +68,7 @@ typedef struct ei_toplevel_t {
     ei_bool_t* closable;
     ei_axis_set_t* resizable;
     ei_size_t** min_size;
+    ei_widget_t* button_closable;
 } ei_toplevel_t;
 
 /**
