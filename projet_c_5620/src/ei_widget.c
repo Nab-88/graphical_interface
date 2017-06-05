@@ -998,8 +998,9 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 			 int dy = where.y - WIN_MOVE -> y;
 			 int x = widget -> screen_location.top_left.x + dx;
 			 int y = widget -> screen_location.top_left.y + dy;
-			 ei_place(widget, NULL, &x, &y, NULL, NULL, NULL, NULL,NULL,NULL);
-			 ei_placer_run(widget);
+       int width = widget -> screen_location.size.width;
+       int height = widget -> screen_location.size.height;
+			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
 			 *WIN_MOVE = where;
 		 }
 		 if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
@@ -1027,11 +1028,8 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 			 	height = 120;
 			 }
 			 ei_place(widget, NULL, &x, &y, &width, &height, NULL, NULL,NULL,NULL);
-			 ei_placer_run(widget);
-			 //draw_widgets(widget -> parent);
-			//  (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, &(widget -> screen_location));
-			//  draw_widgets(widget -> children_head);
-		 }
+       ei_placer_run(widget);
+     }
 	 }
 	 return EI_TRUE;
 }
