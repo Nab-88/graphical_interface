@@ -151,11 +151,11 @@ void ei_placer_run(struct ei_widget_t* widget){
     ei_point_t point_ancre;
     int parent_height = ((widget -> parent) -> screen_location).size.height;
     if (strcmp(widget -> parent -> wclass -> name, "toplevel") == 0) {
-      ei_toplevel_t* toplevel = (ei_toplevel_t*) widget -> parent;
-      if (toplevel -> button_closable != widget) {
-        y += 30;
-        parent_height -= 30;
-      }
+        ei_toplevel_t* toplevel = (ei_toplevel_t*) widget -> parent;
+        if (toplevel -> button_closable != widget) {
+            y += 30;
+            parent_height -= 30;
+        }
     }
     int parent_width = ((widget -> parent) -> screen_location).size.width;
     ei_point_t parent_origin = ((widget -> parent) -> screen_location).top_left;

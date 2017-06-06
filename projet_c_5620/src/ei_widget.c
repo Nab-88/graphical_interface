@@ -36,18 +36,18 @@ uint32_t COLOR_ID = 1;
  *
  *	Callback called when a user clicks on the button.
  */
- void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
- {
+void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
+{
     DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
     DRAW_RECT -> rect = widget -> parent -> screen_location;
- 	ei_widget_destroy(widget -> parent);
-	printf("J'ai détruit le widget !!! hihihi\n");
-	ei_event_set_active_widget(NULL);
- }
+    ei_widget_destroy(widget -> parent);
+    printf("J'ai détruit le widget !!! hihihi\n");
+    ei_event_set_active_widget(NULL);
+}
 
 
 ei_widget_t*		ei_widget_create		(ei_widgetclass_name_t	class_name,
-							 ei_widget_t*		parent){
+        ei_widget_t*		parent){
     ei_widgetclass_t *class = ei_widgetclass_from_name(class_name);
     ei_widget_t *widget = (*(class -> allocfunc))();
     widget -> wclass = class;
@@ -119,8 +119,8 @@ void			ei_widget_destroy		(ei_widget_t*		widget){
     } else {
         previous -> next_sibling = widget -> next_sibling;
     }
-    //(widget -> wclass -> releasefunc)(widget);
-		//draw_widgets(parent);
+    (widget -> wclass -> releasefunc)(widget);
+    //draw_widgets(parent);
 }
 
 ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
@@ -153,25 +153,25 @@ ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
  *				at this location (except for the root widget).
  */
 ei_widget_t*		ei_widget_pick			(ei_point_t*		where){
-	// Recuperer l'ID du widget qu'on cherche sur la pick_surface
-	ei_surface_t pick_surface = SURFACE_PICK;
-	uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(pick_surface);
-	ei_size_t surface_size = hw_surface_get_size(pick_surface);
-	pixel_ptr += where -> x + where -> y * surface_size.width;
-	int ir, ig, ib, ia;
-	hw_surface_get_channel_indices(pick_surface, &ir, &ig, &ib, &ia);
-	ei_color_t* color = calloc(1, sizeof(ei_color_t));
-	color -> red = (unsigned char)((*pixel_ptr <<((3-ir)*8)) >> 24);
-	color -> green = (unsigned char)((*pixel_ptr <<((3-ig)*8)) >> 24);
-	color -> blue = (unsigned char)((*pixel_ptr <<((3-ib)*8)) >> 24);
-	color -> alpha = (unsigned char)((*pixel_ptr <<((3-ia)*8)) >> 24);
-	uint32_t pick_id = color -> red << 24;
-	pick_id += color -> green << 16;
-	pick_id += color -> blue << 8;
-	pick_id += color -> alpha;
-	// Parcours de tout les widgets
-	ei_widget_t* current = ei_app_root_widget();
-	return ei_find_pick_color(current, pick_id);
+    // Recuperer l'ID du widget qu'on cherche sur la pick_surface
+    ei_surface_t pick_surface = SURFACE_PICK;
+    uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(pick_surface);
+    ei_size_t surface_size = hw_surface_get_size(pick_surface);
+    pixel_ptr += where -> x + where -> y * surface_size.width;
+    int ir, ig, ib, ia;
+    hw_surface_get_channel_indices(pick_surface, &ir, &ig, &ib, &ia);
+    ei_color_t* color = calloc(1, sizeof(ei_color_t));
+    color -> red = (unsigned char)((*pixel_ptr <<((3-ir)*8)) >> 24);
+    color -> green = (unsigned char)((*pixel_ptr <<((3-ig)*8)) >> 24);
+    color -> blue = (unsigned char)((*pixel_ptr <<((3-ib)*8)) >> 24);
+    color -> alpha = (unsigned char)((*pixel_ptr <<((3-ia)*8)) >> 24);
+    uint32_t pick_id = color -> red << 24;
+    pick_id += color -> green << 16;
+    pick_id += color -> blue << 8;
+    pick_id += color -> alpha;
+    // Parcours de tous les widgets
+    ei_widget_t* current = ei_app_root_widget();
+    return ei_find_pick_color(current, pick_id);
 
 }
 
@@ -184,18 +184,18 @@ ei_widget_t*		ei_widget_pick			(ei_point_t*		where){
  * @return
  */
 ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id) {
-	ei_widget_t* answer = NULL;
-	while (widget != NULL){
-		if (widget -> pick_id == pick_id && widget != ROOT) {
-			return widget;
-		}
-		answer = ei_find_pick_color(widget -> children_head, pick_id);
-		if (answer != NULL) {
-			break;
-		}
-		widget = widget -> next_sibling;
-	}
-	return answer;
+    ei_widget_t* answer = NULL;
+    while (widget != NULL){
+        if (widget -> pick_id == pick_id && widget != ROOT) {
+            return widget;
+        }
+        answer = ei_find_pick_color(widget -> children_head, pick_id);
+        if (answer != NULL) {
+            break;
+        }
+        widget = widget -> next_sibling;
+    }
+    return answer;
 }
 
 
@@ -231,7 +231,7 @@ ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id) {
  * @param	img		The image to display in the widget, or NULL. Any surface can be
  *				used, but usually a surface returned by \ref hw_image_load. Only one
  *				of the parameter "text" and "img" should be used (i.e. non-NULL).
- 				Defaults to NULL.
+ Defaults to NULL.
  * @param	img_rect	If not NULL, this rectangle defines a subpart of "img" to use as the
  *				image displayed in the widget. Defaults to NULL.
  * @param	img_anchor	The anchor of the image, i.e. where it is placed whithin the widget
@@ -239,17 +239,17 @@ ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id) {
  *				Defaults to \ref ei_anc_center.
  */
 void			ei_frame_configure		(ei_widget_t*		widget,
-							 ei_size_t*		requested_size,
-							 const ei_color_t*	color,
-							 int*			border_width,
-							 ei_relief_t*		relief,
-							 char**			text,
-							 ei_font_t*		text_font,
-							 ei_color_t*		text_color,
-							 ei_anchor_t*		text_anchor,
-							 ei_surface_t*		img,
-							 ei_rect_t**		img_rect,
-							 ei_anchor_t*		img_anchor){
+        ei_size_t*		requested_size,
+        const ei_color_t*	color,
+        int*			border_width,
+        ei_relief_t*		relief,
+        char**			text,
+        ei_font_t*		text_font,
+        ei_color_t*		text_color,
+        ei_anchor_t*		text_anchor,
+        ei_surface_t*		img,
+        ei_rect_t**		img_rect,
+        ei_anchor_t*		img_anchor){
     ei_frame_t* frame = (ei_frame_t*) widget;
     if (color != NULL){
         *(frame -> color) = *color;
@@ -369,40 +369,40 @@ void			ei_button_configure		(ei_widget_t*		widget,
         *(button -> img) = *img;
     }
     if (text_anchor != NULL){
-        button -> text_anchor = calloc(1, sizeof(ei_rect_t));
-        (button -> text_anchor) = text_anchor;
+        //button -> text_anchor = calloc(1, sizeof(ei_rect_t));
+        *(button -> text_anchor) = *text_anchor;
     }
     if (text_color != NULL){
         *(button -> text_color) = *text_color;
     }
     if (text_font != NULL){
-					*(button -> text_font) = *text_font;
-				}
-				if (text != NULL) {
-                    button -> text = calloc(1, sizeof(char*));
-                    *(button -> text) = calloc(strlen(*text), sizeof(char));
-                    strncpy(*(button -> text), *text, strlen(*text));
-					//*(button -> text) = *text;
-				}
-				if (color != NULL) {
-                    button -> color = calloc(1, sizeof(ei_color_t));
-					*(button -> color) = *color;
-				}
-                if (requested_size != NULL){
-                    widget -> requested_size = *requested_size;
-                } else {
-                    if (text != NULL){
-                        ei_surface_t text_surface = hw_text_create_surface(*(button -> text), *(button -> text_font), (button -> text_color));
-                        ei_size_t text_size = hw_surface_get_size(text_surface);
-                        (widget -> requested_size).width = text_size.width + *(button -> border_width)*2;
-                        (widget -> requested_size).height = text_size.height + *(button -> border_width)*2;
-                    } else if (img != NULL) {
-                        ei_size_t size = (**(button -> img_rect)).size;
-                        (widget -> requested_size).width = size.width + *(button -> border_width)*2;
-                        (widget -> requested_size).height = size.height + *(button -> border_width)*2;
-                    }
+        *(button -> text_font) = *text_font;
+    }
+    if (text != NULL) {
+        button -> text = calloc(1, sizeof(char*));
+        *(button -> text) = calloc(strlen(*text), sizeof(char));
+        strncpy(*(button -> text), *text, strlen(*text));
+        //*(button -> text) = *text;
+    }
+    if (color != NULL) {
+        //button -> color = calloc(1, sizeof(ei_color_t));
+        *(button -> color) = *color;
+    }
+    if (requested_size != NULL){
+        widget -> requested_size = *requested_size;
+    } else {
+        if (text != NULL){
+            ei_surface_t text_surface = hw_text_create_surface(*(button -> text), *(button -> text_font), (button -> text_color));
+            ei_size_t text_size = hw_surface_get_size(text_surface);
+            (widget -> requested_size).width = text_size.width + *(button -> border_width)*2;
+            (widget -> requested_size).height = text_size.height + *(button -> border_width)*2;
+        } else if (img != NULL) {
+            ei_size_t size = (**(button -> img_rect)).size;
+            (widget -> requested_size).width = size.width + *(button -> border_width)*2;
+            (widget -> requested_size).height = size.height + *(button -> border_width)*2;
+        }
 
-}
+    }
 }
 
 /**
@@ -427,39 +427,39 @@ void			ei_button_configure		(ei_widget_t*		widget,
  *				the toplevel to be configured to its default size.
  */
 void			ei_toplevel_configure		(ei_widget_t*		widget,
-							 ei_size_t*		requested_size,
-							 ei_color_t*		color,
-							 int*			border_width,
-							 char**			title,
-							 ei_bool_t*		closable,
-							 ei_axis_set_t*		resizable,
-						 	 ei_size_t**		min_size){
-	 if (requested_size != NULL){
-      requested_size -> height += 30;
-			widget -> requested_size = *requested_size;
-	 }
-	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-	 if (color != NULL){
-			 *(toplevel -> color) = *color;
-	 }
-	 if (border_width != NULL){
-			 *(toplevel -> border_width) = *border_width;
-	 }
-	 if (title != NULL){
-             toplevel -> title = calloc(1, sizeof(char*));
-             *(toplevel -> title) = calloc(strlen(*title), sizeof(char));
+        ei_size_t*		requested_size,
+        ei_color_t*		color,
+        int*			border_width,
+        char**			title,
+        ei_bool_t*		closable,
+        ei_axis_set_t*		resizable,
+        ei_size_t**		min_size){
+    if (requested_size != NULL){
+        requested_size -> height += 30;
+        widget -> requested_size = *requested_size;
+    }
+    ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+    if (color != NULL){
+        *(toplevel -> color) = *color;
+    }
+    if (border_width != NULL){
+        *(toplevel -> border_width) = *border_width;
+    }
+    if (title != NULL){
+        toplevel -> title = calloc(1, sizeof(char*));
+        *(toplevel -> title) = calloc(strlen(*title), sizeof(char));
         strncpy(*(toplevel -> title), *title, strlen(*title));
-	 }
-	 if (closable != NULL){
-			 *(toplevel -> closable) = *closable;
-	 }
-	 if (resizable != NULL){
-			 *(toplevel -> resizable) = *resizable;
-	 }
-	 if (min_size != NULL){
-			 *(toplevel -> min_size) = *min_size;
-	 }
-   toplevel -> button_closable = NULL;
+    }
+    if (closable != NULL){
+        *(toplevel -> closable) = *closable;
+    }
+    if (resizable != NULL){
+        *(toplevel -> resizable) = *resizable;
+    }
+    if (min_size != NULL){
+        *(toplevel -> min_size) = *min_size;
+    }
+    toplevel -> button_closable = NULL;
 }
 
 /**
@@ -531,7 +531,7 @@ void*	ei_frame_allocfunc_t		(){
  * @return		A block of memory with all bytes set to 0.
  */
 void*	ei_toplevel_allocfunc_t		(){
-		return calloc(1, sizeof(ei_toplevel_t));
+    return calloc(1, sizeof(ei_toplevel_t));
 }
 
 /**
@@ -542,7 +542,7 @@ void*	ei_toplevel_allocfunc_t		(){
  * @return		A block of memory with all bytes set to 0.
  */
 void*	ei_button_allocfunc_t		(){
-		return calloc(1, sizeof(ei_button_t));
+    return calloc(1, sizeof(ei_button_t));
 }
 /**
  * \brief	A function that releases the memory used by a widget before it is destroyed.
@@ -555,7 +555,24 @@ void*	ei_button_allocfunc_t		(){
 
 void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
     ei_frame_t* frame = (ei_frame_t*) widget;
-    //free(widget -> wclass);
+    free(frame -> color);
+    free(frame -> relief);
+    free(frame -> text_font);
+    free(frame -> text_color);
+    free(frame -> text_anchor);
+    free(frame -> img_anchor);
+    if (frame -> text != NULL){
+        free(*(frame -> text));
+        free(frame -> text);
+    }
+    if (frame -> img != NULL){
+        free(frame -> img);
+    }
+    if (frame -> img_rect != NULL){
+        free(*(frame -> img_rect));
+        free(frame -> img_rect);
+    }
+
     free(frame);
 }
 
@@ -570,7 +587,15 @@ void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget){
 
 void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
     ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-    //free(widget -> wclass);
+    free(toplevel -> color);
+    free(toplevel -> border_width);
+    free(toplevel -> closable);
+    free(toplevel -> resizable);
+    //free(toplevel -> min_size);
+    if (toplevel -> title != NULL){
+        free(*(toplevel -> title));
+        free(toplevel -> title);
+    }
     free(toplevel);
 }
 
@@ -585,7 +610,30 @@ void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
 
 void	ei_button_releasefunc_t	(struct ei_widget_t*	widget){
     ei_button_t* button = (ei_button_t*) widget;
-    //free(widget -> wclass);
+    free(button -> color);
+    free(button -> user_param);
+    free(button -> border_width);
+    free(button -> relief);
+    free(button -> text_font);
+    free(button -> text_color);
+    free(button -> text_anchor);
+    free(button -> img_anchor);
+    free(button -> corner_radius);
+    if (button -> callback != NULL){
+        free(button -> callback);
+    }
+    if (button -> img_rect != NULL){
+        free(*(button -> img_rect));
+        free(button -> img_rect);
+    }
+    if (button -> img != NULL){
+        free(button -> img);
+    }
+    if (button -> text != NULL) {
+        free(*(button -> text));
+        free(button -> text);
+    }
+
     free(button);
 }
 /**
@@ -598,36 +646,36 @@ void	ei_button_releasefunc_t	(struct ei_widget_t*	widget){
  *				(expressed in the surface reference frame).
  */
 void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
-							 ei_surface_t		surface,
-                             ei_surface_t		pick_surface,
-							 ei_rect_t*		clipper){
+        ei_surface_t		surface,
+        ei_surface_t		pick_surface,
+        ei_rect_t*		clipper){
     ei_frame_t* frame = (ei_frame_t*) widget;
-	ei_rect_t rectangle = widget -> screen_location;
-	ei_color_t color = *(frame -> color);
-	ei_color_t pick_color = *(widget -> pick_color);
-	int border_width = *(frame -> border_width);
-	ei_relief_t relief = *(frame -> relief);
-	char** text = frame -> text;
-	ei_surface_t* img = frame -> img;
-	ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t));
-	ei_font_t* text_font = calloc(1, sizeof(ei_font_t));
-	ei_color_t* text_color = calloc(1, sizeof(ei_color_t));
-	ei_anchor_t *anchor = calloc(1, sizeof(ei_anchor_t));
-	ei_point_t* where = calloc(1, sizeof(ei_point_t));
-	if (img != NULL) {
-		img_rect = frame -> img_rect;
-		anchor = frame -> img_anchor;
-		where = ei_get_where(rectangle, anchor, border_width, (**img_rect).size);
-	} else if (text != NULL) {
-		text_font = frame -> text_font;
-		text_color = (ei_color_t*) frame -> text_color;
-		anchor = frame -> text_anchor;
-		ei_surface_t text_surface = hw_text_create_surface(*text, *text_font, &color);
-		ei_size_t text_size = hw_surface_get_size(text_surface);
-		where = ei_get_where(rectangle, anchor, border_width, text_size);
-	}
-	ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
-	ei_draw_button(pick_surface, rectangle, pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
+    ei_rect_t rectangle = widget -> screen_location;
+    ei_color_t color = *(frame -> color);
+    ei_color_t pick_color = *(widget -> pick_color);
+    int border_width = *(frame -> border_width);
+    ei_relief_t relief = *(frame -> relief);
+    char** text = frame -> text;
+    ei_surface_t* img = frame -> img;
+    ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t));
+    ei_font_t* text_font = calloc(1, sizeof(ei_font_t));
+    ei_color_t* text_color = calloc(1, sizeof(ei_color_t));
+    ei_anchor_t *anchor = calloc(1, sizeof(ei_anchor_t));
+    ei_point_t* where = calloc(1, sizeof(ei_point_t));
+    if (img != NULL) {
+        img_rect = frame -> img_rect;
+        anchor = frame -> img_anchor;
+        where = ei_get_where(rectangle, anchor, border_width, (**img_rect).size);
+    } else if (text != NULL) {
+        text_font = frame -> text_font;
+        text_color = (ei_color_t*) frame -> text_color;
+        anchor = frame -> text_anchor;
+        ei_surface_t text_surface = hw_text_create_surface(*text, *text_font, &color);
+        ei_size_t text_size = hw_surface_get_size(text_surface);
+        where = ei_get_where(rectangle, anchor, border_width, text_size);
+    }
+    ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+    ei_draw_button(pick_surface, rectangle, pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
 }
 
 /**
@@ -640,36 +688,36 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
  *				(expressed in the surface reference frame).
  */
 void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
-							 ei_surface_t		surface,
-                             ei_surface_t		pick_surface,
-							 ei_rect_t*		clipper){
+        ei_surface_t		surface,
+        ei_surface_t		pick_surface,
+        ei_rect_t*		clipper){
     ei_button_t* button = (ei_button_t*) widget;
-	ei_rect_t rectangle = widget -> screen_location;
-	ei_color_t color = *(button -> color);
-	ei_color_t pick_color = *(widget -> pick_color);
-	int border_width = *(button -> border_width);
-	ei_relief_t relief = *(button -> relief);
-	char** text = button -> text;
-	ei_surface_t* img = button -> img;
-	ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t));
-	ei_font_t* text_font = calloc(1, sizeof(ei_font_t));
-	ei_color_t* text_color = calloc(1, sizeof(ei_color_t));
-	ei_anchor_t *anchor = calloc(1, sizeof(ei_anchor_t));
-	ei_point_t* where = calloc(1, sizeof(ei_point_t));
-	if (img != NULL) {
-		img_rect = button -> img_rect;
-		anchor = button -> img_anchor;
-		where = ei_get_where(rectangle, anchor, border_width, (**img_rect).size);
-	} else if (text != NULL) {
-		text_font = button -> text_font;
-		text_color = button -> text_color;
-		anchor = button -> text_anchor;
-		ei_surface_t text_surface = hw_text_create_surface(*text, *text_font, &color);
-		ei_size_t text_size = hw_surface_get_size(text_surface);
-		where = ei_get_where(rectangle, anchor, border_width, text_size);
-	}
-	ei_draw_button(surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
-	ei_draw_button(pick_surface, rectangle, pick_color, *(button -> corner_radius), 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
+    ei_rect_t rectangle = widget -> screen_location;
+    ei_color_t color = *(button -> color);
+    ei_color_t pick_color = *(widget -> pick_color);
+    int border_width = *(button -> border_width);
+    ei_relief_t relief = *(button -> relief);
+    char** text = button -> text;
+    ei_surface_t* img = button -> img;
+    ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t));
+    ei_font_t* text_font = calloc(1, sizeof(ei_font_t));
+    ei_color_t* text_color = calloc(1, sizeof(ei_color_t));
+    ei_anchor_t *anchor = calloc(1, sizeof(ei_anchor_t));
+    ei_point_t* where = calloc(1, sizeof(ei_point_t));
+    if (img != NULL) {
+        img_rect = button -> img_rect;
+        anchor = button -> img_anchor;
+        where = ei_get_where(rectangle, anchor, border_width, (**img_rect).size);
+    } else if (text != NULL) {
+        text_font = button -> text_font;
+        text_color = button -> text_color;
+        anchor = button -> text_anchor;
+        ei_surface_t text_surface = hw_text_create_surface(*text, *text_font, &color);
+        ei_size_t text_size = hw_surface_get_size(text_surface);
+        where = ei_get_where(rectangle, anchor, border_width, text_size);
+    }
+    ei_draw_button(surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+    ei_draw_button(pick_surface, rectangle, pick_color, *(button -> corner_radius), 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
 }
 /**
  * \brief  The function gives the top_left from which to draw a text or an
@@ -681,17 +729,17 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
  * @return  The top_left point to start drawing
  */
 ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_width, ei_size_t size) {
-	ei_point_t* where = calloc(1, sizeof(ei_point_t));
-	ei_point_t point_ancre = {rectangle.top_left.x + rectangle.size.width/2, rectangle.top_left.y + rectangle.size.height/2};
-	switch (*anchor) {
+    ei_point_t* where = calloc(1, sizeof(ei_point_t));
+    ei_point_t point_ancre = {rectangle.top_left.x + rectangle.size.width/2, rectangle.top_left.y + rectangle.size.height/2};
+    switch (*anchor) {
         case ei_anc_none:
-		case ei_anc_center:
+        case ei_anc_center:
             where -> x = point_ancre.x - 0.5 * size.width;
-			where -> y = point_ancre.y - 0.5 * size.height;
+            where -> y = point_ancre.y - 0.5 * size.height;
             break;
         case ei_anc_northwest:
-			where -> x = point_ancre.x - ((rectangle.size.width)/2) + border_width;
-			where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
+            where -> x = point_ancre.x - ((rectangle.size.width)/2) + border_width;
+            where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
             break;
         case ei_anc_west:
             where -> x = point_ancre.x - ((rectangle.size.width)/2) + border_width;
@@ -724,7 +772,7 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
         default:
             break;
     }
-	return where;
+    return where;
 }
 
 
@@ -739,49 +787,49 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
  *				(expressed in the surface reference frame).
  */
 void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
-							 ei_surface_t		surface,
-							 ei_surface_t		pick_surface,
-							 ei_rect_t*		clipper) {
-	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-	 ei_rect_t rectangle = widget -> screen_location;
-	 ei_color_t* color = toplevel -> color;
-	 ei_color_t* pick_color = widget -> pick_color;
-	 int* border_width = toplevel -> border_width;
-	 char** title = toplevel -> title;
-	 ei_axis_set_t* resizable = toplevel -> resizable;
-	 ei_color_t window_color = {110, 110, 110, 0};
-	 ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
-	 ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
-	 if (*(toplevel -> closable) == EI_TRUE && toplevel -> button_closable == NULL) {
-		 ei_point_t point;
-		 ei_size_t size;
-		 point.x = 10;
-		 point.y = 10;
-		 ei_anchor_t anchor = ei_anc_none;
-		 size.width = 16;
-		 size.height = 16;
-		 ei_widget_t* closable = ei_widget_create("button", widget);
-		 ei_color_t* red = calloc(1, sizeof(ei_color_t));
-		 red -> red = 255;
-		 int width = 3;
-		 int radius = 10;
-		 ei_callback_t callback = button_press2;
-		 ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
-		 ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
-     toplevel -> button_closable = closable;
-	 }
-	 if (*resizable != ei_axis_none) {
-			ei_rect_t* rect_resiz = malloc(sizeof(ei_rect_t));
-			rect_resiz ->top_left.x = rectangle.top_left.x + rectangle.size.width - 10 - *border_width;
-			rect_resiz ->top_left.y = rectangle.top_left.y + rectangle.size.height - 10 - *border_width;
-			rect_resiz ->size.width = 10 + *border_width;
-			rect_resiz ->size.height = 10 + *border_width;
-			ei_point_t* where = calloc(1, sizeof(ei_point_t));
-			*where = (ei_point_t) {0, 0};
-			ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none, NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
-			ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
-	 }
- }
+        ei_surface_t		surface,
+        ei_surface_t		pick_surface,
+        ei_rect_t*		clipper) {
+    ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+    ei_rect_t rectangle = widget -> screen_location;
+    ei_color_t* color = toplevel -> color;
+    ei_color_t* pick_color = widget -> pick_color;
+    int* border_width = toplevel -> border_width;
+    char** title = toplevel -> title;
+    ei_axis_set_t* resizable = toplevel -> resizable;
+    ei_color_t window_color = {110, 110, 110, 0};
+    ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
+    ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
+    if (*(toplevel -> closable) == EI_TRUE && toplevel -> button_closable == NULL) {
+        ei_point_t point;
+        ei_size_t size;
+        point.x = 10;
+        point.y = 10;
+        ei_anchor_t anchor = ei_anc_none;
+        size.width = 16;
+        size.height = 16;
+        ei_widget_t* closable = ei_widget_create("button", widget);
+        ei_color_t* red = calloc(1, sizeof(ei_color_t));
+        red -> red = 255;
+        int width = 3;
+        int radius = 10;
+        ei_callback_t callback = button_press2;
+        ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
+        ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
+        toplevel -> button_closable = closable;
+    }
+    if (*resizable != ei_axis_none) {
+        ei_rect_t* rect_resiz = malloc(sizeof(ei_rect_t));
+        rect_resiz ->top_left.x = rectangle.top_left.x + rectangle.size.width - 10 - *border_width;
+        rect_resiz ->top_left.y = rectangle.top_left.y + rectangle.size.height - 10 - *border_width;
+        rect_resiz ->size.width = 10 + *border_width;
+        rect_resiz ->size.height = 10 + *border_width;
+        ei_point_t* where = calloc(1, sizeof(ei_point_t));
+        *where = (ei_point_t) {0, 0};
+        ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none, NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
+        ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
+    }
+}
 
 /**
  * \brief	A function that sets the default values for a class.
@@ -795,16 +843,16 @@ void	ei_frame_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     ei_color_t* color = malloc(sizeof(ei_color_t));
     *color = ei_default_background_color;
     frame -> color = color;
-	int* border_width = calloc(1, sizeof(int));
+    int* border_width = calloc(1, sizeof(int));
     frame -> border_width = border_width;
-	ei_relief_t *relief = malloc(sizeof(ei_relief_t));
-	*relief = ei_relief_none;
+    ei_relief_t *relief = malloc(sizeof(ei_relief_t));
+    *relief = ei_relief_none;
     frame -> relief = relief;
-	ei_font_t* text_font = malloc(sizeof(ei_font_t));
-	*text_font = ei_default_font;
+    ei_font_t* text_font = malloc(sizeof(ei_font_t));
+    *text_font = ei_default_font;
     frame -> text_font = text_font;
-	ei_color_t* text_color = malloc(sizeof(ei_color_t));
-	*text_color = ei_font_default_color;
+    ei_color_t* text_color = malloc(sizeof(ei_color_t));
+    *text_color = ei_font_default_color;
     frame -> text_color = text_color;
     ei_anchor_t* center_text = malloc(sizeof(ei_anchor_t));
     *center_text = ei_anc_center;
@@ -825,16 +873,16 @@ void	ei_button_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     *color = ei_default_background_color;
     button -> color = color;
     button -> user_param = calloc(1, sizeof(void *));
-	int* border_width = calloc(1, sizeof(int));
+    int* border_width = calloc(1, sizeof(int));
     button -> border_width = border_width;
-	ei_relief_t *relief = malloc(sizeof(ei_relief_t));
-	*relief = ei_relief_raised;
+    ei_relief_t *relief = malloc(sizeof(ei_relief_t));
+    *relief = ei_relief_raised;
     button -> relief = relief;
-	ei_font_t* text_font = malloc(sizeof(ei_font_t));
-	*text_font = ei_default_font;
+    ei_font_t* text_font = malloc(sizeof(ei_font_t));
+    *text_font = ei_default_font;
     button -> text_font = text_font;
-	ei_color_t* text_color = malloc(sizeof(ei_color_t));
-	*text_color = ei_font_default_color;
+    ei_color_t* text_color = malloc(sizeof(ei_color_t));
+    *text_color = ei_font_default_color;
     button -> text_color = text_color;
     ei_anchor_t* center_text = malloc(sizeof(ei_anchor_t));
     *center_text = ei_anc_center;
@@ -848,31 +896,31 @@ void	ei_button_setdefaultsfunc_t	(struct ei_widget_t*	widget){
 
 }
 /**
-* \brief	A function that sets the default values for a class.
-*
-* @param	widget		A pointer to the widget instance to intialize.
-*/
+ * \brief	A function that sets the default values for a class.
+ *
+ * @param	widget		A pointer to the widget instance to intialize.
+ */
 void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
-		(widget -> requested_size).width = 320;
-		(widget -> requested_size).height = 240;
-		ei_toplevel_t* toplevel = (ei_toplevel_t *) widget;
-		ei_color_t* color = malloc(sizeof(ei_color_t));
-		*color = ei_default_background_color;
-		toplevel -> color = color;
-		int* border_width = calloc(1, sizeof(int));
-		toplevel -> border_width = border_width;
-		char* title = "Toplevel";
-		toplevel -> title = &title;
-		ei_bool_t* closable = malloc(sizeof(ei_bool_t));
-		*closable = EI_TRUE;
-		toplevel -> closable = closable;
-		ei_axis_set_t* resizable = malloc(sizeof(ei_axis_set_t));
-		*resizable = ei_axis_both;
-		toplevel -> resizable = resizable;
-		ei_size_t* min_size = malloc(sizeof(ei_size_t));
-		min_size -> width = 160;
-		min_size -> height = 120;
-		toplevel -> min_size = &min_size;
+    (widget -> requested_size).width = 320;
+    (widget -> requested_size).height = 240;
+    ei_toplevel_t* toplevel = (ei_toplevel_t *) widget;
+    ei_color_t* color = malloc(sizeof(ei_color_t));
+    *color = ei_default_background_color;
+    toplevel -> color = color;
+    int* border_width = calloc(1, sizeof(int));
+    toplevel -> border_width = border_width;
+    char* title = "Toplevel";
+    toplevel -> title = &title;
+    ei_bool_t* closable = malloc(sizeof(ei_bool_t));
+    *closable = EI_TRUE;
+    toplevel -> closable = closable;
+    ei_axis_set_t* resizable = malloc(sizeof(ei_axis_set_t));
+    *resizable = ei_axis_both;
+    toplevel -> resizable = resizable;
+    ei_size_t* min_size = malloc(sizeof(ei_size_t));
+    min_size -> width = 160;
+    min_size -> height = 120;
+    toplevel -> min_size = &min_size;
 }
 
 /**
@@ -885,7 +933,7 @@ void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
  */
 
 void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
-							 ei_rect_t		rect){
+        ei_rect_t		rect){
 }
 
 /**
@@ -898,7 +946,7 @@ void	ei_frame_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 
 void	ei_toplevel_geomnotifyfunc_t	(struct ei_widget_t*	widget,
-							 ei_rect_t		rect){
+        ei_rect_t		rect){
 }
 
 /**
@@ -911,7 +959,7 @@ void	ei_toplevel_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  */
 
 void	ei_button_geomnotifyfunc_t	(struct ei_widget_t*	widget,
-							 ei_rect_t		rect){
+        ei_rect_t		rect){
 }
 /**
  * @brief	A function that is called in response to an event. This function
@@ -929,9 +977,9 @@ void	ei_button_geomnotifyfunc_t	(struct ei_widget_t*	widget,
  *				FALSE, or return TRUE without having done anything.
  */
 ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
-						 struct ei_event_t*	event){
-      ei_event_set_active_widget(widget -> parent);
-      return EI_FALSE;
+        struct ei_event_t*	event){
+    ei_event_set_active_widget(widget -> parent);
+    return EI_FALSE;
 }
 
 /**
@@ -950,139 +998,139 @@ ei_bool_t ei_frame_handlefunc_t (struct ei_widget_t*	widget,
  *				FALSE, or return TRUE without having done anything.
  */
 ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
-						 struct ei_event_t*	event){
-	 ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-	 ei_point_t where = event -> param.mouse.where;
-	 if (event -> type == ei_ev_mouse_buttondown) {
-		 ei_event_set_active_widget(widget);
-		 if  (is_on_the_banner(widget, event) == EI_TRUE) {
-		 	*WIN_MOVE = where;
-		} else if (*(toplevel -> resizable) != ei_axis_none) {
-			if (is_on_the_square(widget, event) == EI_TRUE) {
-				switch (*(toplevel -> resizable)) {
-					case ei_axis_both:
-						*WIN_RESIZ = where;
-						break;
-					case ei_axis_x:
-						*WIN_RESIZ = (ei_point_t) {where.x, 0};
-						break;
-					case ei_axis_y:
-						*WIN_RESIZ = (ei_point_t) {0, where.y};
-						break;
-					default:
-						break;
-				}
-			}
-		}
-	 }
-	 else if (event -> type == ei_ev_mouse_buttonup) {
-		 WIN_MOVE -> x = 0;
-		 WIN_MOVE -> y = 0;
-		 WIN_RESIZ -> x = 0;
-		 WIN_RESIZ -> y = 0;
-		 ei_event_set_active_widget(widget);
-	 }
-	 else if (event -> type == ei_ev_mouse_move) {
-		 if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
+        struct ei_event_t*	event){
+    ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+    ei_point_t where = event -> param.mouse.where;
+    if (event -> type == ei_ev_mouse_buttondown) {
+        ei_event_set_active_widget(widget);
+        if  (is_on_the_banner(widget, event) == EI_TRUE) {
+            *WIN_MOVE = where;
+        } else if (*(toplevel -> resizable) != ei_axis_none) {
+            if (is_on_the_square(widget, event) == EI_TRUE) {
+                switch (*(toplevel -> resizable)) {
+                    case ei_axis_both:
+                        *WIN_RESIZ = where;
+                        break;
+                    case ei_axis_x:
+                        *WIN_RESIZ = (ei_point_t) {where.x, 0};
+                        break;
+                    case ei_axis_y:
+                        *WIN_RESIZ = (ei_point_t) {0, where.y};
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    else if (event -> type == ei_ev_mouse_buttonup) {
+        WIN_MOVE -> x = 0;
+        WIN_MOVE -> y = 0;
+        WIN_RESIZ -> x = 0;
+        WIN_RESIZ -> y = 0;
+        ei_event_set_active_widget(widget);
+    }
+    else if (event -> type == ei_ev_mouse_move) {
+        if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
 
-             DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-             DRAW_RECT -> rect = (widget -> screen_location);
-			 int dx = where.x - WIN_MOVE -> x;
-			 int dy = where.y - WIN_MOVE -> y;
-			 int* x = calloc(1, sizeof(int));
-             *x = widget -> screen_location.top_left.x + dx;
-			 int* y = calloc(1, sizeof(int));
-             *y = widget -> screen_location.top_left.y + dy;
-       int width = widget -> screen_location.size.width;
-       int height = widget -> screen_location.size.height;
-       ei_point_t point = {*x, *y};
-       ei_size_t size = {width, height};
-       ei_rect_t rectangle = {point, size};
-       DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
+            DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+            DRAW_RECT -> rect = (widget -> screen_location);
+            int dx = where.x - WIN_MOVE -> x;
+            int dy = where.y - WIN_MOVE -> y;
+            int* x = calloc(1, sizeof(int));
+            *x = widget -> screen_location.top_left.x + dx;
+            int* y = calloc(1, sizeof(int));
+            *y = widget -> screen_location.top_left.y + dy;
+            int width = widget -> screen_location.size.width;
+            int height = widget -> screen_location.size.height;
+            ei_point_t point = {*x, *y};
+            ei_size_t size = {width, height};
+            ei_rect_t rectangle = {point, size};
+            DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
 
-       ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
-			 *WIN_MOVE = where;
+            ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
+            *WIN_MOVE = where;
 
-		 }
-		 if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
-             DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
-             DRAW_RECT -> rect = (widget -> screen_location);
-			 int dx, dy;
-			 if (WIN_RESIZ -> x != 0) {
-				 dx = where.x - WIN_RESIZ -> x;
-				 WIN_RESIZ -> x = where.x;
-				} else {
-					dx = 0;
-				}
-				if (WIN_RESIZ -> y != 0) {
-					dy = where.y - WIN_RESIZ -> y;
-					WIN_RESIZ -> y = where.y;
-				} else {
-					dy = 0;
-				}
-			 int* x = calloc(1, sizeof(int));
-			 *x = widget -> screen_location.top_left.x;
-			 int* y = calloc(1, sizeof(int));
- 			 *y = widget -> screen_location.top_left.y;
-			 int width = widget -> screen_location.size.width + dx;
-			 int height = widget -> screen_location.size.height + dy;
-             ei_point_t point = {*x, *y};
-             ei_size_t size = {width, height};
-             ei_rect_t rectangle = {point, size};
-             DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
-			 if (width < 160) {
-			 	width = 160;
-			 }
-			 if (height < 120) {
-			 	height = 120;
-			 }
-			 ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
-       ei_placer_run(widget);
-     }
-	 }
-	 return EI_TRUE;
+        }
+        if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
+            DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+            DRAW_RECT -> rect = (widget -> screen_location);
+            int dx, dy;
+            if (WIN_RESIZ -> x != 0) {
+                dx = where.x - WIN_RESIZ -> x;
+                WIN_RESIZ -> x = where.x;
+            } else {
+                dx = 0;
+            }
+            if (WIN_RESIZ -> y != 0) {
+                dy = where.y - WIN_RESIZ -> y;
+                WIN_RESIZ -> y = where.y;
+            } else {
+                dy = 0;
+            }
+            int* x = calloc(1, sizeof(int));
+            *x = widget -> screen_location.top_left.x;
+            int* y = calloc(1, sizeof(int));
+            *y = widget -> screen_location.top_left.y;
+            int width = widget -> screen_location.size.width + dx;
+            int height = widget -> screen_location.size.height + dy;
+            ei_point_t point = {*x, *y};
+            ei_size_t size = {width, height};
+            ei_rect_t rectangle = {point, size};
+            DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
+            if (width < 160) {
+                width = 160;
+            }
+            if (height < 120) {
+                height = 120;
+            }
+            ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
+            ei_placer_run(widget);
+        }
+    }
+    return EI_TRUE;
 }
 
 ei_rect_t* ei_union(ei_rect_t* rect1, ei_rect_t* rect2) {
-  ei_point_t point1 = rect1 -> top_left;
-  ei_point_t point2 = rect2 -> top_left;
-  ei_size_t size1 = rect1 -> size;
-  ei_size_t size2 = rect2 -> size;
-  ei_rect_t* intersection = malloc(sizeof(ei_rect_t));
-  intersection -> top_left.x = min(point1.x, point2.x);
-  intersection -> top_left.y = min(point1.y, point2.y);
-  intersection -> size.width = max(size1.width, size2.width) + abs(point1.x - point2.x);
-  intersection -> size.height = max(size1.height, size2.height) + abs(point1.y - point2.y);
-  return intersection;
+    ei_point_t point1 = rect1 -> top_left;
+    ei_point_t point2 = rect2 -> top_left;
+    ei_size_t size1 = rect1 -> size;
+    ei_size_t size2 = rect2 -> size;
+    ei_rect_t* intersection = malloc(sizeof(ei_rect_t));
+    intersection -> top_left.x = min(point1.x, point2.x);
+    intersection -> top_left.y = min(point1.y, point2.y);
+    intersection -> size.width = max(size1.width, size2.width) + abs(point1.x - point2.x);
+    intersection -> size.height = max(size1.height, size2.height) + abs(point1.y - point2.y);
+    return intersection;
 }
 
 
 ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event) {
-	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-	ei_point_t where = event -> param.mouse.where;
-	int x_min, x_max, y_min, y_max;
-	x_min = widget -> screen_location.top_left.x;
-	y_min = widget -> screen_location.top_left.y;
-	x_max = widget -> screen_location.top_left.x + widget -> screen_location.size.width;
-	y_max = y_min + 30 + *(toplevel -> border_width);
-	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
-		return EI_TRUE;
-	}
-	return EI_FALSE;
+    ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+    ei_point_t where = event -> param.mouse.where;
+    int x_min, x_max, y_min, y_max;
+    x_min = widget -> screen_location.top_left.x;
+    y_min = widget -> screen_location.top_left.y;
+    x_max = widget -> screen_location.top_left.x + widget -> screen_location.size.width;
+    y_max = y_min + 30 + *(toplevel -> border_width);
+    if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
+        return EI_TRUE;
+    }
+    return EI_FALSE;
 }
 
 ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event) {
-	ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
-	ei_point_t where = event -> param.mouse.where;
-	int x_min, x_max, y_min, y_max;
-	x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10 - *(toplevel -> border_width);
-	y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10 - *(toplevel -> border_width);
-	x_max = x_min + 10 + *(toplevel -> border_width);
-	y_max = y_min + 10 + *(toplevel -> border_width);
-	if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
-		return EI_TRUE;
-	}
-	return EI_FALSE;
+    ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
+    ei_point_t where = event -> param.mouse.where;
+    int x_min, x_max, y_min, y_max;
+    x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10 - *(toplevel -> border_width);
+    y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10 - *(toplevel -> border_width);
+    x_max = x_min + 10 + *(toplevel -> border_width);
+    y_max = y_min + 10 + *(toplevel -> border_width);
+    if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
+        return EI_TRUE;
+    }
+    return EI_FALSE;
 }
 
 /**
@@ -1101,44 +1149,44 @@ ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event) {
  *				FALSE, or return TRUE without having done anything.
  */
 ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
-						 struct ei_event_t*	event){
- 	ei_button_t* button = (ei_button_t*) widget;
-	ei_relief_t* relief = button -> relief;
-	if (event -> type == ei_ev_mouse_buttondown) {
-		*relief = ei_relief_sunken;
-		ei_change_relief_button(relief, widget);
+        struct ei_event_t*	event){
+    ei_button_t* button = (ei_button_t*) widget;
+    ei_relief_t* relief = button -> relief;
+    if (event -> type == ei_ev_mouse_buttondown) {
+        *relief = ei_relief_sunken;
+        ei_change_relief_button(relief, widget);
         DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
         DRAW_RECT -> rect = widget -> screen_location;
-		ei_event_set_active_widget(widget);
+        ei_event_set_active_widget(widget);
         if (button -> callback != NULL){
             (*(button -> callback))(widget, event, *(button -> user_param));
         }
-	}
-	else if (event -> type == ei_ev_mouse_buttonup) {
-		*relief = ei_relief_raised;
-		ei_change_relief_button(relief, widget);
+    }
+    else if (event -> type == ei_ev_mouse_buttonup) {
+        *relief = ei_relief_raised;
+        ei_change_relief_button(relief, widget);
         DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
         DRAW_RECT -> rect = widget -> screen_location;
-		ei_event_set_active_widget(widget -> parent);
+        ei_event_set_active_widget(widget -> parent);
 
-	}
-	else if (event -> type == ei_ev_mouse_move) {
-		ei_point_t where = event -> param.mouse.where;
-		ei_widget_t* compare = ei_widget_pick(&where);
-		if (compare == NULL || compare -> pick_id != widget -> pick_id) {
-			if (*relief != ei_relief_raised) {
-				*relief = ei_relief_raised;
-				ei_change_relief_button(relief, widget);
-			}
-		}
-		else {
-			if (*relief != ei_relief_sunken) {
-				*relief = ei_relief_sunken;
-				ei_change_relief_button(relief, widget);
-			}
-		}
-	}
-	return EI_TRUE;
+    }
+    else if (event -> type == ei_ev_mouse_move) {
+        ei_point_t where = event -> param.mouse.where;
+        ei_widget_t* compare = ei_widget_pick(&where);
+        if (compare == NULL || compare -> pick_id != widget -> pick_id) {
+            if (*relief != ei_relief_raised) {
+                *relief = ei_relief_raised;
+                ei_change_relief_button(relief, widget);
+            }
+        }
+        else {
+            if (*relief != ei_relief_sunken) {
+                *relief = ei_relief_sunken;
+                ei_change_relief_button(relief, widget);
+            }
+        }
+    }
+    return EI_TRUE;
 }
 
 
@@ -1149,8 +1197,8 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
  * @param   widget the current widget
  */
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
-	ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
-	ei_placer_run(widget);
+    ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
+    ei_placer_run(widget);
 }
 
 /**
