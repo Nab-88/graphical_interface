@@ -13,7 +13,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_draw_poly.o ${OBJDIR}/ei_draw_widgets.o
+LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_widget_button.o ${OBJDIR}/ei_widget_frame.o ${OBJDIR}/ei_widget_toplevel.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_draw_poly.o ${OBJDIR}/ei_draw_widgets.o
 
 
 # Platform specific definitions (OS X, Linux)
@@ -76,6 +76,22 @@ ${OBJDIR}/ei_placer.o : ${SRC}/ei_placer.c
 #
 ${OBJDIR}/ei_widget.o : ${SRC}/ei_widget.c
 	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget.c -o ${OBJDIR}/ei_widget.o
+#
+# # ei_widget_button
+#
+${OBJDIR}/ei_widget_button.o : ${SRC}/ei_widget_button.c
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget_button.c -o ${OBJDIR}/ei_widget_button.o
+
+#
+# # ei_widget_frame
+#
+${OBJDIR}/ei_widget_frame.o : ${SRC}/ei_widget_frame.c
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget_frame.c -o ${OBJDIR}/ei_widget_frame.o
+#
+# # ei_widget_toplevel
+#
+${OBJDIR}/ei_widget_toplevel.o : ${SRC}/ei_widget_toplevel.c
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget_toplevel.c -o ${OBJDIR}/ei_widget_toplevel.o
 #
 # # ei_event
 #
