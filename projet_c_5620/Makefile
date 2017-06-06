@@ -7,8 +7,8 @@ TESTS		= ./tests
 INCLUDES	= ./include
 SRC = ./src
 INCFLAGS	:= -I${INCLUDES} -I${TESTS}
-OPTFLAGS	:= -Os -DNDEBUG
-# OPTFLAGS	:= -g
+# OPTFLAGS	:= -Os -DNDEBUG
+OPTFLAGS	:= -g
 CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
