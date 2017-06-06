@@ -11,6 +11,9 @@
 #include "ei_widget_button.h"
 #include "ei_widget_toplevel.h"
 
+#define max(a,b) ((a) > (b) ? a : b)
+#define min(a,b) ((a) < (b) ? a : b)
+
 /*
  * button_press --
  *
@@ -237,7 +240,43 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         ei_size_t text_size = hw_surface_get_size(text_surface);
         where = ei_get_where(rectangle, anchor, border_width, text_size);
     }
-    ei_draw_button(surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+    ei_size_t surface_size = hw_surface_get_size(surface);
+    ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
+    ei_draw_button(alpha_surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+    ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    if (text != NULL) {
+        if (*text != NULL) {
+            if (relief == ei_relief_sunken) {
+                where->x += 3;
+                where->y += 3;
+            }
+            rectangle.size.width -= 2*border_width;
+            rectangle.size.height -= 2*border_width;
+            rectangle.top_left.x += border_width;
+            rectangle.top_left.y += border_width;
+            rectangle = *ei_intersection(&rectangle, clipper);
+            ei_draw_text(surface, where, *text, *text_font, text_color, &rectangle);
+        }
+    } else if (img != NULL) {
+        // on utilise copy
+        ei_rect_t rect = {*where, (*img_rect)->size};
+        ei_rect_t image = **img_rect;
+        ei_rect_t* intersects = &rect;
+        if (clipper != NULL) {
+            if (clipper->size.width != 0 && clipper->size.height != 0) {
+                intersects = ei_intersection(&rect, clipper);
+                image.top_left.x += max(0,intersects ->top_left.x - where->x);
+                image.top_left.y += max(0,intersects ->top_left.y - where->y);
+                image.size = intersects -> size;
+            }
+        }
+        if (image.size.width != 0 && image.size.height != 0) {
+            ei_size_t surface_size = hw_surface_get_size(surface);
+            if (intersects -> top_left.x >= 0 && intersects -> top_left.y >= 0 && intersects -> top_left.x <= surface_size.width && intersects -> top_left.y <= surface_size.height) {
+                ei_copy_surface(surface, intersects, *img, &image, hw_surface_has_alpha(surface));
+            }
+        }
+    }
     ei_draw_button(pick_surface, rectangle, pick_color, *(button -> corner_radius), 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
 }
 

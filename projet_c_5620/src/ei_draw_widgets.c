@@ -263,33 +263,6 @@ void ei_draw_button(ei_surface_t surface,
     frame = ei_rounded_frame(rectangle, corner_radius, 0);
     ei_draw_polygon(surface, frame, color, clipper);
     free_ei_linked_point(frame);
-    if (text != NULL) {
-        if (relief == ei_relief_sunken) {
-            where.x += 3;
-            where.y += 3;
-        }
-        rectangle = *ei_intersection(&rectangle, clipper);
-        ei_draw_text(surface, &where, *text, text_font, text_color, &rectangle);
-    } else if (img != NULL) {
-        // on utilise copy
-        ei_rect_t rect = {where, img_rect->size};
-        ei_rect_t image = *img_rect;
-        ei_rect_t* intersects = &rect;
-        if (clipper != NULL) {
-            if (clipper->size.width != 0 && clipper->size.height != 0) {
-                intersects = ei_intersection(&rect, clipper);
-                image.top_left.x += max(0,intersects ->top_left.x - where.x);
-                image.top_left.y += max(0,intersects ->top_left.y - where.y);
-                image.size = intersects -> size;
-            }
-        }
-        if (image.size.width != 0 && image.size.height != 0) {
-            ei_size_t surface_size = hw_surface_get_size(surface);
-            if (intersects -> top_left.x >= 0 && intersects -> top_left.y >= 0 && intersects -> top_left.x <= surface_size.width && intersects -> top_left.y <= surface_size.height) {
-                ei_copy_surface(surface, intersects, *img, &image, hw_surface_has_alpha(surface));
-            }
-        }
-    }
 }
 
 /**
