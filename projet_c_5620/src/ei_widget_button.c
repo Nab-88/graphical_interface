@@ -18,10 +18,11 @@
  */
 void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
 {
-    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+    if (DRAW_RECT == NULL){
+        DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+    }
     DRAW_RECT -> rect = widget -> parent -> screen_location;
     ei_widget_destroy(widget -> parent);
-    printf("J'ai détruit le widget !!! hihihi\n");
     ei_event_set_active_widget(NULL);
 }
 
@@ -309,15 +310,19 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
     if (event -> type == ei_ev_mouse_buttondown) {
         *relief = ei_relief_sunken;
         ei_change_relief_button(relief, widget);
-        DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+        if (DRAW_RECT == NULL){
+            DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+        }
         DRAW_RECT -> rect = widget -> screen_location;
         ei_event_set_active_widget(widget);
     }
     else if (event -> type == ei_ev_mouse_buttonup) {
         *relief = ei_relief_raised;
         ei_change_relief_button(relief, widget);
-        DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
-        DRAW_RECT -> rect = widget -> parent -> screen_location;
+        if (DRAW_RECT == NULL){
+            DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+        }
+        DRAW_RECT -> rect = widget -> screen_location;
         ei_event_set_active_widget(widget -> parent);
         if (button -> callback != NULL){
             (*(button -> callback))(widget, event, *(button -> user_param));

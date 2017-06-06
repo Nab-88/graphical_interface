@@ -360,5 +360,6 @@ void ei_draw_toplevel(ei_surface_t surface,
         where -> x = rectangle.top_left.x + 25; // on garde de la place pour le bouton closable
         where -> y = rectangle.top_left.y - 30;
         ei_draw_text(surface, where, *title, ei_default_font, &text_color, clipper);
+        free(where);
     }
 }
