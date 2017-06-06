@@ -207,12 +207,13 @@ void draw_widgets(ei_widget_t* widget){
         if (widget != ei_app_root_widget()){
             ei_placer_run(widget);
         }
-        ei_rect_t* clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
+        ei_rect_t* clipper = &(widget -> screen_location);
         ei_widget_t* current = widget;
         while (current != ei_app_root_widget()) {
             clipper = ei_intersection(clipper, &(current -> screen_location));
             current = current -> parent;
         }
+        clipper = ei_intersection(clipper, &(current -> screen_location));
         if (DRAW_RECT != NULL) {
             clipper = ei_intersection(clipper, &(DRAW_RECT -> rect));
         }
