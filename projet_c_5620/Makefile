@@ -111,6 +111,6 @@ doc :
 # Removing all built files.
 
 clean:
-	rm -f ${TARGETS}
-	rm -f *.exe
-	rm -f ${OBJDIR}/*
+	@rm -f ${TARGETS}
+	@rm -f *.exe
+	@rm -f ${OBJDIR}/*
