@@ -13,7 +13,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/test_button.o ${OBJDIR}/round_frame.o ${OBJDIR}/arc_draw.o ${OBJDIR}/clipping_polygon.o ${OBJDIR}/acote.o ${OBJDIR}/order_TCA.o ${OBJDIR}/delete_side.o ${OBJDIR}/move_TCA.o ${OBJDIR}/test_polygon.o ${OBJDIR}/init_scanline.o ${OBJDIR}/minimal.o ${OBJDIR}/test_text.o ${OBJDIR}/ei_draw.o ${OBJDIR}/test_copy.o  ${OBJDIR}/test_fill.o ${OBJDIR}/map_rgba.o ${OBJDIR}/lines.o ${OBJDIR}/frame.o ${OBJDIR}/button.o ${OBJDIR}/hello_world.o ${OBJDIR}/puzzle.o ${OBJDIR}/two048.o
+LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o
 
 
 # Platform specific definitions (OS X, Linux)
@@ -55,217 +55,52 @@ TARGETS		=	${LIBEI} \
 			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba frame button hello_world puzzle two048 arc_draw round_frame test_button delete_side
 all : ${TARGETS}
 
+# Make un test
 
+% : ${OBJDIR}/%.o ${LIBEIBASE} ${LIBEI}
+	@${LINK} -o $* ${LDFLAGS} ${OBJDIR}/$*.o ${LIBEI} ${LIBS}
 
-########## Test-programs
+########## Our Program
+# # ei_draw
+#
+${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw.c -o ${OBJDIR}/ei_draw.o
+#
+
 # ei_placer
 #
 ${OBJDIR}/ei_placer.o : ${SRC}/ei_placer.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_placer.c -o ${OBJDIR}/ei_placer.o
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_placer.c -o ${OBJDIR}/ei_placer.o
 #
 # # ei_widget
 #
 ${OBJDIR}/ei_widget.o : ${SRC}/ei_widget.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget.c -o ${OBJDIR}/ei_widget.o
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_widget.c -o ${OBJDIR}/ei_widget.o
 #
 # # ei_event
 #
 ${OBJDIR}/ei_event.o : ${SRC}/ei_event.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_event.c -o ${OBJDIR}/ei_event.o
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_event.c -o ${OBJDIR}/ei_event.o
 #
 # # ei_application
 #
 ${OBJDIR}/ei_application.o : ${SRC}/ei_application.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_application.c -o ${OBJDIR}/ei_application.o
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_application.c -o ${OBJDIR}/ei_application.o
 #
-# #test_button
-# test_button : ${OBJDIR}/test_button.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o test_button ${LDFLAGS} ${OBJDIR}/test_button.o ${LIBS} ${OBJDIR}/ei_draw.o
+# #TESTS compilation
 #
-${OBJDIR}/test_button.o : ${TESTS}/test_button.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_button.c -o ${OBJDIR}/test_button.o
-#
-# #round_frame
-# round_frame : ${OBJDIR}/round_frame.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o round_frame ${LDFLAGS} ${OBJDIR}/round_frame.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/round_frame.o : ${TESTS}/round_frame.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/round_frame.c -o ${OBJDIR}/round_frame.o
-#
-# #arc_draw
-# arc_draw : ${OBJDIR}/arc_draw.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o arc_draw ${LDFLAGS} ${OBJDIR}/arc_draw.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/arc_draw.o : ${TESTS}/arc_draw.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/arc_draw.c -o ${OBJDIR}/arc_draw.o
-#
-# #clipping_polygon
-# clipping_polygon : ${OBJDIR}/clipping_polygon.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o clipping_polygon ${LDFLAGS} ${OBJDIR}/clipping_polygon.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/clipping_polygon.o : ${TESTS}/clipping_polygon.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/clipping_polygon.c -o ${OBJDIR}/clipping_polygon.o
-#
-# #acote
-# acote : ${OBJDIR}/acote.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o acote ${LDFLAGS} ${OBJDIR}/acote.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/acote.o : ${TESTS}/acote.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/acote.c -o ${OBJDIR}/acote.o
-#
-# #order_TCA
-# order_TCA : ${OBJDIR}/order_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o order_TCA ${LDFLAGS} ${OBJDIR}/order_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/order_TCA.o : ${TESTS}/order_TCA.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/order_TCA.c -o ${OBJDIR}/order_TCA.o
-#
-# #test delete_side
-# delete_side : ${OBJDIR}/delete_side.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o delete_side ${LDFLAGS} ${OBJDIR}/delete_side.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/delete_side.o : ${TESTS}/delete_side.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/delete_side.c -o ${OBJDIR}/delete_side.o
-#
-# #test move_TCA
-# move_TCA : ${OBJDIR}/move_TCA.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o move_TCA ${LDFLAGS} ${OBJDIR}/move_TCA.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/move_TCA.o : ${TESTS}/move_TCA.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/move_TCA.c -o ${OBJDIR}/move_TCA.o
-#
-#
-# # test_polygon
-# test_polygon : ${OBJDIR}/test_polygon.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o test_polygon ${LDFLAGS} ${OBJDIR}/test_polygon.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/test_polygon.o : ${TESTS}/test_polygon.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_polygon.c -o ${OBJDIR}/test_polygon.o
-#
-#
-# # init_scanline
-# init_scanline : ${OBJDIR}/init_scanline.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o init_scanline ${LDFLAGS} ${OBJDIR}/init_scanline.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/init_scanline.o : ${TESTS}/init_scanline.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/init_scanline.c -o ${OBJDIR}/init_scanline.o
-#
-#
-# # minimal
-#
-# minimal : ${OBJDIR}/minimal.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o minimal ${LDFLAGS} ${OBJDIR}/minimal.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-# #test_text
-# test_text : ${OBJDIR}/test_text.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o test_text ${LDFLAGS} ${OBJDIR}/test_text.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-${OBJDIR}/test_text.o : ${TESTS}/test_text.c
-		${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_text.c -o ${OBJDIR}/test_text.o
-#
-${OBJDIR}/minimal.o : ${TESTS}/minimal.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/minimal.c -o ${OBJDIR}/minimal.o
-#
-# # ei_draw
-#
-${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw.c -o ${OBJDIR}/ei_draw.o
-#
-# #test_copy
-# test_copy : ${OBJDIR}/test_copy.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o test_copy ${LDFLAGS} ${OBJDIR}/test_copy.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-#
-${OBJDIR}/test_copy.o : ${TESTS}/test_copy.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_copy.c -o ${OBJDIR}/test_copy.o
-#
-# #test_fill
-# test_fill : ${OBJDIR}/test_fill.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o test_fill ${LDFLAGS} ${OBJDIR}/test_fill.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-#
-${OBJDIR}/test_fill.o : ${TESTS}/test_fill.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_fill.c -o ${OBJDIR}/test_fill.o
-#
-# # map_rgba
-# map_rgba : ${OBJDIR}/map_rgba.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o
-# 	${LINK} -o map_rgba ${LDFLAGS} ${OBJDIR}/map_rgba.o ${LIBS} ${OBJDIR}/ei_draw.o
-#
-#
-${OBJDIR}/map_rgba.o : ${TESTS}/map_rgba.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/map_rgba.c -o ${OBJDIR}/map_rgba.o
-#
-# # lines
-#
-# lines : ${OBJDIR}/lines.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${LIBEI}
-# 	${LINK} -o lines ${OBJDIR}/lines.o ${OBJDIR}/ei_draw.o ${LIBEI} ${LIBS}
-#
-${OBJDIR}/lines.o : ${TESTS}/lines.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/lines.c -o ${OBJDIR}/lines.o
-#
-# # frame
-#
-# frame : ${OBJDIR}/frame.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI}
-# 	${LINK} -o frame ${LDFLAGS} ${OBJDIR}/frame.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${LIBS}
-#
-${OBJDIR}/frame.o : ${TESTS}/frame.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/frame.c -o ${OBJDIR}/frame.o
-#
-# # button
-#
-# button : ${OBJDIR}/button.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI}
-# 	${LINK} -o button ${LDFLAGS} ${OBJDIR}/button.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${LIBS}
-#
-${OBJDIR}/button.o : ${TESTS}/button.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/button.c -o ${OBJDIR}/button.o
-#
-# # hello_world
-#
-# hello_world : ${OBJDIR}/hello_world.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI}
-# 	${LINK} -o hello_world ${LDFLAGS} ${OBJDIR}/hello_world.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o ${LIBEI} ${LIBS}
-#
-${OBJDIR}/hello_world.o : ${TESTS}/hello_world.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/hello_world.c -o ${OBJDIR}/hello_world.o
-#
-# # puzzle
-#
-# puzzle : ${OBJDIR}/puzzle.o ${LIBEIBASE} ${LIBEI} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o
-# 	${LINK} -o puzzle ${LDFLAGS} ${OBJDIR}/puzzle.o ${LIBEI} ${LIBS} ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_placer.o
-#
-${OBJDIR}/puzzle.o : ${TESTS}/puzzle.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/puzzle.c -o ${OBJDIR}/puzzle.o
-#
-
-# two048
-
-% : ${OBJDIR}/%.o ${LIBEIBASE} ${LIBEI}
-	${LINK} -o $* ${LDFLAGS} ${OBJDIR}/$*.o ${LIBEI} ${LIBS}
-
-${OBJDIR}/two048.o : ${TESTS}/two048.c
-	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/two048.c -o ${OBJDIR}/two048.o
-
-# # test_ext_class
-# test_ext_class : ${OBJDIR}/test_ext_class.o ${LIBEIBASE} ${LIBEI} src/ext_testclass.o
-# 	${LINK} -o test_ext_class ${LDFLAGS} ${OBJDIR}/test_ext_class.o ${LIBEI} ${LIBS} src/ext_testclass.o
-#
-#
-# ${OBJDIR}/test_ext_class.o : ${TESTS}/test_ext_class.c src/ext_testclass.o
-# 	${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/test_ext_class.c -o ${OBJDIR}/test_ext_class.o
+${OBJDIR}/%.o : ${TESTS}/%.c
+	@${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/$*.c -o ${OBJDIR}/$*.o
 
 # Building of the library libei
 
 ${LIBEI} : ${LIBEIOBJS}
-	ar rcs ${LIBEI} ${LIBEIOBJS}
-
-
-
+	@ar rcs ${LIBEI} ${LIBEIOBJS}
 
 # Building of the doxygen documentation.
 
 doc :
 	doxygen docs/doxygen.cfg
-
-
 
 # Removing all built files.
 
