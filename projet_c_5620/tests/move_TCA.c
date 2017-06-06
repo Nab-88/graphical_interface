@@ -6,7 +6,9 @@
 #include "ei_utils.h"
 #include "ei_draw.h"
 #include "ei_types.h"
-#include "ei_TC.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
+#include "ei_draw_poly.h"
 
 
 

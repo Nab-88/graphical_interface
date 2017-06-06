@@ -13,7 +13,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/test_button.o ${OBJDIR}/round_frame.o ${OBJDIR}/arc_draw.o ${OBJDIR}/clipping_polygon.o ${OBJDIR}/acote.o ${OBJDIR}/order_TCA.o ${OBJDIR}/delete_side.o ${OBJDIR}/move_TCA.o ${OBJDIR}/test_polygon.o ${OBJDIR}/init_scanline.o ${OBJDIR}/minimal.o ${OBJDIR}/test_text.o ${OBJDIR}/ei_draw.o ${OBJDIR}/test_copy.o  ${OBJDIR}/test_fill.o ${OBJDIR}/map_rgba.o ${OBJDIR}/lines.o ${OBJDIR}/frame.o ${OBJDIR}/button.o ${OBJDIR}/hello_world.o ${OBJDIR}/puzzle.o ${OBJDIR}/two048.o
+LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/test_button.o ${OBJDIR}/round_frame.o ${OBJDIR}/arc_draw.o ${OBJDIR}/clipping_polygon.o ${OBJDIR}/acote.o ${OBJDIR}/order_TCA.o ${OBJDIR}/delete_side.o ${OBJDIR}/move_TCA.o ${OBJDIR}/test_polygon.o ${OBJDIR}/init_scanline.o ${OBJDIR}/minimal.o ${OBJDIR}/test_text.o ${OBJDIR}/ei_draw.o ${OBJDIR}/test_copy.o  ${OBJDIR}/test_fill.o ${OBJDIR}/map_rgba.o ${OBJDIR}/lines.o ${OBJDIR}/frame.o ${OBJDIR}/button.o ${OBJDIR}/hello_world.o ${OBJDIR}/puzzle.o ${OBJDIR}/two048.o ${OBJDIR}/ei_draw_poly.o ${OBJDIR}/ei_draw_widgets.o
 
 
 # Platform specific definitions (OS X, Linux)
@@ -170,6 +170,13 @@ ${OBJDIR}/minimal.o : ${TESTS}/minimal.c
 #
 ${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
 	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw.c -o ${OBJDIR}/ei_draw.o
+
+
+${OBJDIR}/ei_draw_poly.o : ${SRC}/ei_draw_poly.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw_poly.c -o ${OBJDIR}/ei_draw_poly.o
+
+${OBJDIR}/ei_draw_widgets.o : ${SRC}/ei_draw_widgets.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw_widgets.c -o ${OBJDIR}/ei_draw_widgets.o
 #
 # #test_copy
 # test_copy : ${OBJDIR}/test_copy.o ${LIBEIBASE} ${OBJDIR}/ei_draw.o

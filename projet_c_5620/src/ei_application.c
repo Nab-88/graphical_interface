@@ -7,6 +7,8 @@
 #include "ei_types.h"
 #include "hw_interface.h"
 #include "ei_draw.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
 #include "ei_application.h"
 #include "ei_all_widgets.h"
 #include "ei_event.h"

@@ -11,9 +11,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "ei_arc.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
 #include "ei_application.h"
 #include "ei_event.h"
+
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
