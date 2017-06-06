@@ -13,6 +13,10 @@
 #include "ei_all_widgets.h"
 #include "ei_event.h"
 #include "ei_widgetclass.h"
+#include "ei_widget.h"
+#include "ei_widget_frame.h"
+#include "ei_widget_button.h"
+#include "ei_widget_toplevel.h"
 
 #define max(a,b) ((a) > (b) ? a : b)
 #define min(a,b) ((a) < (b) ? a : b)

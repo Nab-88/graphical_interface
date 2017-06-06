@@ -14,6 +14,10 @@
 #include <string.h>
 #include "ei_widget.h"
 #include "ei_all_widgets.h"
+#include "ei_widget.h"
+#include "ei_widget_frame.h"
+#include "ei_widget_button.h"
+#include "ei_widget_toplevel.h"
 
 /**
  * \brief	Configures the geometry of a widget using the "placer" geometry manager.
