@@ -193,7 +193,9 @@ void draw(){
     hw_surface_lock(ei_app_root_surface());
     draw_widgets(ei_app_root_widget());
     hw_surface_unlock(ei_app_root_surface());
-    DRAW_RECT = ei_intersection(&(DRAW_RECT -> rect),&(ei_app_root_widget() -> screen_location));
+    if (DRAW_RECT != NULL) {
+        DRAW_RECT -> rect = *ei_intersection(&(DRAW_RECT -> rect),&(ei_app_root_widget() -> screen_location));
+    }
     hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
     free(DRAW_RECT);
     DRAW_RECT = NULL;
