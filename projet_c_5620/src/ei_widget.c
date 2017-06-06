@@ -11,9 +11,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "ei_arc.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
 #include "ei_application.h"
 #include "ei_event.h"
+
 /**
  * @brief	Creates a new instance of a widget of some particular class, as a descendant of
  *		an existing widget.
@@ -591,7 +593,8 @@ void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
     free(toplevel -> border_width);
     free(toplevel -> closable);
     free(toplevel -> resizable);
-    //free(toplevel -> min_size);
+    free(*(toplevel -> min_size));
+    free(toplevel -> min_size);
     if (toplevel -> title != NULL){
         free(*(toplevel -> title));
         free(toplevel -> title);
@@ -917,10 +920,13 @@ void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
     ei_axis_set_t* resizable = malloc(sizeof(ei_axis_set_t));
     *resizable = ei_axis_both;
     toplevel -> resizable = resizable;
+
     ei_size_t* min_size = malloc(sizeof(ei_size_t));
     min_size -> width = 160;
     min_size -> height = 120;
-    toplevel -> min_size = &min_size;
+    toplevel -> min_size = min_size;
+    toplevel -> min_size = malloc(sizeof(ei_size_t*));
+    *(toplevel -> min_size) = min_size;
 }
 
 /**
@@ -1078,11 +1084,11 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
             ei_size_t size = {width, height};
             ei_rect_t rectangle = {point, size};
             DRAW_RECT -> rect = *(ei_union(&(DRAW_RECT -> rect), &rectangle));
-            if (width < 160) {
-                width = 160;
+            if (width < ((*(toplevel -> min_size)) -> width)) {
+                width = (*(toplevel -> min_size)) -> width;
             }
-            if (height < 120) {
-                height = 120;
+            if (height < ((*(toplevel -> min_size)) -> height)) {
+                height = (*(toplevel -> min_size)) -> height;
             }
             ei_place(widget, NULL, x, y, &width, &height, NULL, NULL,NULL,NULL);
             ei_placer_run(widget);

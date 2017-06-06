@@ -359,6 +359,7 @@ ei_rect_t* ei_union(ei_rect_t* rect1, ei_rect_t* rect2);
  */
 ei_widget_t*    ei_widget_previous (ei_widget_t* widget);
 
+void draw();
 /*Declaration of the library of class of widgets
  */
 ei_widgetclass_t* LIB;

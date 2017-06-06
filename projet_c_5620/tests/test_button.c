@@ -6,7 +6,9 @@
 #include "ei_utils.h"
 #include "hw_interface.h"
 #include <stdio.h>
-#include "ei_arc.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
+#include "ei_draw_poly.h"
 
 
 int ei_main(int argc, char** argv)

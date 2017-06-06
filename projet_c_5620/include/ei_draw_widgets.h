@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef EI_ARC_H
-#define EI_ARC_H
+#ifndef ei_DRAW_WIDGETS_H
+#define EI_DRAW_WIDGETS_H
 
 #include <stdint.h>
 #include "ei_types.h"
@@ -40,13 +40,7 @@ ei_linked_point_t *ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, in
 *
 * @return			Returns the list of points that make the octant
 */
-ei_linked_point_t* ei_complete_octant(ei_linked_point_t* first,ei_point_t centre, uint32_t rayon, int variable1_x, int variable1_y, int variable2_x, int variable2_y, ei_bool_t inverse);
 
-/**
-* \brief	Prints the list of points that has been put in parameter
-*
-* @param	first the first point of the chained list
-*/
 void print_linked_point(ei_linked_point_t* first);
 
 /**
@@ -57,15 +51,7 @@ void print_linked_point(ei_linked_point_t* first);
 *
 * @return			Returns the list of points that make the whole circle
 */
-ei_linked_point_t* ei_circle_normal(ei_point_t centre, uint32_t rayon);
 
-/**
-* \brief	The fonction returns the opposite list of points
-*
-* @param	first	The first point of the chained list
-*
-* @return			Returns opposite the list of points
-*/
 ei_linked_point_t* ei_linked_inverse(ei_linked_point_t* first);
 
 

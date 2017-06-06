@@ -6,7 +6,9 @@
 #include "ei_utils.h"
 #include "ei_draw.h"
 #include "ei_types.h"
-#include "ei_TC.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
+#include "ei_draw_poly.h"
 
 
 
@@ -105,11 +107,11 @@ int ei_main(int argc, char** argv)
 	ei_rect_t*		clipper_ptr	= NULL;
 //	ei_rect_t		clipper		= ei_rect(ei_point(200, 150), ei_size(400, 300));
 //	clipper_ptr		= &clipper;
-	
+
 	hw_init();
-		
+
 	main_window = hw_create_window(&win_size, EI_FALSE);
-	
+
 	/* Lock the drawing surface, paint it white. */
 	hw_surface_lock	(main_window);
 	ei_fill		(main_window, &white, clipper_ptr);
@@ -117,14 +119,14 @@ int ei_main(int argc, char** argv)
 	/* Draw polylines. */
 	test_octogone	(main_window, clipper_ptr);
 	test_square	(main_window, clipper_ptr);
-	
+
 	/* Unlock and update the surface. */
 	hw_surface_unlock(main_window);
 	hw_surface_update_rects(main_window, NULL);
-	
+
 	/* Wait for a character on command line. */
 	getchar();
-	
+
 	hw_quit();
 	return (EXIT_SUCCESS);
 }

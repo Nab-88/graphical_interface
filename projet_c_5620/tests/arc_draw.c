@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include "ei_draw.h"
-#include "ei_arc.h"
+#include "ei_draw_widgets.h"
+#include "ei_draw_extension.h"
+#include "ei_draw_poly.h"
 #include "ei_types.h"
 #include "ei_main.h"
 #include "ei_event.h"

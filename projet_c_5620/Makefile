@@ -13,7 +13,7 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o
+LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_draw_poly.o ${OBJDIR}/ei_draw_widgets.o
 
 
 # Platform specific definitions (OS X, Linux)
@@ -87,8 +87,14 @@ ${OBJDIR}/ei_event.o : ${SRC}/ei_event.c
 ${OBJDIR}/ei_application.o : ${SRC}/ei_application.c
 	@${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_application.c -o ${OBJDIR}/ei_application.o
 #
-# #TESTS compilation
+${OBJDIR}/ei_draw_poly.o : ${SRC}/ei_draw_poly.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw_poly.c -o ${OBJDIR}/ei_draw_poly.o
+
+${OBJDIR}/ei_draw_widgets.o : ${SRC}/ei_draw_widgets.c
+	${CC} ${CCFLAGS} ${INCFLAGS} ${SRC}/ei_draw_widgets.c -o ${OBJDIR}/ei_draw_widgets.o
 #
+# Compilation Tests
+
 ${OBJDIR}/%.o : ${TESTS}/%.c
 	@${CC} ${CCFLAGS} ${INCFLAGS} ${TESTS}/$*.c -o ${OBJDIR}/$*.o
 
