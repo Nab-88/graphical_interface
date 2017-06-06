@@ -333,7 +333,6 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
                 pixel.x = i;
                 pixel.y = y;
                 if ((clipper == NULL) || (pixel_is_in_rect(pixel, clipper) == EI_TRUE)){
-                    //*pixel_ptr++ = color_rgba;
                     *pixel_ptr = color_rgba;
                 }
                 pixel_ptr ++;

@@ -315,6 +315,9 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
         }
         DRAW_RECT -> rect = widget -> screen_location;
         ei_event_set_active_widget(widget);
+        if (button -> callback != NULL){
+            (*(button -> callback))(widget, event, *(button -> user_param));
+        }
     }
     else if (event -> type == ei_ev_mouse_buttonup) {
         *relief = ei_relief_raised;
@@ -324,9 +327,6 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
         }
         DRAW_RECT -> rect = widget -> screen_location;
         ei_event_set_active_widget(widget -> parent);
-        if (button -> callback != NULL){
-            (*(button -> callback))(widget, event, *(button -> user_param));
-        }
     }
     else if (event -> type == ei_ev_mouse_move) {
         ei_point_t where = event -> param.mouse.where;

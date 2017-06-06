@@ -349,7 +349,6 @@ void ei_draw_toplevel(ei_surface_t surface,
     ei_draw_polygon(surface, first, *color2, clipper);
     free_ei_linked_point(first);
     if (title != NULL) {
-        ei_color_t text_color = {0, 0, 0, 0};
         rectangle.top_left.x += border_width;
         rectangle.top_left.y += 30; // on choisit arbitrairement la taille de la bannière
         rectangle.size.width -= 2*border_width;
@@ -357,10 +356,5 @@ void ei_draw_toplevel(ei_surface_t surface,
         first = ei_rounded_frame(rectangle, 0, 0);
         ei_draw_polygon(surface, first, *color, clipper);
         free_ei_linked_point(first);
-        ei_point_t* where = calloc(1, sizeof(ei_point_t));
-        where -> x = rectangle.top_left.x + 25; // on garde de la place pour le bouton closable
-        where -> y = rectangle.top_left.y - 30;
-        ei_draw_text(surface, where, *title, ei_default_font, &text_color, clipper);
-        free(where);
     }
 }

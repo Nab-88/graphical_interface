@@ -141,8 +141,17 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
     int* border_width = toplevel -> border_width;
     char** title = toplevel -> title;
     ei_axis_set_t* resizable = toplevel -> resizable;
-    ei_color_t window_color = {110, 110, 110, 0};
-    ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
+    ei_color_t window_color = {110, 110, 110, 255};
+    ei_size_t surface_size = hw_surface_get_size(surface);
+    ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
+    ei_draw_toplevel(alpha_surface, rectangle, color, &window_color, *border_width, title, clipper);
+    ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    ei_color_t text_color = {0, 0, 0, 255};
+    ei_point_t* where = calloc(1, sizeof(ei_point_t));
+    where -> x = rectangle.top_left.x + 25; // on garde de la place pour le bouton closable
+    where -> y = rectangle.top_left.y;
+    ei_draw_text(surface, where, *title, ei_default_font, &text_color, clipper);
+    free(where);
     ei_draw_toplevel(pick_surface, rectangle, pick_color, pick_color, 0, NULL, clipper);
     if (*(toplevel -> closable) == EI_TRUE && toplevel -> button_closable == NULL) {
         ei_point_t point;
@@ -155,6 +164,7 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
         ei_widget_t* closable = ei_widget_create("button", widget);
         ei_color_t* red = calloc(1, sizeof(ei_color_t));
         red -> red = 255;
+        red -> alpha = 255;
         int width = 3;
         int radius = 10;
         ei_callback_t callback = button_press2;
