@@ -79,9 +79,28 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
 
 void ei_app_free(){
     free_widgets(ei_app_root_widget ());
+    free_class();
     hw_quit();
 
 }
+
+/*
+ * \brief frees all the registered classes
+ *
+ */
+void free_class(){
+    ei_widgetclass_t* current = LIB;
+    ei_widgetclass_t* suiv = LIB -> next;
+    while (suiv != NULL){
+        free(current);
+        current = suiv;
+        suiv = suiv -> next;
+    }
+    free(suiv);
+}
+
+
+
 
 /*
  * \brief Frees all widgets from widget.
