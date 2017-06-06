@@ -395,8 +395,8 @@ ei_TCA_t* order_TCA(ei_TCA_t *TCA) {
 void free_all(ei_TC_t *TC, ei_TCA_t *TCA, int* tab) {
     free(tab);
     free(TC->tab);
-    ei_side_t* current;
     ei_side_t* ancient = (ei_side_t*) TCA -> head;
+    ei_side_t* current = ancient;
     while (current != NULL) {
         current = (ei_side_t*) ancient -> next;
         free(ancient);

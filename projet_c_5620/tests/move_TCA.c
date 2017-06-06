@@ -53,7 +53,7 @@ void test_octogone(ei_surface_t surface, ei_rect_t* clipper)
     ei_TC_t* TC = init_TC(pts, tab[0], tab[1]);
     ei_TCA_t* TCA = malloc(sizeof(ei_TCA_t));
     move_side(TCA, TC, 0);
-    printf("Le x_y de la remière cellule : %f \n", (TCA -> head) -> x_y);
+    printf("Le x_y de la remière cellule : %i \n", (TCA -> head) -> x_y);
     if ((TC -> tab)[0] == NULL){
        printf("Move fonctionne \n");
     } else {

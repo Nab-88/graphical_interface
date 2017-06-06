@@ -924,7 +924,6 @@ void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
     ei_size_t* min_size = malloc(sizeof(ei_size_t));
     min_size -> width = 160;
     min_size -> height = 120;
-    toplevel -> min_size = min_size;
     toplevel -> min_size = malloc(sizeof(ei_size_t*));
     *(toplevel -> min_size) = min_size;
 }
