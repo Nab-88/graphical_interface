@@ -255,8 +255,6 @@ void ei_draw_button(ei_surface_t surface,
         color.blue -= 40;
         color.red -= 40;
         color.green -= 40;
-        where.x += 3;
-        where.y += 3;
     }
     rectangle.size.width -= 2*border_width;
     rectangle.size.height -= 2*border_width;
@@ -266,7 +264,11 @@ void ei_draw_button(ei_surface_t surface,
     ei_draw_polygon(surface, frame, color, clipper);
     free_ei_linked_point(frame);
     if (text != NULL) {
-        ei_draw_text(surface, &where, *text, text_font, text_color, clipper);
+        if (relief == ei_relief_sunken) {
+            where.x += 3;
+            where.y += 3;
+        }
+        ei_draw_text(surface, &where, *text, text_font, text_color, &rectangle);
     } else if (img != NULL) {
         // on utilise copy
         ei_rect_t rect = {where, img_rect->size};

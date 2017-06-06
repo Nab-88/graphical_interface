@@ -106,7 +106,7 @@ void create_puzzle_window(char* image_filename)
 	ei_size_t		tile_size		= ei_size(k_tile_size, k_tile_size);
 	char*			title			= "Puzzle";
 	ei_color_t		toplevel_bg		= {0xff, 0xff, 0xff, 0x60};
-	ei_axis_set_t		resizable		= ei_axis_none;
+	ei_axis_set_t		resizable		= ei_axis_x;
 
 	ei_widget_t*		button;
 	int			corner_radius		= 0;

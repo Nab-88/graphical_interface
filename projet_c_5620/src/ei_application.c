@@ -109,8 +109,6 @@ void ei_app_run(){
     hw_surface_lock(ei_app_root_surface());
     hw_surface_lock(SURFACE_PICK);
     draw_widgets(ei_app_root_widget());
-    hw_surface_unlock(SURFACE_PICK);
-    hw_surface_update_rects(SURFACE_PICK, NULL);
     hw_surface_unlock(ei_app_root_surface());
     hw_surface_update_rects(ei_app_root_surface(), NULL);
     DRAW_RECT = NULL;
@@ -174,12 +172,10 @@ void ei_app_run(){
 
 void draw(){
     hw_surface_lock(ei_app_root_surface());
-    hw_surface_lock(SURFACE_PICK);
     draw_widgets(ei_app_root_widget());
-    hw_surface_unlock(SURFACE_PICK);
-    hw_surface_update_rects(SURFACE_PICK, NULL);
     hw_surface_unlock(ei_app_root_surface());
-    hw_surface_update_rects(ei_app_root_surface(), NULL);
+    DRAW_RECT = ei_intersection(&(DRAW_RECT -> rect),&(ei_app_root_widget() -> screen_location));
+    hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
     free(DRAW_RECT);
     DRAW_RECT = NULL;
 }
@@ -187,25 +183,17 @@ void draw(){
 
 void draw_widgets(ei_widget_t* widget){
     while (widget != NULL){
-        ei_rect_t* clipper = NULL;
         if (widget != ei_app_root_widget()){
             ei_placer_run(widget);
         }
+        ei_rect_t* clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
+        ei_widget_t* current = widget;
+        while (current != ei_app_root_widget()) {
+            clipper = ei_intersection(clipper, &(current -> screen_location));
+            current = current -> parent;
+        }
         if (DRAW_RECT != NULL) {
-            clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
-            ei_widget_t* current = widget;
-            while (current != ei_app_root_widget()) {
-                clipper = ei_intersection(clipper, &(current -> screen_location));
-                current = current -> parent;
-            }
             clipper = ei_intersection(clipper, &(DRAW_RECT -> rect));
-        } else {
-            ei_widget_t* current = widget;
-            clipper = ei_intersection(&(ei_app_root_widget() -> screen_location), &(widget -> screen_location));
-            while (current != ei_app_root_widget()) {
-                clipper = ei_intersection(clipper, &(current -> screen_location));
-                current = current -> parent;
-            }
         }
         (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, clipper);
         draw_widgets(widget -> children_head);

@@ -23,7 +23,7 @@ int ei_main(int argc, char** argv)
 	ei_relief_t	frame_relief		= ei_relief_raised;
 	int		frame_border_width	= 6;
 	char ** text = calloc(2, sizeof(char));
-	*text = "Je nike Florian";
+	*text = "Toplevel";
 
 	/* Create the application and change the color of the background. */
 	ei_app_create(&screen_size, EI_FALSE);
