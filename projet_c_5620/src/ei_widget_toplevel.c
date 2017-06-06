@@ -268,7 +268,9 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
     else if (event -> type == ei_ev_mouse_move) {
         if (WIN_MOVE -> x + WIN_MOVE -> y != 0) {
 
-            DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+            if (DRAW_RECT == NULL){
+                DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+            }
             DRAW_RECT -> rect = (widget -> screen_location);
             int dx = where.x - WIN_MOVE -> x;
             int dy = where.y - WIN_MOVE -> y;
@@ -288,7 +290,9 @@ ei_bool_t ei_toplevel_handlefunc_t (struct ei_widget_t*	widget,
 
         }
         if (WIN_RESIZ -> x + WIN_RESIZ -> y != 0) {
-            DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+            if (DRAW_RECT == NULL){
+                DRAW_RECT = malloc(sizeof(ei_linked_rect_t));
+            }
             DRAW_RECT -> rect = (widget -> screen_location);
             int dx, dy;
             if (WIN_RESIZ -> x != 0) {
