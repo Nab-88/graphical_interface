@@ -36,7 +36,6 @@ int ei_main(int argc, char** argv)
 	color3 -> alpha = 100;
   ei_point_t* where = malloc(sizeof(ei_point_t));
   *where = ei_point(320,240);
-	char* text = "ROMAIN LE FDP <3";
 	char* text2 = "COUCOU";
 	ei_point_t point;
 	point.x = 50;

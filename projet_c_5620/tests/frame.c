@@ -15,13 +15,10 @@
 int ei_main(int argc, char** argv)
 {
 	ei_size_t	screen_size		= {600, 600};
-	ei_color_t	root_bgcol		= {0x52, 0x7f, 0xb4, 0xff};
 	static char*			image_filename	= "misc/klimt.jpg";
 
 	ei_widget_t*	frame;
 	ei_size_t	frame_size		= {410,210};
-	int		frame_x			= 150;
-	int		frame_y			= 200;
 	ei_color_t	frame_color		= {0x88, 0x88, 0x88, 0xff};
 	ei_relief_t	frame_relief		= ei_relief_raised;
 	int		frame_border_width	= 6;
@@ -36,7 +33,6 @@ int ei_main(int argc, char** argv)
 	int ele1 = 50;
 	ei_toplevel_configure(toplevel, &toplevel_size, &frame_color, &border_width, text, NULL, NULL, NULL);
 	ei_place(toplevel, NULL, &(ele1), &(ele1), NULL, NULL, NULL, NULL, NULL, NULL);
-	//ei_frame_configure(toplevel, NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 	ei_surface_t image		= hw_image_load(image_filename, ei_app_root_surface());
 	ei_size_t image_size	= hw_surface_get_size(image);
 	image_size.width = 100;

@@ -37,7 +37,7 @@ void ei_widget_set_destroy_cb	(ei_widget_t*		widget,
 double randomf()
 {
 	#ifndef __WIN__
-		return (double)(random()) / (double)((1ul << 31) - 1ul);
+		return (double)(rand()) / (double)((1ul << 31) - 1ul);
 	#else
 		return (double)(rand()) / (double)(32767);
 	#endif
