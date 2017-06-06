@@ -268,6 +268,7 @@ void ei_draw_button(ei_surface_t surface,
             where.x += 3;
             where.y += 3;
         }
+        rectangle = *ei_intersection(&rectangle, clipper);
         ei_draw_text(surface, &where, *text, text_font, text_color, &rectangle);
     } else if (img != NULL) {
         // on utilise copy
