@@ -215,9 +215,14 @@ void	ei_frame_drawfunc_t		(struct ei_widget_t*	widget,
         where = ei_get_where(rectangle, anchor, border_width, text_size);
     }
     ei_size_t surface_size = hw_surface_get_size(surface);
-    ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
-    ei_draw_button(alpha_surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
-    ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    if (color.alpha != 255){
+        ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
+        ei_draw_button(alpha_surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+        ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    } else {
+        ei_draw_button(surface, rectangle, color, 0, border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+    }
+
     if (text != NULL) {
         if (*text != NULL) {
             rectangle.size.width -= 2*border_width;

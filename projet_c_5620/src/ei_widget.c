@@ -98,6 +98,10 @@ ei_widgetclass_t*	ei_widgetclass_from_name	(ei_widgetclass_name_t name){
  * @param	widget		The widget that is to be destroyed.
  */
 void			ei_widget_destroy		(ei_widget_t*		widget){
+    ei_callback_widget_t* widget_destroy = (ei_callback_widget_t*) widget;
+    if (widget_destroy -> callback != NULL) {
+        (widget_destroy -> callback)(widget, NULL, widget_destroy -> user_param);
+    }
     free_widgets(widget -> children_tail);
     ei_widget_t* parent = (widget -> parent);
     ei_widget_t* previous = ei_widget_previous(widget);
@@ -110,7 +114,7 @@ void			ei_widget_destroy		(ei_widget_t*		widget){
         previous -> next_sibling = widget -> next_sibling;
     }
     (widget -> wclass -> releasefunc)(widget);
-    //draw_widgets(parent);
+    ei_event_set_active_widget(NULL);
 }
 
 ei_widget_t*    ei_widget_previous (ei_widget_t* widget){

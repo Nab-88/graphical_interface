@@ -18,7 +18,6 @@
 #include "ei_event.h"
 #include "ei_all_widgets.h"
 
-
 // ei_widget_set_destroy_cb --
 //
 //	An undocumented function that registers a callback to be called when a widget
@@ -29,9 +28,9 @@
 void ei_widget_set_destroy_cb	(ei_widget_t*		widget,
 				 ei_callback_t		callback,
 				 void*			user_param) {
-			 ei_callback_widget_t* widget_destroy = (ei_callback_widget_t* ) widget;
-			widget_destroy -> callback = callback;
-			widget_destroy -> user_param = user_param;
+		 ei_callback_widget_t* widget_destroy = (ei_callback_widget_t* ) widget;
+		widget_destroy -> callback = callback;
+		widget_destroy -> user_param = user_param;
 				 }
 
 

@@ -13,12 +13,21 @@
 #include "ei_widget.h"
 #include "ei_event.h"
 /*
+ *\brief Definition of a widget linked with a callback
+ *
+ */
+typedef struct ei_callback_widget_t {
+    ei_widget_t widget;
+    ei_callback_t		callback;
+    void*			user_param;
+} ei_callback_widget_t;
+/*
  *\brief Definition of a frame which can be used to draw a simple frame with 3D effect or not.
  *
  */
 typedef struct ei_frame_t {
-    ei_widget_t widget;
-
+    ei_callback_widget_t widget;
+    //ei_callback_widget_t* widget_destroy;
     ei_color_t* color;
     int* border_width;
     ei_relief_t* relief;
@@ -36,8 +45,8 @@ typedef struct ei_frame_t {
  *
  */
 typedef struct ei_button_t {
-    ei_widget_t widget;
-
+    ei_callback_widget_t widget;
+    //ei_callback_widget_t* widget_destroy;
     ei_color_t* color;
     int*		border_width;
     int*		corner_radius;
@@ -58,7 +67,8 @@ typedef struct ei_button_t {
  *
  */
 typedef struct ei_toplevel_t {
-    ei_widget_t widget;
+    ei_callback_widget_t widget;
+    //ei_callback_widget_t* widget_destroy;
     ei_color_t* color;
     int*		border_width;
     char **title;
@@ -67,6 +77,8 @@ typedef struct ei_toplevel_t {
     ei_size_t** min_size;
     ei_widget_t* button_closable;
 } ei_toplevel_t;
+
+
 
 /**
  * @brief	Returns the widget that is has the given id
