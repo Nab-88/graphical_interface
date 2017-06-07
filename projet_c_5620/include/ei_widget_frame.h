@@ -1,3 +1,8 @@
+/**
+ *  @file	ei_widget_frame.h
+ *  @brief	Functions related to frames
+ *
+ */
 #ifndef EI_WIDGET_FRAME_H
 #define EI_WIDGET_FRAME_H
 
@@ -73,8 +78,6 @@ void			ei_frame_register_class 	();
  * \brief	A function that allocates a block of memory that is big enough to store the
  *		attributes of a widget of a class. After allocation, the function *must*
  *		initialize the memory to 0.
- *
- * @return		A block of memory with all bytes set to 0.
  */
 void*	ei_frame_allocfunc_t		();
 
@@ -86,11 +89,10 @@ void*	ei_frame_allocfunc_t		();
  *
  * @param	widget		The widget which resources are to be freed.
  */
-
 void	ei_frame_releasefunc_t	(struct ei_widget_t*	widget);
 
 /**
- * \brief	A function that draws widgets of a class.
+ * \brief	A function that draws widgets of a frame.
  *
  * @param	widget		A pointer to the widget instance to draw.
  * @param	surface		Where to draw the widget. The actual location of the widget in the
