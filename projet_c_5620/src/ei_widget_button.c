@@ -261,10 +261,10 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         // on utilise copy
         ei_rect_t rect = {*where, (*img_rect)->size};
         ei_rect_t image = **img_rect;
-        ei_rect_t* intersects = &rect;
+        //ei_rect_t* intersects = &rect;
+        ei_rect_t* intersects = ei_intersection(&rect, clipper);
         if (clipper != NULL) {
             if (clipper->size.width != 0 && clipper->size.height != 0) {
-                intersects = ei_intersection(&rect, clipper);
                 image.top_left.x += max(0,intersects ->top_left.x - where->x);
                 image.top_left.y += max(0,intersects ->top_left.y - where->y);
                 image.size = intersects -> size;
