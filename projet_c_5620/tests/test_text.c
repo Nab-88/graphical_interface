@@ -59,7 +59,7 @@ int ei_main(int argc, char** argv)
 	ei_fill(main_window, color, NULL);
 	ei_fill(main_window, color3,ls_rect);
   ei_draw_text(main_window, where, text2, ei_default_font, color2, ls_rect);
-
+	hw_surface_update_rects(main_window, NULL);
 	// Free the font created above
 
 

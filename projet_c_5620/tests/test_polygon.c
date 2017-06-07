@@ -56,9 +56,7 @@ int ei_main(int argc, char** argv)
     }
 
     /* End the linked list */
-    ei_linked_point_t orange = pts[0];
-    orange.next = NULL;
-    pts[i-1].next = &orange;
+    pts[i-1].next =NULL;
     ei_draw_polygon(main_window, pts, color, NULL);
     // Wait for a key press.
     event.type = ei_ev_none;
@@ -87,9 +85,7 @@ int ei_main(int argc, char** argv)
     }
 
     /* End the linked list */
-    ei_linked_point_t red = pts[0];
-    red.next = NULL;
-    pts[i-1].next = &red;
+    pts2[i-1].next = NULL;
     ei_draw_polygon(main_window, pts2, color2, NULL);
     hw_surface_update_rects(main_window, NULL);
     event.type = ei_ev_none;
