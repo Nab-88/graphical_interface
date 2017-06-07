@@ -13,7 +13,10 @@ CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
 
-LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_widget_button.o ${OBJDIR}/ei_widget_frame.o ${OBJDIR}/ei_widget_toplevel.o ${OBJDIR}/ei_event.o ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_draw_poly.o ${OBJDIR}/ei_draw_widgets.o ${SRC}/ext_testclass.o
+LIBEIOBJS	:= ${OBJDIR}/ei_placer.o ${OBJDIR}/ei_widget.o ${OBJDIR}/ei_widget_button.o\
+ ${OBJDIR}/ei_widget_frame.o ${OBJDIR}/ei_widget_toplevel.o ${OBJDIR}/ei_event.o\
+  ${OBJDIR}/ei_application.o ${OBJDIR}/ei_draw.o ${OBJDIR}/ei_draw_poly.o\
+	 ${OBJDIR}/ei_draw_widgets.o ${SRC}/ext_testclass.o
 
 
 # Platform specific definitions (OS X, Linux)
@@ -63,9 +66,6 @@ all : ${TARGETS}
 	@${LINK} -o $* ${LDFLAGS} ${OBJDIR}/$*.o ${LIBEI} ${LIBS}
 
 ########## Our Program
-# test_ext_class
-#
-#test_ext_class 
 # # ei_draw
 #
 ${OBJDIR}/ei_draw.o : ${SRC}/ei_draw.c
