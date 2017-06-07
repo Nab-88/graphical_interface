@@ -7,6 +7,17 @@
 #include "ei_widget.h"
 #include "ei_utils.h"
 
+ei_bool_t global_handler(ei_event_t* event)
+{
+	if (event->type == ei_ev_keydown) {
+		if (event->param.key.key_sym == SDLK_ESCAPE) {
+			ei_app_quit_request();
+			return EI_TRUE;
+		}
+	}
+	return EI_FALSE;
+}
+
 /*
  * ei_main --
  *
@@ -25,6 +36,7 @@ int ei_main(int argc, char** argv)
 	int		frame_border_width	= 6;
 	char ** text = calloc(2, sizeof(char));
 	*text = "Toplevel";
+	hw_init();
 
 	/* Create the application and change the color of the background. */
 	ei_app_create(&screen_size, EI_FALSE);
@@ -47,7 +59,7 @@ int ei_main(int argc, char** argv)
 				 &frame_border_width, &frame_relief, NULL, NULL, NULL, NULL,
 				 &image, &img_rect, NULL);
 	ei_place(frame, NULL, &ele1, &ele1, NULL, NULL, NULL, NULL, NULL, NULL );
-
+	ei_event_set_default_handle_func(global_handler);
 	/* Run the application's main loop. */
 	ei_app_run();
 	/* We just exited from the main loop. Terminate the application (cleanup). */

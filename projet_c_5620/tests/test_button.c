@@ -81,6 +81,7 @@ int ei_main(int argc, char** argv)
 	ei_rect_t img_rect = {img_point, img_size};
 	ei_point_t where3 = {rectangle2.top_left.x + 10,rectangle2.top_left.y + 10};
 	ei_draw_button(main_window, rectangle3, *color4, 0, 10,ei_relief_raised, NULL, ei_default_font, color5, &img, &img_rect, where3, NULL);
+	hw_surface_update_rects(main_window, NULL);
 
 	event.type = ei_ev_none;
 	while (event.type != ei_ev_keydown)

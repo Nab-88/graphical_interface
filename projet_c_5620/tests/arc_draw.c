@@ -37,6 +37,8 @@ int ei_main(int argc, char** argv)
 	ei_color_t color = {255, 0, 0, 0};
 	ei_linked_point_t *pts = ei_arc(centre, 20, 180, 90);
 	ei_draw_polyline(main_window, pts, color, NULL);
+	hw_surface_update_rects(main_window, NULL);
+
 
 	// Wait for a key press.
 	event.type = ei_ev_none;

@@ -47,8 +47,8 @@ void button_callback	(ei_widget_t*		widget,
 //	If true, the testclass drawfunc draws a widget *and its children*.
 //	If false, the testclass drawfunc only draws the widget, not its children.
 
- static const ei_bool_t	k_drawfunc_draws_children	= EI_TRUE;
-// static const ei_bool_t	k_drawfunc_draws_children	= EI_FALSE;
+ // static const ei_bool_t	k_drawfunc_draws_children	= EI_TRUE;
+static const ei_bool_t	k_drawfunc_draws_children	= EI_FALSE;
 
 
 
@@ -91,15 +91,15 @@ int ei_main(int argc, char** argv)
 
 	// Create a toplevel, place it on the screen.
 
-        top = ei_widget_create("toplevel", ei_app_root_widget());
-        ei_toplevel_configure(top, &top_size, &top_color, &top_border_width, &top_title,
-								&top_closable, &top_resizable, &top_min_size_ptr);
-        ei_place(top, NULL, &(top_position.x), &(top_position.y), NULL, NULL, NULL, NULL, NULL, NULL);
+    top = ei_widget_create("toplevel", ei_app_root_widget());
+    ei_toplevel_configure(top, &top_size, &top_color, &top_border_width, &top_title,
+							&top_closable, &top_resizable, &top_min_size_ptr);
+    ei_place(top, NULL, &(top_position.x), &(top_position.y), NULL, NULL, NULL, NULL, NULL, NULL);
 
 	// Create the testclass widget as a child of the toplevel, use relative placement.
 
 	test = ei_widget_create("testclass", top);
-	ext_testclass_configure(test, 8);
+	ext_testclass_configure(test, 10);
 	test_sz		= ei_size(-40, -40);
 	ei_place(test, &anchor_c, NULL, NULL, &(test_sz.width), &(test_sz.height), &fl_0_5, &fl_0_5, &fl_1_0, &fl_1_0);
 
@@ -113,7 +113,7 @@ int ei_main(int argc, char** argv)
 
 	ei_event_set_default_handle_func(global_event_handler);
 
-        ei_app_run();
+    ei_app_run();
 
 	ei_app_free();
 	return (EXIT_SUCCESS);

@@ -33,7 +33,7 @@ int ei_main(int argc, char** argv)
   // Create the main window.
   main_window = hw_create_window(&main_window_size, EI_FALSE);
   ei_fill(main_window, color, ls_rect);
-
+  hw_surface_update_rects(main_window, NULL);
   event.type = ei_ev_none;
 	while (event.type != ei_ev_keydown)
 		hw_event_wait_next(&event);

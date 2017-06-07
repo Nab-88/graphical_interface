@@ -55,6 +55,7 @@ int ei_main(int argc, char** argv)
     /* End the linked list */
     pts[i-1].next = NULL;
     ei_draw_polygon(main_window, pts, color, NULL);
+    hw_surface_update_rects(main_window, NULL);
     // Wait for a key press.
     event.type = ei_ev_none;
     while (event.type != ei_ev_keydown)

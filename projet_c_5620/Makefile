@@ -7,8 +7,8 @@ TESTS		= ./tests
 INCLUDES	= ./include
 SRC = ./src
 INCFLAGS	:= -I${INCLUDES} -I${TESTS}
-# OPTFLAGS	:= -O3 -DNDEBUG
-OPTFLAGS	:= -g
+OPTFLAGS	:= -O3 -DNDEBUG
+# OPTFLAGS	:= -g
 CCFLAGS		:= -c ${OPTFLAGS} -Wall -std=c99
 
 # The list of objects to include in the library
@@ -55,9 +55,9 @@ endif
 # Main target of the makefile. To build specific targets, call "make <target_name>"
 
 TARGETS		=	${LIBEI} \
-			minimal lines move_TCA test_polygon init_scanline test_text test_fill map_rgba\
+			minimal lines test_polygon init_scanline test_text test_fill map_rgba\
 			 frame_modified button_modified hello_world_modified puzzle_modified \
-			 two048_modified arc_draw round_frame test_button delete_side
+			 two048_modified arc_draw round_frame test_button test_ext_class
 all : ${TARGETS}
 
 # Make un test

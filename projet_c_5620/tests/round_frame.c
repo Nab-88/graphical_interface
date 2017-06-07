@@ -45,6 +45,7 @@ int ei_main(int argc, char** argv)
 	ei_rect_t rectangle2 = {top_left2, size2};
 	pts = ei_rounded_frame(rectangle2, 50, 2);
 	ei_draw_polygon(main_window, pts, color2, NULL);
+	hw_surface_update_rects(main_window, NULL);
 
 	// Wait for a key press.
 	event.type = ei_ev_none;
