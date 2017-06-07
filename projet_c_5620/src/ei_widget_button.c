@@ -26,7 +26,6 @@ void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
     }
     DRAW_RECT -> rect = widget -> parent -> screen_location;
     ei_widget_destroy(widget -> parent);
-    ei_event_set_active_widget(NULL);
 }
 
 /**
@@ -312,7 +311,6 @@ void	ei_button_setdefaultsfunc_t	(struct ei_widget_t*	widget){
     int* corner = malloc(sizeof(int));
     *corner = k_default_button_corner_radius;
     button -> corner_radius = corner;
-
 }
 /**
  * \brief 	A function that is called to notify the widget that its geometry has been modified
