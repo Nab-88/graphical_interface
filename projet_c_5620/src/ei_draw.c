@@ -67,7 +67,8 @@ ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect){
     uint32_t x_max_rect = x_min_rect + rect -> size.width;
     uint32_t y_min_rect = rect -> top_left.y;
     uint32_t y_max_rect = y_min_rect + rect -> size.height;
-    if ((x_px > x_min_rect)&&(x_px < x_max_rect)&&(y_px > y_min_rect)&&(y_px < y_max_rect)) {
+    if ((x_px > x_min_rect)&&(x_px < x_max_rect)&&(y_px > y_min_rect)
+    &&(y_px < y_max_rect)) {
         return EI_TRUE;
     }
     else{
@@ -100,7 +101,8 @@ void			ei_draw_text		(ei_surface_t		surface,
     else{
         uint32_t* text_ptr = (uint32_t*)hw_surface_get_buffer(text_surface);
         uint32_t* dest_ptr = (uint32_t*)hw_surface_get_buffer(surface);
-        dest_ptr += (rect_dest -> top_left.x) + surface_size.width * (rect_dest -> top_left.y);
+        dest_ptr += (rect_dest -> top_left.x)
+        + surface_size.width * (rect_dest -> top_left.y);
         for (uint32_t j = 0; j < rect_source -> size.height; j++) {
             for (uint32_t i = 0; i < rect_source -> size.width; i++) {
                 if (pixel_is_in_rect(current_pixel, clipper) == EI_TRUE) {
@@ -140,7 +142,8 @@ void			ei_fill			(ei_surface_t		surface,
         }
     }
     else {
-        pixel_ptr += (clipper -> top_left.x) + surface_size.width * (clipper -> top_left.y);
+        pixel_ptr += (clipper -> top_left.x)
+        + surface_size.width * (clipper -> top_left.y);
         for (uint32_t j = 0; j < clipper -> size.height; j++) {
             for (uint32_t i = 0; i < clipper -> size.width; i++) {
                 *pixel_ptr =  converted_color;
@@ -191,14 +194,17 @@ void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf
     free(color);
 }
 
-void ei_copy2(const ei_rect_t* dst_rect, const ei_rect_t* src_rect, const ei_surface_t destination,
+void ei_copy2(const ei_rect_t* dst_rect, const ei_rect_t* src_rect,
+    const ei_surface_t destination,
         const ei_surface_t source, const ei_bool_t alpha){
     ei_size_t dest_surf_size = hw_surface_get_size(destination);
     ei_size_t src_surf_size = hw_surface_get_size(source);
     uint32_t* dest_ptr = (uint32_t*)hw_surface_get_buffer(destination);
     uint32_t* src_ptr = (uint32_t*)hw_surface_get_buffer(source);
-    dest_ptr += (dst_rect -> top_left.x) + dest_surf_size.width * (dst_rect -> top_left.y);
-    src_ptr += (src_rect -> top_left.x) + src_surf_size.width * (src_rect -> top_left.y);
+    dest_ptr += (dst_rect -> top_left.x)
+    + dest_surf_size.width * (dst_rect -> top_left.y);
+    src_ptr += (src_rect -> top_left.x)
+     + src_surf_size.width * (src_rect -> top_left.y);
     for (uint32_t j = 0; j < src_rect -> size.height; j++) {
         for (uint32_t i = 0; i < src_rect -> size.width; i++) {
             if (alpha == EI_TRUE) {
@@ -224,7 +230,8 @@ int			ei_copy_surface(ei_surface_t		destination,
     if ((dst_rect == NULL && src_rect == NULL)) {
         const ei_rect_t dst_rect2 = hw_surface_get_rect(destination);
         const ei_rect_t src_rect2 = hw_surface_get_rect(source);
-        if ((src_rect2.size.width == dst_rect2.size.width) && (src_rect2.size.height == dst_rect2.size.height)) {
+        if ((src_rect2.size.width == dst_rect2.size.width)
+        && (src_rect2.size.height == dst_rect2.size.height)) {
             ei_copy2(&dst_rect2, &src_rect2, destination, source, alpha);
             return 1;
         }
@@ -234,7 +241,8 @@ int			ei_copy_surface(ei_surface_t		destination,
     }
     else if ((dst_rect == NULL && src_rect != NULL)) {
         const ei_rect_t dst_rect2 = hw_surface_get_rect(destination);
-        if ((src_rect -> size.width == dst_rect2.size.width) && (src_rect -> size.height == dst_rect2.size.height)) {
+        if ((src_rect -> size.width == dst_rect2.size.width)
+         && (src_rect -> size.height == dst_rect2.size.height)) {
             ei_copy2(&dst_rect2, src_rect, destination, source, alpha);
             return 1;
         }
@@ -244,7 +252,8 @@ int			ei_copy_surface(ei_surface_t		destination,
     }
     else if ((dst_rect != NULL && src_rect == NULL)) {
         const ei_rect_t src_rect2 = hw_surface_get_rect(source);
-        if ((src_rect2.size.width == dst_rect -> size.width) && (src_rect2.size.height == dst_rect -> size.height)) {
+        if ((src_rect2.size.width == dst_rect -> size.width)
+        && (src_rect2.size.height == dst_rect -> size.height)) {
             ei_copy2(dst_rect, &src_rect2, destination, source, alpha);
             return 1;
         }
@@ -254,7 +263,8 @@ int			ei_copy_surface(ei_surface_t		destination,
 
     }
     else{
-        if ((src_rect -> size.width == dst_rect -> size.width) && (src_rect -> size.height == dst_rect -> size.height)) {
+        if ((src_rect -> size.width == dst_rect -> size.width)
+         && (src_rect -> size.height == dst_rect -> size.height)) {
             ei_copy2(dst_rect, src_rect, destination, source, alpha);
             return 1;
         }

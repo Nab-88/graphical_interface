@@ -61,7 +61,7 @@ int ei_main(int argc, char** argv)
 	ei_anchor_t	anchor_c		= ei_anc_center;
 	float		fl_1_0			= 1.0;
 	float		fl_0_5			= 0.5;
-	
+
         ei_widget_t*	top;
         ei_size_t	top_size		= {400,400};
         char*		top_title		= "Test nouvelle classe de widget";
@@ -83,7 +83,7 @@ int ei_main(int argc, char** argv)
 	// Initialize the application, set the background color.
 
 	ei_app_create(&screen_size, EI_FALSE);
-        ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);        
+        ei_frame_configure(ei_app_root_widget(), NULL, &root_bgcol, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 	// Register the new "testclass" widget class.
 
@@ -118,5 +118,3 @@ int ei_main(int argc, char** argv)
 	ei_app_free();
 	return (EXIT_SUCCESS);
 }
-
-

@@ -28,7 +28,8 @@
  * @param	color		The color used to draw the line, alpha channel is managed.
  * @param	clipper		If not NULL, the drawing is restricted within this rectangle.
  */
-void draw_pixel(ei_surface_t surface, int x_coord, int y_coord, uint32_t color_rgba, const ei_rect_t* clipper) { // A changer pour optimiser
+void draw_pixel(ei_surface_t surface, int x_coord, int y_coord,
+    uint32_t color_rgba, const ei_rect_t* clipper) {
     uint32_t *pixel_ptr = (uint32_t*)hw_surface_get_buffer(surface);
     ei_size_t surface_size = hw_surface_get_size(surface);
     pixel_ptr += x_coord + y_coord * surface_size.width;
@@ -112,7 +113,8 @@ void			ei_draw_polyline	(ei_surface_t			surface,
 /**
  * \brief	Finds skyline min and skyline max.
  *
- * @param	first_point 	The head of a linked list of the points of the line. It is either
+ * @param	first_point 	The head of a linked list of the points of the line.
+ * It is either
  *				NULL (i.e. draws nothing), or has more than 2 points.
  * @return                  int* returns skyline min and max
  */
@@ -146,7 +148,8 @@ int* init_scanline(ei_linked_point_t* first_point){
 /**
  * \brief	Initialize the table of sides
  *
- * @param	first_point 	The head of a linked list of the points of the line. It is either
+ * @param	first_point 	The head of a linked list of the points of the line.
+ * It is either
  *				NULL (i.e. draws nothing), or has more than 2 points.
  * @param y_min  The lowest abscissa
  * @param y_max  The highest abscissa
@@ -332,7 +335,8 @@ void draw_scanline(ei_surface_t surface, ei_TCA_t *TCA, uint32_t color_rgba, int
                 ei_point_t pixel;
                 pixel.x = i;
                 pixel.y = y;
-                if ((clipper == NULL) || (pixel_is_in_rect(pixel, clipper) == EI_TRUE)){
+                if ((clipper == NULL) ||
+                (pixel_is_in_rect(pixel, clipper) == EI_TRUE)){
                     *pixel_ptr = color_rgba;
                 }
                 pixel_ptr ++;

@@ -25,10 +25,12 @@
  *
  * @return			Returns the list of points that make the arc
  */
-ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, int angle_fin){
+ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut,
+     int angle_fin){
     float val = 3.14159265/180;
     float pas = ((float)(angle_fin - angle_debut)) /100;
-    ei_point_t first_point = {(int) (centre.x + rayon*cos(angle_debut*val)),(int) (centre.y + rayon*sin(angle_debut*val))};
+    ei_point_t first_point = {(int) (centre.x + rayon*cos(angle_debut*val)),(int)
+         (centre.y + rayon*sin(angle_debut*val))};
     ei_linked_point_t* start = calloc(1, sizeof(ei_linked_point_t));
     start -> point = first_point;
     float angle, fin;
@@ -44,7 +46,8 @@ ei_linked_point_t* ei_arc(ei_point_t centre, uint32_t rayon, int angle_debut, in
     ei_linked_point_t* ancient = start;
     while (angle < fin) {
         angle += pas;
-        ei_point_t point = {(int) (centre.x + rayon*cos(angle*val)),(int) (centre.y + rayon*sin(angle*val))};
+        ei_point_t point = {(int) (centre.x + rayon*cos(angle*val)),
+            (int) (centre.y + rayon*sin(angle*val))};
         ei_linked_point_t* current = calloc(1, sizeof(ei_linked_point_t));
         current -> point = point;
         ancient -> next = current;
@@ -302,8 +305,10 @@ void ei_draw_toplevel(ei_surface_t surface,
     ei_linked_point_t* first = ei_arc(centre, 10, 180, 270);
     centre.x = centre.x + rectangle.size.width - 20;
     ei_linked_point_t* second = ei_arc(centre, 10, 270, 360);
-    ei_point_t corner_southwest = {rectangle.top_left.x, rectangle.top_left.y + rectangle.size.height};
-    ei_point_t corner_southeast = {rectangle.top_left.x + rectangle.size.width, corner_southwest.y};
+    ei_point_t corner_southwest = {rectangle.top_left.x, rectangle.top_left.y
+        + rectangle.size.height};
+    ei_point_t corner_southeast = {rectangle.top_left.x + rectangle.size.width,
+         corner_southwest.y};
     ei_linked_point_t* third = calloc(1, sizeof(ei_linked_point_t));
     third -> point = corner_southeast;
     ei_linked_point_t* fourth = calloc(1, sizeof(ei_linked_point_t));

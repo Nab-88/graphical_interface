@@ -115,14 +115,19 @@ void			ei_button_configure		(ei_widget_t*		widget,
         widget -> requested_size = *requested_size;
     } else {
         if (text != NULL){
-            ei_surface_t text_surface = hw_text_create_surface(*(button -> text), *(button -> text_font), (button -> text_color));
+            ei_surface_t text_surface = hw_text_create_surface(*(button -> text),
+             *(button -> text_font), (button -> text_color));
             ei_size_t text_size = hw_surface_get_size(text_surface);
-            (widget -> requested_size).width = text_size.width + *(button -> border_width)*2;
-            (widget -> requested_size).height = text_size.height + *(button -> border_width)*2;
+            (widget -> requested_size).width = text_size.width +
+            *(button -> border_width)*2;
+            (widget -> requested_size).height = text_size.height +
+            *(button -> border_width)*2;
         } else if (img != NULL) {
             ei_size_t size = (**(button -> img_rect)).size;
-            (widget -> requested_size).width = size.width + *(button -> border_width)*2;
-            (widget -> requested_size).height = size.height + *(button -> border_width)*2;
+            (widget -> requested_size).width = size.width +
+            *(button -> border_width)*2;
+            (widget -> requested_size).height = size.height +
+            *(button -> border_width)*2;
         }
 
     }
@@ -242,10 +247,14 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
     ei_size_t surface_size = hw_surface_get_size(surface);
     if (color.alpha != 255){
         ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
-        ei_draw_button(alpha_surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+        ei_draw_button(alpha_surface, rectangle, color, *(button -> corner_radius),
+         border_width, relief, text, *text_font, text_color, img, *img_rect,
+          *where, clipper);
         ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
     } else {
-        ei_draw_button(surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+        ei_draw_button(surface, rectangle, color, *(button -> corner_radius),
+         border_width, relief, text, *text_font, text_color, img, *img_rect,
+          *where, clipper);
     }
 
     if (text != NULL) {
@@ -275,12 +284,17 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         }
         if (image.size.width != 0 && image.size.height != 0) {
             ei_size_t surface_size = hw_surface_get_size(surface);
-            if (intersects -> top_left.x >= 0 && intersects -> top_left.y >= 0 && intersects -> top_left.x <= surface_size.width && intersects -> top_left.y <= surface_size.height) {
-                    ei_copy_surface(surface, intersects, *img, &image, hw_surface_has_alpha(surface));
+            if (intersects -> top_left.x >= 0 && intersects -> top_left.y >= 0
+                 && intersects -> top_left.x <= surface_size.width
+                  && intersects -> top_left.y <= surface_size.height) {
+                    ei_copy_surface(surface, intersects, *img, &image,
+                        hw_surface_has_alpha(surface));
             }
         }
     }
-    ei_draw_button(pick_surface, rectangle, pick_color, *(button -> corner_radius), 0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where, clipper);
+    ei_draw_button(pick_surface, rectangle, pick_color, *(button -> corner_radius),
+     0, ei_relief_none, NULL, ei_default_font, &color, NULL, &rectangle, *where,
+      clipper);
 }
 
 
@@ -403,6 +417,7 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
  * @param   widget the current widget
  */
 void ei_change_relief_button(ei_relief_t* relief, ei_widget_t* widget) {
-    ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL);
+    ei_button_configure(widget, NULL, NULL,NULL,NULL, relief, NULL,NULL,NULL,
+        NULL,NULL, NULL,NULL,NULL,NULL);
     ei_placer_run(widget);
 }
