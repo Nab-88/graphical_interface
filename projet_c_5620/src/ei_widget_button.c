@@ -19,7 +19,7 @@
  *
  *	Callback called when a user clicks on the button.
  */
-void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param)
+void button_closable(ei_widget_t* widget, ei_event_t* event, void* user_param)
 {
     if (DRAW_RECT == NULL){
         DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));

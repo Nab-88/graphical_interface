@@ -1,3 +1,8 @@
+/**
+ *  @file	ei_widget_toplevel.h
+ *  @brief	Functions related to toplevels
+ *
+ */
 #ifndef ei_widget_toplevel_H
 #define EI_WIDGET_TOPLEVEL_H
 
@@ -50,7 +55,6 @@ void			ei_toplevel_register_class 	();
  *		attributes of a widget of a class. After allocation, the function *must*
  *		initialize the memory to 0.
  *
- * @return		A block of memory with all bytes set to 0.
  */
 void*	ei_toplevel_allocfunc_t		();
 
@@ -66,7 +70,7 @@ void*	ei_toplevel_allocfunc_t		();
 void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget);
 
 /**
- * \brief	A function that draws widgets of a class.
+ * \brief	A function that draws widgets of a toplevel.
  *
  * @param	widget		A pointer to the widget instance to draw.
  * @param	surface		Where to draw the widget. The actual location of the widget in the

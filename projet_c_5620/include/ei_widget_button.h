@@ -1,3 +1,8 @@
+/**
+ *  @file	ei_widget_button.h
+ *  @brief	Functions related to buttons
+ *
+ */
 #ifndef EI_WIDGET_BUTTON_H
 #define EI_WIDGET_BUTTON_H
 
@@ -7,12 +12,15 @@
 #include "ei_types.h"
 #include "ei_widget.h"
 
-/*
- * button_press --
+/**
+ * @brief The function closes the parent of the widget
  *
- *	Callback called when a user clicks on the button.
+ * @param	widget    the current widget
+ * @param	event     the current event
+ * @param	user_param    	A programmer supplied parameter that will
+ *  be passed to the callback when called. Defaults to NULL.
  */
-void button_press2(ei_widget_t* widget, ei_event_t* event, void* user_param);
+void button_closable(ei_widget_t* widget, ei_event_t* event, void* user_param);
 
 
 /**
@@ -47,20 +55,19 @@ void			ei_button_configure		(ei_widget_t*		widget,
         ei_callback_t*		callback,
         void**			user_param);
 
-        /**
-         * \brief	Registers the "button" widget class in the program. This must be called only
-         *		once before widgets of the class "button" can be created and configured with
-         *		\ref ei_button_configure.
-         */
+/**
+ * \brief	Registers the "button" widget class in the program. This must be called only
+ *		once before widgets of the class "button" can be created and configured with
+ *		\ref ei_button_configure.
+ */
 void			ei_button_register_class 	();
 
 /**
- * \brief	A function that allocates a block of memory that is big enough to store the
- *		attributes of a widget of a class. After allocation, the function *must*
- *		initialize the memory to 0.
- *
- * @return		A block of memory with all bytes set to 0.
- */
+* \brief	A function that allocates a block of memory that is big enough to store the
+*		attributes of a widget of a class. After allocation, the function *must*
+*		initialize the memory to 0.
+*
+*/
 void*	ei_button_allocfunc_t		();
 
 /**
@@ -89,7 +96,7 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         ei_rect_t*		clipper);
 
 /**
- * \brief	A function that sets the default values for a class.
+ * \brief	A function that sets the default values for a button.
  *
  * @param	widget		A pointer to the widget instance to intialize.
  */

@@ -3,21 +3,27 @@
 
 #include "ei_types.h"
 
-
+/**
+ * \brief	Copy a pixel from the source surface to the destination surface using the
+ formula given by the teachers
+ *
+ * @param	dest_pixel	the pixel where to make the copy
+ * @param	src_pixel	the pixel to copy
+ * @param	src_surf	the surface from which the pixel is copied
+ * @param	dest_surf	the surface where the copy happens
+ */
 void copy_pixel(uint32_t* dest_pixel, uint32_t* src_pixel, ei_surface_t src_surf,  ei_surface_t dest_surf);
 
 /**
- * \brief	Draws a scanline
+ * @brief	Tests if an pixel is on the rect
  *
- * @param	surface 	Where to draw the polygon. The surface must be *locked* by
- *				\ref hw_surface_lock.
- * @param	table of active sides
- * @param	color		The color used to draw the polygon, alpha channel is managed.
+ * @param	pixel   The pixel to test
+ * @param   rect    The current rect
+ *
+ * @return			Returns EI_TRUE if the pixel is in rect else
+ * EI_FALSE
  */
-
 ei_bool_t pixel_is_in_rect(ei_point_t pixel, const ei_rect_t* rect);
-
-
 
 /**
  * \brief	copy the src_rect of dst_rect pixel by pixel using the course formula

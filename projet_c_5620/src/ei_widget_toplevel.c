@@ -175,7 +175,7 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
         red -> alpha = 255;
         int width = 3;
         int radius = 10;
-        ei_callback_t callback = button_press2;
+        ei_callback_t callback = button_closable;
         ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
         ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
         toplevel -> button_closable = closable;
