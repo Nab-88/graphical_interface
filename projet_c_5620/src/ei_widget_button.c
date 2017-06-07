@@ -241,9 +241,14 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         where = ei_get_where(rectangle, anchor, border_width, text_size);
     }
     ei_size_t surface_size = hw_surface_get_size(surface);
-    ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
-    ei_draw_button(alpha_surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
-    ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    if (color.alpha != 255){
+        ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
+        ei_draw_button(alpha_surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+        ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    } else {
+        ei_draw_button(surface, rectangle, color, *(button -> corner_radius), border_width, relief, text, *text_font, text_color, img, *img_rect, *where, clipper);
+    }
+
     if (text != NULL) {
         if (*text != NULL) {
             if (relief == ei_relief_sunken) {
@@ -261,7 +266,6 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         // on utilise copy
         ei_rect_t rect = {*where, (*img_rect)->size};
         ei_rect_t image = **img_rect;
-        //ei_rect_t* intersects = &rect;
         ei_rect_t* intersects = ei_intersection(&rect, clipper);
         if (clipper != NULL) {
             if (clipper->size.width != 0 && clipper->size.height != 0) {
@@ -273,7 +277,7 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
         if (image.size.width != 0 && image.size.height != 0) {
             ei_size_t surface_size = hw_surface_get_size(surface);
             if (intersects -> top_left.x >= 0 && intersects -> top_left.y >= 0 && intersects -> top_left.x <= surface_size.width && intersects -> top_left.y <= surface_size.height) {
-                ei_copy_surface(surface, intersects, *img, &image, hw_surface_has_alpha(surface));
+                    ei_copy_surface(surface, intersects, *img, &image, hw_surface_has_alpha(surface));
             }
         }
     }
