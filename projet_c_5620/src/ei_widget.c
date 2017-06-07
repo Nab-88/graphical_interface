@@ -123,7 +123,8 @@ ei_widget_t*    ei_widget_previous (ei_widget_t* widget){
     if (widget == parent -> children_head){
         return NULL;
     }
-    while (((prev -> next_sibling) != widget) && (prev -> next_sibling) != (parent -> children_tail) && (prev -> next_sibling) != NULL){
+    while (((prev -> next_sibling) != widget) && (prev -> next_sibling)
+    != (parent -> children_tail) && (prev -> next_sibling) != NULL){
         prev = prev -> next_sibling;
     }
     if (prev -> next_sibling != parent -> children_tail){
@@ -203,9 +204,11 @@ ei_widget_t* ei_find_pick_color(ei_widget_t* widget, uint32_t pick_id) {
  *
  * @return  The top_left point to start drawing
  */
-ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_width, ei_size_t size) {
+ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor,
+    int border_width, ei_size_t size) {
     ei_point_t* where = calloc(1, sizeof(ei_point_t));
-    ei_point_t point_ancre = {rectangle.top_left.x + rectangle.size.width/2, rectangle.top_left.y + rectangle.size.height/2};
+    ei_point_t point_ancre = {rectangle.top_left.x + rectangle.size.width/2,
+        rectangle.top_left.y + rectangle.size.height/2};
     switch (*anchor) {
         case ei_anc_none:
         case ei_anc_center:
@@ -222,22 +225,28 @@ ei_point_t* ei_get_where(ei_rect_t rectangle, ei_anchor_t* anchor, int border_wi
             break;
         case ei_anc_southwest:
             where -> x = point_ancre.x - (rectangle.size.width/2) + border_width;
-            where -> y = point_ancre.y + (rectangle.size.height/2) - size.height - border_width;
+            where -> y = point_ancre.y + (rectangle.size.height/2) -
+            size.height - border_width;
             break;
         case ei_anc_south:
             where -> x = point_ancre.x - 0.5 * size.width;
-            where -> y = point_ancre.y + (rectangle.size.height/2) - size.height - border_width;
+            where -> y = point_ancre.y + (rectangle.size.height/2) -
+            size.height - border_width;
             break;
         case ei_anc_southeast:
-            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - border_width;
-            where -> y = point_ancre.y + (rectangle.size.height/2) - size.height - border_width;
+            where -> x = point_ancre.x + (rectangle.size.width/2) -
+            size.width - border_width;
+            where -> y = point_ancre.y + (rectangle.size.height/2) -
+             size.height - border_width;
             break;
         case ei_anc_east:
-            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - border_width;
+            where -> x = point_ancre.x + (rectangle.size.width/2) -
+            size.width - border_width;
             where -> y = point_ancre.y - 0.5 * size.height;
             break;
         case ei_anc_northeast:
-            where -> x = point_ancre.x + (rectangle.size.width/2)- size.width - 2*border_width;
+            where -> x = point_ancre.x + (rectangle.size.width/2) -
+            size.width - 2*border_width;
             where -> y = point_ancre.y - ((rectangle.size.height)/2) + border_width;
             break;
         case ei_anc_north:
@@ -258,8 +267,10 @@ ei_rect_t* ei_union(ei_rect_t* rect1, ei_rect_t* rect2) {
     ei_rect_t* intersection = malloc(sizeof(ei_rect_t));
     intersection -> top_left.x = min(point1.x, point2.x);
     intersection -> top_left.y = min(point1.y, point2.y);
-    intersection -> size.width = max(size1.width, size2.width) + abs(point1.x - point2.x);
-    intersection -> size.height = max(size1.height, size2.height) + abs(point1.y - point2.y);
+    intersection -> size.width = max(size1.width, size2.width) +
+    abs(point1.x - point2.x);
+    intersection -> size.height = max(size1.height, size2.height) +
+    abs(point1.y - point2.y);
     return intersection;
 }
 
@@ -272,7 +283,8 @@ ei_bool_t is_on_the_banner(ei_widget_t* widget, ei_event_t* event) {
     y_min = widget -> screen_location.top_left.y;
     x_max = widget -> screen_location.top_left.x + widget -> screen_location.size.width;
     y_max = y_min + 30 + *(toplevel -> border_width);
-    if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {
+    if (x_min <= where.x && x_max >= where.x && y_min <= where.y
+        && y_max >= where.y) {
         return EI_TRUE;
     }
     return EI_FALSE;
@@ -282,8 +294,10 @@ ei_bool_t is_on_the_square(ei_widget_t* widget, ei_event_t* event) {
     ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
     ei_point_t where = event -> param.mouse.where;
     int x_min, x_max, y_min, y_max;
-    x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width - 10 - *(toplevel -> border_width);
-    y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height - 10 - *(toplevel -> border_width);
+    x_min = widget -> screen_location.top_left.x + widget -> screen_location.size.width
+     - 10 - *(toplevel -> border_width);
+    y_min = widget -> screen_location.top_left.y + widget -> screen_location.size.height
+     - 10 - *(toplevel -> border_width);
     x_max = x_min + 10 + *(toplevel -> border_width);
     y_max = y_min + 10 + *(toplevel -> border_width);
     if (x_min <= where.x && x_max >= where.x && y_min <= where.y && y_max >= where.y) {

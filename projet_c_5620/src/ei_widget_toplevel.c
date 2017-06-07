@@ -144,11 +144,14 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
     ei_color_t window_color = {110, 110, 110, 255};
     ei_size_t surface_size = hw_surface_get_size(surface);
     if ((color -> alpha) != 255){
-        ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
-        ei_draw_toplevel(alpha_surface, rectangle, color, &window_color, *border_width, title, clipper);
+        ei_surface_t alpha_surface = hw_surface_create(surface,
+             &surface_size, EI_TRUE);
+        ei_draw_toplevel(alpha_surface, rectangle, color, &window_color,
+            *border_width, title, clipper);
         ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
     } else {
-        ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
+        ei_draw_toplevel(surface, rectangle, color, &window_color,
+            *border_width, title, clipper);
     }
     ei_color_t text_color = {0, 0, 0, 255};
     ei_point_t* where = calloc(1, sizeof(ei_point_t));
@@ -172,20 +175,26 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
         int width = 3;
         int radius = 10;
         ei_callback_t callback = button_closable;
-        ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL, NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
-        ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL, NULL, NULL, NULL);
+        ei_button_configure(closable, &size, red, &width, &radius, NULL, NULL,
+            NULL, red, NULL,NULL,NULL,NULL, &callback, NULL);
+        ei_place(closable, &anchor, &(point.x), &(point.y), NULL, NULL, NULL,
+        NULL, NULL, NULL);
         toplevel -> button_closable = closable;
     }
     if (*resizable != ei_axis_none) {
         ei_rect_t* rect_resiz = malloc(sizeof(ei_rect_t));
-        rect_resiz ->top_left.x = rectangle.top_left.x + rectangle.size.width - 10 - *border_width;
-        rect_resiz ->top_left.y = rectangle.top_left.y + rectangle.size.height - 10 - *border_width;
+        rect_resiz ->top_left.x = rectangle.top_left.x + rectangle.size.width -
+         10 - *border_width;
+        rect_resiz ->top_left.y = rectangle.top_left.y + rectangle.size.height -
+         10 - *border_width;
         rect_resiz ->size.width = 10 + *border_width;
         rect_resiz ->size.height = 10 + *border_width;
         ei_point_t* where = calloc(1, sizeof(ei_point_t));
         *where = (ei_point_t) {0, 0};
-        ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none, NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
-        ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none, NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
+        ei_draw_button(surface, *rect_resiz, window_color, 0, 0, ei_relief_none,
+            NULL, ei_default_font, &window_color, NULL, rect_resiz, *where, clipper);
+        ei_draw_button(pick_surface, *rect_resiz, *pick_color, 0, 0, ei_relief_none,
+             NULL, ei_default_font, color, NULL, rect_resiz, *where, clipper);
     }
 }
 

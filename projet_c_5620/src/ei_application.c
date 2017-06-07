@@ -46,7 +46,8 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
 
     //Create the main window
     ei_surface_t main_window = hw_create_window(main_window_size, fullscreen);
-    ei_surface_t pick_surface = hw_surface_create(main_window, main_window_size, EI_TRUE);
+    ei_surface_t pick_surface = hw_surface_create(main_window, main_window_size,
+        EI_TRUE);
     LIB = calloc(1, sizeof(ei_widgetclass_t));
     ei_frame_register_class();
     ei_button_register_class();
@@ -79,8 +80,6 @@ void ei_app_create(ei_size_t* main_window_size, ei_bool_t fullscreen){
  * \brief	Releases all the resources of the application, and releases the hardware
  *		(ie. calls \ref hw_quit).
  */
-
-
 void ei_app_free(){
     free_widgets(ei_app_root_widget ());
     free_class();
@@ -111,7 +110,6 @@ void free_class(){
  *
  * \param   widget  the widget from which to free.
  */
-
 void free_widgets(ei_widget_t* widget){
     while (widget != NULL){
         (*(widget -> wclass) ->  releasefunc)(widget);
@@ -152,7 +150,8 @@ void ei_app_run(){
                 }
             }
         }
-        else if (event.type == ei_ev_mouse_buttonup || event.type == ei_ev_mouse_move) {
+        else if (event.type == ei_ev_mouse_buttonup ||
+            event.type == ei_ev_mouse_move) {
             widget = ei_event_get_active_widget();
             if (widget != NULL) {
                 (widget -> wclass -> handlefunc)(widget, &event);
@@ -182,7 +181,8 @@ void draw(){
     draw_widgets(ei_app_root_widget());
     hw_surface_unlock(ei_app_root_surface());
     if (DRAW_RECT != NULL) {
-        DRAW_RECT -> rect = *ei_intersection(&(DRAW_RECT -> rect),&(ei_app_root_widget() -> screen_location));
+        DRAW_RECT -> rect = *ei_intersection(&(DRAW_RECT -> rect),
+        &(ei_app_root_widget() -> screen_location));
     }
     hw_surface_update_rects(ei_app_root_surface(), DRAW_RECT);
     free(DRAW_RECT);
@@ -205,7 +205,8 @@ void draw_widgets(ei_widget_t* widget){
         if (DRAW_RECT != NULL) {
             clipper = ei_intersection(clipper, &(DRAW_RECT -> rect));
         }
-        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(), SURFACE_PICK, clipper);
+        (widget -> wclass ->  drawfunc)(widget, ei_app_root_surface(),
+         SURFACE_PICK, clipper);
         draw_widgets(widget -> children_head);
         widget = widget -> next_sibling;
     }
@@ -227,8 +228,10 @@ ei_rect_t* ei_intersection(ei_rect_t* rect1, ei_rect_t* rect2) {
     ei_rect_t* intersection = malloc(sizeof(ei_rect_t));
     intersection -> top_left.x = max(point1.x, point2.x);
     intersection -> top_left.y = max(point1.y, point2.y);
-    intersection -> size.width = max(min(size1.width - intersection ->top_left.x + point1.x, size2.width - intersection ->top_left.x + point2.x),0);
-    intersection -> size.height = max(min(size1.height - intersection ->top_left.y + point1.y, size2.height - intersection ->top_left.y + point2.y),0);
+    intersection -> size.width = max(min(size1.width - intersection ->top_left.x
+        + point1.x, size2.width - intersection ->top_left.x + point2.x),0);
+    intersection -> size.height = max(min(size1.height - intersection ->top_left.y
+         + point1.y, size2.height - intersection ->top_left.y + point2.y),0);
     return intersection;
 }
 
@@ -252,7 +255,8 @@ void ei_app_quit_request(){
 }
 
 /**
- * \brief	Returns the "root widget" of the application: a "frame" widget that encapsulate the
+ * \brief	Returns the "root widget" of the application: a "frame" widget that
+ * encapsulate the
  *		root window.
  *
  * @return 			The root widget.
@@ -262,7 +266,8 @@ ei_widget_t* ei_app_root_widget(){
 }
 
 /**
- * \brief	Returns the surface of the root window. Used to create surfaces with similar r, g, b
+ * \brief	Returns the surface of the root window. Used to create surfaces
+ * with similar r, g, b
  *		channels.
  *
  * @return 			The surface of the root window.

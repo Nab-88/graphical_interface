@@ -149,8 +149,10 @@ void ei_placer_run(struct ei_widget_t* widget){
     float 		rel_height = (widget -> placer_params) -> rh_data;
     ei_rect_t* rect_widget = &(widget -> screen_location);
     //===============================Managing rect size========================
-    (rect_widget -> size).height = max((((widget -> parent) -> screen_location).size.height) * (rel_height), height);
-    (rect_widget -> size).width = max((((widget -> parent) -> screen_location).size.width) * (rel_width), width);
+    (rect_widget -> size).height = max((((widget -> parent) ->
+    screen_location).size.height) * (rel_height), height);
+    (rect_widget -> size).width = max((((widget -> parent) ->
+     screen_location).size.width) * (rel_width), width);
     //===============================Managing anchor========================
     ei_point_t point_ancre;
     int parent_height = ((widget -> parent) -> screen_location).size.height;
