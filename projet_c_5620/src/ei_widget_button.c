@@ -222,7 +222,7 @@ void	ei_button_drawfunc_t		(struct ei_widget_t*	widget,
     ei_relief_t relief = *(button -> relief);
     char** text = button -> text;
     ei_surface_t* img = button -> img;
-    ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t));
+    ei_rect_t** img_rect = calloc(1, sizeof(ei_rect_t*));
     ei_font_t* text_font = calloc(1, sizeof(ei_font_t));
     ei_color_t* text_color = calloc(1, sizeof(ei_color_t));
     ei_anchor_t *anchor = calloc(1, sizeof(ei_anchor_t));
