@@ -137,15 +137,20 @@ void	ei_toplevel_drawfunc_t		(struct ei_widget_t*	widget,
     ei_toplevel_t* toplevel = (ei_toplevel_t*) widget;
     ei_rect_t rectangle = widget -> screen_location;
     ei_color_t* color = toplevel -> color;
+    char alpha = color -> alpha;
     ei_color_t* pick_color = widget -> pick_color;
     int* border_width = toplevel -> border_width;
     char** title = toplevel -> title;
     ei_axis_set_t* resizable = toplevel -> resizable;
     ei_color_t window_color = {110, 110, 110, 255};
     ei_size_t surface_size = hw_surface_get_size(surface);
-    ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
-    ei_draw_toplevel(alpha_surface, rectangle, color, &window_color, *border_width, title, clipper);
-    ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    if (alpha != 255){
+        ei_surface_t alpha_surface = hw_surface_create(surface, &surface_size, EI_TRUE);
+        ei_draw_toplevel(alpha_surface, rectangle, color, &window_color, *border_width, title, clipper);
+        ei_copy_surface(surface,clipper, alpha_surface,clipper, EI_TRUE);
+    } else {
+        ei_draw_toplevel(surface, rectangle, color, &window_color, *border_width, title, clipper);
+    }
     ei_color_t text_color = {0, 0, 0, 255};
     ei_point_t* where = calloc(1, sizeof(ei_point_t));
     where -> x = rectangle.top_left.x + 25; // on garde de la place pour le bouton closable
