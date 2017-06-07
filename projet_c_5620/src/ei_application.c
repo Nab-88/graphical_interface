@@ -133,11 +133,11 @@ void ei_app_run(){
     DRAW_RECT = NULL;
     ei_event_t event;
     event.type = ei_ev_none;
+    ei_point_t where;
+    ei_widget_t* widget;
+    ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
     while (SORTIE == EI_FALSE){
         hw_event_wait_next(&event);
-        ei_point_t where;
-        ei_widget_t* widget;
-        ei_default_handle_func_t def_func = ei_event_get_default_handle_func();
         if(event.type == ei_ev_mouse_buttondown){
             where = event.param.mouse.where;
             widget = ei_widget_pick(&where);
@@ -152,19 +152,7 @@ void ei_app_run(){
                 }
             }
         }
-        if (event.type == ei_ev_mouse_buttonup) {
-            widget = ei_event_get_active_widget();
-            if (widget != NULL) {
-                (widget -> wclass -> handlefunc)(widget, &event);
-            }
-            else{
-                if (def_func != NULL){
-                    if (def_func(&event) == EI_TRUE) {
-                        draw();
-                    }       }
-            }
-        }
-        if (event.type == ei_ev_mouse_move) {
+        else if (event.type == ei_ev_mouse_buttonup || event.type == ei_ev_mouse_move) {
             widget = ei_event_get_active_widget();
             if (widget != NULL) {
                 (widget -> wclass -> handlefunc)(widget, &event);

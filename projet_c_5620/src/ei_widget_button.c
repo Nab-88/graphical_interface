@@ -365,7 +365,7 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
             DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
         }
         DRAW_RECT -> rect = widget -> screen_location;
-        ei_event_set_active_widget(widget -> parent);
+        ei_event_set_active_widget(NULL);
     }
     else if (event -> type == ei_ev_mouse_move) {
         ei_point_t where = event -> param.mouse.where;
@@ -374,12 +374,20 @@ ei_bool_t ei_button_handlefunc_t (struct ei_widget_t*	widget,
             if (*relief != ei_relief_raised) {
                 *relief = ei_relief_raised;
                 ei_change_relief_button(relief, widget);
+                if (DRAW_RECT == NULL){
+                    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+                }
+                DRAW_RECT -> rect = widget -> screen_location;
             }
         }
         else {
             if (*relief != ei_relief_sunken) {
                 *relief = ei_relief_sunken;
                 ei_change_relief_button(relief, widget);
+                if (DRAW_RECT == NULL){
+                    DRAW_RECT = calloc(1, sizeof(ei_linked_rect_t));
+                }
+                DRAW_RECT -> rect = widget -> screen_location;
             }
         }
     }
