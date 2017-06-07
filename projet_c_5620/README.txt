@@ -63,7 +63,7 @@ fonctionner l'interface graphique
                     ===============================
                     =            Makefile         =
                     ===============================
-                    
+
 make nom_du_test : permet de compiler le test en question
 make all et make : compile tous les tests
 make clean : supprimer tous les fichiers .o
@@ -72,25 +72,25 @@ make clean : supprimer tous les fichiers .o
                     =            Tests            =
                     ===============================
 
--> button.c
+-> button_modified.c
 Ce test affiche un unique bouton cliquable qui contient du texte. Lors d'un click
 sur le bouton, "Click" s'affiche dans le terminal.
 
--> frame.c
+-> frame_modified.c
 Ce test permet de mettre en évidence le clipping d'une frame, d'une image dans un
 frame, d'un toplevel, et le resizable d'un toplevel.
 
--> hello_world.c
+-> hello_world_modified.c
 Ce test montre le bon fonctionnement de la gestion avant/arrière plan lorsque deux
 toplevels sont superposées, resizable, le déplacement d'un toplevel, la bonne gestion
 de l'affichage d'un bouton au sein d'une toplevel en arrière plan.
 
--> puzzle.c
+-> puzzle_modified.c
 Ce test permet d'afficher un jeu de taquin. Ce test utilise un très grand nombre
 des fonctionnalités de notre bibliothèque parmi lesquelles, l'affichage en transparence,
 le dessin d'image, le clipping etc.
 
--> two048.c
+-> two048_modified.c
 Implémentation du célèbre jeu 2048 grâce à notre bibliothèque.
 Modification par rapport au test d'origine, on a placé la ligne 232 à la ligne 237.
 Car selon nous ei_place n'était pas appelée au bon moment.
