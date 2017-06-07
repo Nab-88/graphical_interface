@@ -63,7 +63,9 @@ void			ei_toplevel_configure		(ei_widget_t*		widget,
         *(toplevel -> resizable) = *resizable;
     }
     if (min_size != NULL){
-        *(toplevel -> min_size) = *min_size;
+        if (*min_size != NULL){
+            **(toplevel -> min_size) = **min_size;
+        }
     }
     toplevel -> button_closable = NULL;
 }
@@ -112,7 +114,9 @@ void	ei_toplevel_releasefunc_t	(struct ei_widget_t*	widget){
     free(toplevel -> border_width);
     free(toplevel -> closable);
     free(toplevel -> resizable);
-    free(*(toplevel -> min_size));
+    if (*(toplevel -> min_size) != NULL){
+        free(*(toplevel -> min_size));
+    }
     free(toplevel -> min_size);
     if (toplevel -> title != NULL){
         free(*(toplevel -> title));
@@ -212,11 +216,10 @@ void	ei_toplevel_setdefaultsfunc_t	(struct ei_widget_t*	widget) {
     *resizable = ei_axis_both;
     toplevel -> resizable = resizable;
 
-    ei_size_t* min_size = malloc(sizeof(ei_size_t));
-    min_size -> width = 160;
-    min_size -> height = 120;
     toplevel -> min_size = malloc(sizeof(ei_size_t*));
-    *(toplevel -> min_size) = min_size;
+    *(toplevel -> min_size) = malloc(sizeof(ei_size_t));
+    (*(toplevel -> min_size)) -> width = 160;
+    (*(toplevel -> min_size)) -> height = 160;
 }
 /**
  * \brief 	A function that is called to notify the widget that its geometry has been modified
